@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[go指针类型转化 unsafe Pointer]]></title>
+    <url>%2F2019%2F01%2F04%2Fgolang-2019-01-04-go-unsafe-Pointer%E3%80%81%E6%8C%87%E9%92%88%E7%B1%BB%E5%9E%8B%E8%BD%AC%E5%8C%96%2F</url>
+    <content type="text"><![CDATA[golang强类型golang是一种强类型的静态语言。强类型就是说一旦类型定义了，就不能够再改变它的类型。静态是说，程序在运行前检测类型，而不是像JavaScript和python等动态语言，运行时才检测 为了安全考虑，golang时不允许两种指针类型 之间相互转化的。 指针类型转换即使有相同的底层类型也是不能转换的123456func main() &#123; var i Myint = 2 var j int =3 j = i // cannot use i (type Myint) as type int in assignment fmt.Println(j)&#125; 1234567891011121314func main() &#123; i := 10 fmt.Printf("%T:%v,%p,%T\n",i,i,&amp;i,&amp;i) // int:10,0x416020,*in var j float64 = 3.434 fmt.Printf("%T:%v,%p,%T\n",j,j,&amp;j,&amp;j) // float64:3.434,0x416038,*float64 // 类型转化 m := float64(i) fmt.Printf("%T:%v,%p,%T\n",m,m,&amp;m,&amp;m) // float64:10,0x416060,*float64 // 指针类型转化 n := (*float64)(&amp;i) //cannot convert &amp;i (type *int) to type *float64 fmt.Printf("%T:%v,%p,%T\n",n,n,&amp;n,&amp;n)&#125; 程序中我们需明白 int，表示int类型的指针，float表示float类型的指针 float64(i)就是普通的类型转化，golang时允许的 (*float64)(&amp;i) 中 (*float64) 括号中整体是一个类型，表示float64类型的指针类型 通过上面的例子，我们知道不同的指针类型是不同转换的，但是我们就需要转化怎么办？就需要用到unsafe包的 Pointer了 unsafe.Pointer介绍unsafe.Pointer是一种特殊类型的指针，它可以包含任意类型的地址我们可以在golang的源码中看到如下的定义12type ArbitraryType inttype Pointer *ArbitraryType 说明unsafe.Pointer其实就是*int，一个通用类型的指针示例一123456func main() &#123; i := 10 fmt.Printf("%T,%v\n",&amp;i,&amp;i) // *int,0xc00004c080 var j unsafe.Pointer = unsafe.Pointer(&amp;i) // unsafe.Pointer,0xc00004c080 fmt.Printf("%T,%v",j,j)&#125; 如果我们直接var j unsafe.Pointer = &amp;i 的话，就会报错：cannot use &amp;i (type *int) as type unsafe.Pointer in assignment。说民unsafe.Pointer是一种类型，上面的示例只是类型强转。 利用unsafe.Pointer再不同*T之间转换1234567func main() &#123; var i int = 10 var j *float64 = (*float64)(unsafe.Pointer(&amp;i)) fmt.Printf("%T.%T\n",j,*j) // *float64.float64 *j = *j * 3 fmt.Printf("%v,%v",i,j) //30,0xc00004c080&#125; 上面的代码中，我们通过操作j指针就改变了i的值。虽然毫无意义，但是证明了通过unsafe.Pointer，我们可以将*int转化成*float64 unsafe.Pointer 四原则 1.任何指针都可以转化为unsafe.Pointer2.unsafe.Pointer 可以转化为任何指针3.uintptr可以转化为unsafe.Pointer4.unsafe.Pointer可以转化为uintptr 规则1,2我们前面已经演示过了，3,4是干什么的？*T 不能计算偏移量，也不能计算便宜。但是uintptr可以。所以，涉及到指针运算的时候，我们可以转化为uintptr计算，之后再转化回去。利用uintprt 我们可以访问特定的内存，可以达到对特定内存的读写 uintptr写一个uintptr直接操作内存的代码123456789101112131415161718192021import ( "fmt" "unsafe")type user struct &#123; name string age int64&#125;func main() &#123; u := new(user) fmt.Printf("%T\n",u) pname := (*string)(unsafe.Pointer(u)) *pname = "xuxiaofeng" page := (*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(u))+unsafe.Offsetof(u.age))) *page = 26 // print u fmt.Println(u) //&amp;&#123;xuxiaofeng 26&#125;&#125; name值是user的第一个字段，不用偏移age 是第二个字段，需要便宜。就需要用到uintptr和unsafe.Pointer 注意事项 如若改成下面的代码，虽然从逻辑上是对的但是这里会牵涉到GC，如果我们的这些临时变量被GC，那么导致的内存操作就错了，我们最终操作的，就不知道是哪块内存了，会引起莫名其妙的问题。123temp:=uintptr(unsafe.Pointer(u))+unsafe.Offsetof(u.age)pAge:=(*int)(unsafe.Pointer(temp))*pAge = 20]]></content>
+      <categories>
+        <category>golang学习</category>
+      </categories>
+      <tags>
+        <tag>golang</tag>
+        <tag>指针转化</tag>
+        <tag>unsafe</tag>
+        <tag>Pointer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[golang切片的使用和本质]]></title>
+    <url>%2F2019%2F01%2F03%2Fgolang-2019-01-03-golang%E5%88%87%E7%89%87%E4%BD%BF%E7%94%A8%E5%92%8C%E6%9C%AC%E8%B4%A8%2F</url>
+    <content type="text"><![CDATA[内部实现切片中有三个字段， 指向底层数组的指针 切片的长度 切片的容量 声明和初始化12345678910111213141516171819202122// 方式1：声明s1 := make([]int,5)s2 := make([]int,5,10)// 直接创建并且初始哈s3 := []int&#123;1,2,3,4,5&#125;s4 := []int&#123;4:6&#125; //第四个元素是6，其他的默认// 数组和切片的区别slice := []int&#123;4:1&#125; //切片array := [5]int&#123;4:1&#125;// 空切片和nil切片// 切片还有nil切片和空切片，它们的长度和容量都是0，但是它们指向底层数组的指针不一样// nil切片意味着指向底层数组的指针为nil，而空切片对应的指针是个地址s6 := []int&#123;&#125; //空切片var s7 []int // nil切片// 基于现有的切片或数组创建sl := []int&#123;1,2,3,4,5&#125;sl1 := sl[:]sl2 := sl[:2] 基于数据或者切片创建新切片基于数据或者切片创建一个新切片后，新切片和原切片共用一个底层数组 基于切片创建新切片1234567func main() &#123; s := []int&#123;1,2,3,4,5&#125; s1 := s[:] fmt.Println(s1) //[1 2 3 4 5] s[0] = 88 fmt.Println(s1) //[88 2 3 4 5] &#125; 基于数组创建新切片12345678func main() &#123; s := [5]int&#123;1,2,3,4,5&#125; s1 := s[:] fmt.Println(s1) //[1 2 3 4 5 ] s[0] = 88 fmt.Println(s1) //[88 2 3 4 5] &#125; 新切片的长度和容量12345678910111213141516171819func main() &#123; s := []int&#123;1,2,3,4,5,6&#125; fmt.Println(len(s)) // 6 fmt.Println(cap(s)) //6 s1 := s[1:2] fmt.Println(len(s1)) // 1 fmt.Println(cap(s1)) // 5 s2 := s[1:5] fmt.Println(len(s2)) //4 fmt.Println(cap(s2)) //5 s3 := s[0:2] fmt.Println(len(s3)) //2 fmt.Println(cap(s3)) //6&#125; 规律就是：新切片长度还算正常，但是容量就是从你截取的部分一直到原切片容量的结束。这也符合切片在内存中线性分布的特征 切片的使用长度和容量房12345func main() &#123; s := make([]int,5,10) fmt.Println(len(s)) // 5 fmt.Println(cap(s)) // 10&#125; 取值和修改123456func main() &#123; s := make([]int,5,10) fmt.Println(s[2]) // 0 s[2] = 88 fmt.Println(s[2]) // 88&#125; append可用容量足够12345678910func main() &#123; s := []int&#123;1,2,3,4,5&#125; s1 := s[1:3] fmt.Println(s1) //[2,3] fmt.Println(cap(s1)) s1 = append(s1,66) fmt.Println(s1) //[2,3,66] fmt.Println(s) //[1,2,3,66,5]&#125; s1中增加66很正常，为什么s的值中也会去掉4，而增加66呢？ s1有可用的容量，不会创建新的切片来满足追加 s1和s共用一个底层数组其实这里的追加只是把第四个元素4，替换成了66 可用容量不够当容量不够的时候，会把原来的数组复制一份，再增加新值，这时候对新切片的操作就不会影响旧切片了]]></content>
+      <categories>
+        <category>golang学习</category>
+      </categories>
+      <tags>
+        <tag>golang</tag>
+        <tag>切片</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[标志寄存器]]></title>
+    <url>%2F2018%2F12%2F22%2Fstudy-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-25-%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8%2F</url>
+    <content type="text"><![CDATA[crackme.exe 引出标志寄存器现在有一个crackme.exe的程序，进去后需要我们注册成功后才可以使用。要想破解这个小软件，我们需要掌握哪些东西呢？ PE 断点我们随便输入一个用户名和密码，就会弹出一个失败提示框。我们就在弹出提示框的地方打断点。 win32 API我们知道要在弹出提示框的地方打断点，可是只有我们知道了win32的API后，我们才知道， 那就是一个messageBoxAbp messageBoxA 函数调用 熟悉堆栈，熟练绘画堆栈图 如果熟悉堆栈，肯定知道，一个函数调用的时候，栈顶的位置肯定放着它的放回地址。所以函数执行完毕后，就会返回到栈顶编号对应的位置。 call 、 jcc and 标志寄存器最后判断我们输入的对不对，是否继续，其实就是判断某个标志寄存器中的值 copy to executable -&gt; 保存即可完成我们的修改 以上的东西其实就是暴力破解，不管你算法多么优秀，我们只找那个关键点，让你直接进行下一步 标志寄存器这就是计算机中的标志寄存器，说到标志我们就应该想到flag，bool类型。而一个bool类型用1bit就可以表示了，所以我们谈论这个32位的标志寄存器，更多的时候是讨论其中的某一位。比如0位，2位，4位，都是cpu中设定好的用途，就跟通用寄存器一样，有自己的名字。比如C位，P位，O位。 进位标志位CF（carry flag） 如果运算结果的最高位产生了一个进位或借位，那么，其值为1，否则其值为0。 三个实验:1234567891011mov al,0xffadd al,2 // c位变成1mov al,0xfe // mov不是运算所以C位不变// C位手动清零add al,2 // c位又变成1// C位手动清零mov ax,0xffadd ax,2 // c位已经是0// =========================重点// 标志寄存器在学习过程中，我们一定要明白数据的宽度 //【mov ax，0xff 】中，数据的宽度是16位，add之后，确实是进位了，但不是最高位的进位 补充：什么是运算？mov不算是运算，其他的加减乘除异或等都是运算 奇偶标志位：PF（Parity Flag） PF 反应运算结果中“1”的个数的奇偶性，如果1的个数是偶数，则P位是1，如果1的个数是奇数，则P位是0 实验12MOV AL,3 // 00001011 p位：0add al,2 // 00001010 P位：1 辅助进位标志AF(Auxiliary Carry Flag) 在发生下列情况时，辅助进位标志AF的值被置为1，否则其值为0：(1)、在字节操作时，发生低字节向高字节进位或借位时；(2)、在字节操作时，发生低4位向高4位进位或借位时。大白话说下，就是运算时，把位划分成两半，低位的一半的第一位如果向高位进位（加）或者借位（减）时，A位就是1如下图，就看突出的那一位32位运算： _ _ _ _ - _ _ _16位运算： _ _ - _8位运算： _ - 实验：123456789// 第一组MOV EAX,0x55EEFFFFADD EAX,2 // A位变1// 第二组MOV AX,5EFE add ax,2 // A位又变1// 第三组MOV AL,4Eadd al,2 // A位又变1 零标志ZF(Zero Flag) 零标志ZF用来反映运算结果是否为0如果运算结果为0，则其值为1，否则其值为0。在判断运算结果是否为0时，可使用此标志位。 实验1234XOR EAX,EAX // Z位：1// 这句话的作用有两个// 1.将EAX的值变为1// 2.将标志位Z位置为1。如果[mov eax,0] 的话就没有第二个作用了,mov就不是运算 符号标志SF(Sign Flag) 符号标志SF用来反映运算结果的符号位，它与运算结果的最高位相同。特别注意：这里的最高位说的是二进制的最高位，所以只能是0或1 12MOV AL,7FADD AL,2 // 1 溢出标志OF(Overflow Flag) 溢出标志OF用于反映有符号数加减运算所得结果是否溢出。如果运算结果超过当前运算位数所能表示的范围，则称为溢出，OF的值被置为1，否则，OF的值被清为0。 最高位进位（CF）和溢出（OF）的区别？这里主要涉及到了无符号整数和有符号整数。计算机在存储的时候，并不知道自己存储的是有符号整数还是无符号整数。只有使用的人才知道，就是程序员喽。C位是做无符号运算时该关注的O位是做有符号运算时该关注的 想知道现在计算的结果有没有溢出，是看CF位还是OF位？我要看那个取决于我做的是有符号还是无符号运算。 如果你知道自己做的是无符号运算，你只用看C位，不用管O位如果你知道自己的做的是有符号运算，只要看O位，不用管C位 好好看这个图就什么都明白了 正数+负数，一定在圈内，永远不会溢出正数+正数，如果结果为负数（超过7F内），一定溢出。因为越界了，两个正数相加不应该是负数。 说结果之前，一定要指定到底是无符号运算还是有符号预算。 自己这个分析判断是错误的，其实只要是圈上的点可以表示的，都没有溢出，圈上的店不能表示的，就是溢出了。只是有符号的话，只有右边区域表示正数，左边区域表示负数无符号的话，整个区域都可以表示 和标志寄存器相关的指令ADC指令：带进位加法 百度百科：ADC 带进位的加法指令 ADC Reg/Mem, Reg/Mem/Imm 功能，将目的操作数和源操作数相加再加低位进位，结果送入目的的地址 dst+src+cf-&gt;dst， 受影响的标志位：AF、CF、OF、PF、SF和ZF，该指令的功能是把源操作数和进位标志位CF的值(0/1)一起加到目的操作数中。 实验12345MOV AL,1MOV CL,2ADC AL,CL //按照我们正常的ADD指令，此时AL中应该是3// 但是ADC指令是带进位的加法,它会把c位中的值也给加上。// 如果此时cf中的值是1，那结果:AL中的值是4，cf的值：0 注意事项：1.两边 SBB指令：带借位减法 百度百科的解释很明确SBB：带借位减法， 格式：SBB DST,SRC, 执行的操作：（DST)←(DST)-(SRC)-CF,其中CF为进位的值。 SBB Compents ：他们组成了Application .他们以何种方式组合是由SLEE来确定的。 实验123456MOV AL,3MOV CL,1SBB AL,CL // 分两种情况：// 1. 如果cf是0，那么结果和我们预想的一样，2// 2. 如果cf是1，那么结果还会减1，结果al变为1了 XCHG指令：交换数据 百度百科交换指令XCHG是两个寄存器，寄存器和内存变量之间内容的交换指令，两个操作数的数据类型要相同，可以是一个字节，也可以是一个字，也可以是双字 说明什么？我们交换的是两个容器，不能是立即数而且交换的两个容器不能都是内存 123456// 实验：MOV AL,1MOV CL,3XCHG AL,CL // AL变成3，CL变成了1XCHG DWORD PTR DS:[0X0019FF74],EAX MOVS指令：移动数据看了一下通用寄存器中EDI和ESI的分工：再回顾一下通用寄存器的划分：https://xuxiaofeng.gitlab.io/2018/12/12/study-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-12-%E8%BF%9B%E4%B8%80%E6%AD%A5%E5%AD%A6%E4%B9%A0%E5%AF%84%E5%AD%98%E5%99%A8/ 现在我们来解释MOVS指令 movs指令是用来复制一个数据项（字节，字或双字）从源字符串到目标字符串。原字符串又ESI/SI/DH 指出，目标字符串又EDI/DI/BH指出。（具体又那个指出，我们需要看使用时定义的单位） 这里还有一段解释：MOVS指令可以把由（SI）指向的数据段中的一个字（或字节）传送到由（DI）指向的附加段中的一个字（或字节）中去，同时根据方向标志(df标志寄存器)及数据格式（字 或字节）对SI和DI进行修改 在执行该指令前，应该先做好以下 准备工作： 1） 把存放于数据段中的源串首地址（如反向传送则应是末地址）放入SI寄存器中； 2） 把将要存放数据串的附加段中的目的串首地址（或反向传送时的末地址）放入DI寄存器中； 3） 建立方向标志。 实验首先说明一下，我们之前碰到内存的时候，我们总是这样表示DS:[],没错。但是碰到EDI表示内存地址单元时，我们应该这样ES:[],所以往下，我们会经常看到这样的字符：ES:[EDI] （这里涉及到段、页的概念）123 1.直接输入movs，点击确定，编辑器就会自动给我们生成下面的额语句 充分说明了这个指令是针对EDI和ESI的MOVS DWORD PTR ES:[EDI],DWORD PTR DS:[ESI] 12345678mov edi,0019ff88mov esi,0019ff80MOVS DWORD PTR ES:[EDI],DWORD PTR DS:[ESI] 结果edi:0019ff8cesi:0019ff84并且刚才edi对应内存编号中的值和dsi对应内存编号中的值确实做了交换我们发现EDI和ESI中的值都+4 了。这是有D位（df标志寄存器决定的） 所以这个MOVS指令有两个主要影响，一是真的交换了寄存器对应内存地址单元中的值，二是根据DF标志寄存器中的值，让ESI和EDI都进行一些位移。 STOS指令：讲Al/AX/EAX的值存储到[EDI]指定的内存单元 到底是复制AL还是AX还是EAX，是又我们指定的内存宽度决定的。复制完毕后，EDI的变化方向是由我们的D位（df标志寄存器）决定的。 12345678// 实验mov eax,12345678mov edi,0019ff88直接数据stos，确定酒水弹出下面的值STOS DWORD PTR ES:[EDI]运行结果（D位此时是0）DEI：0019FF8C内存单元0019FF88中的值：12345678 REP指令：按计数寄存器 (ECX) 中指定的次数重复执行字符串指令这里有一个把movs和rep指令糅合在一起的解释 MOVS指令可以把由（SI）指向的数据段中的一个字（或字节）传送到由（DI）指向的附加段中的一个字（或字节）中去，同时根据方向标志及数据格式（字 或字节）对SI和DI进行修改。当该指令与前缀REP联用时，则可将数据段中的整串数据传送到附加段中去。这里源串必须在数据段中，目的串必须在附加段 中，但源串允许使用段跨越前缀来修改。在与REP联用时还必须先把数据串的长度送到CX寄存器中，以便控制指令结束。因此在执行该指令前，应该先做好以下 准备工作： 1） 把存放于数据段中的源串首地址（如反向传送则应是末地址）放入SI寄存器中； 2） 把将要存放数据串的附加段中的目的串首地址（或反向传送时的末地址）放入DI寄存器中； 3） 把数据串长度放入CX寄存器； 4） 建立方向标志。在完成这些准备工作后就可使用串指令传送信息了 123MOV ECX,10REP MOVSDREP STOSD]]></content>
+      <categories>
+        <category>滴水逆向三期视频教程</category>
+      </categories>
+      <tags>
+        <tag>滴水逆向</tag>
+        <tag>汇编</tag>
+        <tag>标志寄存器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[git系统学习]]></title>
+    <url>%2F2018%2F12%2F21%2Ftools-git-2018-12-21-git%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%2F</url>
+    <content type="text"><![CDATA[git的特性 版本控制最终版，最终版1，最终版2 分布式分布式和集中式都需要中央服务器，不同的是分布式在工作电脑上保存了服务器的完整工程，即使服务器挂掉了，也不会影响工作电脑上的开发。集中式就不可以了。中央服务器挂掉，其他人就都不可以开发了。 git的安装和基本使用安装1sudo apt-get install git 基本使用1234567891011//目录初始化git init // 创建版本vim code.txtgit add code.txtgit commit -m &quot;create file code.txt&quot;// 查看版本记录git log// 版本回退git reset --hard HEAD^ // HEAD表示当前的最新版本，也可以用版本编号（commit hash）// HEAD^也是这样表示HEAD~1,回退四个版本git reset --hard HEAD~4 使用git reset 回退到低版本后，高版本并没有删掉。（但是git log看不到了）如果我们现在又想回到高版本该如何做？git log看不到高版本的版本编号了，我们可以用git reflog 查看历史操作。就会看到我们高版本的commit hash（版本编号）git reset --hard 版本编号 工作区和版本库工作区就是本地工作的目录版本库就是我们工作区下面的.git文件。 git版本库里有很多东西，其中最重要的就是本称为stage（或者叫index）的暂存区。 已经git add 到暂存区的文件，如何恢复？git reset HEAD 就相当于git add 命令的倒退，从暂存区清理code.txt,但是工作区的修改依然在。此时用git status，应该又提示文件修改，需要你git add git只会用暂存区的修改来创建版本，工作区的修改如果没有添加到暂存区。git commit创建的版本中是不会包括工作区修改的内容的。vim code.txt -&gt; 添加第一行git add code.txtvim code.txt -&gt; 添加第二行// 没有git add 直接git commitgit commit -m “update code.txt” // 这个版本中是没有第二行内容的 撤销修改编辑完工作区后，想撤销对工作区的修改1git checkout -- &lt;file&gt; 编辑完文件，git add 提交到暂存区，突然又不想到暂存区的此文件的改动了123git reset HEAD &lt;file&gt; // 这就是取消暂存想要继续丢弃工作区的改动git checkout -- &lt;file&gt; 总结撤销修改的三种情况1.只在工作区修改，还没有提交到暂存区git checkout – 2.工作区修改后，git add 提交到了暂存区git reset head git checkout – 3 git add 并且已经git commitgit reset –hard HEAD^ git对比文件工作区和版本库中的对比git diff HEAD – 将工作区和版本库HEAD进行比较如何看比较的内容？—和+++ ，分队对应diff后面的第一个和第二个 — a/ 代表HEAD版本中的+++ b/ 代表工作区的前面没有出现+或者-的，就是两个文件共有的 两个版本库中的对比git diff HEAD HEAD^ 删除文件12345rm &lt;file&gt;// 将删除的改动提交到暂存区git add &lt;file&gt;// 将删除的改动提交到版本库git commit - &quot;delete&quot; rm 和 git add ,两个命令可以合为一个，git rm 恢复删除删除文件也是对工作区的改动，和上面修改文件的恢复是一样的。在工作区删除后，发现删错了。想要恢复怎么办？git checkout – 特别注意： 创建文件touch filename.txt后，如果没有git add添加到暂存区，git是不会开始管理这个文件的。这个时候，如果你直接rm filename.txt,就真的删掉了。因为git本来就没有跟踪这个文件。 分支管理工厂里面的流水线平行宇宙 创建分支与合并分支主分支，默认分支 master刚才我们说HEAD指向最新的commit，严格的说：HEAD是指向master，master才是指向最新的commit合并完分支之后，我们可以删除dev分支。删除dev分支就是把dev指针给删除掉。删掉后，我们就剩下一个master分支。 实验12345678910111213141516git branch //查看当前仓库又多少分支 * master // *代表当前在那个分支里面// 创建并切换到新的分支devgit checkout -b devvim code.txt -&gt; add online git add code.txt // 在dev分支中进行开发git commit -m &quot;dev 分支提交&quot; // 此时master分支并没有改变// 切换到master分支git checkout master// 查看master分支上有没有dev分支的操作记录git log --pretty=online //发现并没有dev分支的操作记录// 合并分支git merge dev 执行完命令后，我们发现出现又这样的提示，fast-forward，这属于快速合并。快速合并就是直接挪动master指针就可以。// 删除分支git branch -d dev 分支-解决冲突 合并分支往往不是一帆风顺的。当我们在两个分支上都对一个文件进行修改了。那执行git merge命令的时候，就会提示自动合并失败。并给出冲突失败文件。当然我们执行git status 也会看到合并有冲突的文件。 这时候我们该怎么做？需要手动融合，打开冲突文件进行手动融合。融合之后，需要做一次新的提交。gti add *，git commit - “”。HEAD指向master，master向前移动了，但是dev分支是不动的。 重点有时候我们需要看分支图例git log –graph –pretty=online 分支管理策略没有快速合并，但是也没有冲突 我们在dev分支和master分支都做了修改，但是修改的不是同一个文件。我们合并时，不能使用fast-forward模式了，但是并没有冲突。 当我们在master分支上git merge dev时，命令行中会出现一次弹窗，让我们输入一个commit信息。这种合并方式时recursive合并。这时候，git默认会给我们做一次新的提交。 强制禁止快速合并是在什么样的情景呢？ git checkout -b dev后，在dev分支做了修改，提交了好几个commit。git checkout master，然后git merge dev。此时没有冲突，快速合并成功。但是：我们在dev分支中的commit记录都没有了！！！ 解决办法，禁用fast-forwardgit merge --no-ff -m &#39;禁用fast-farword合并&#39; dev这样就会重新做一次新的提交。 –no-ff指的是强行关闭fast-forward方式。fast-forward方式就是当条件允许的时候，git直接把HEAD指针指向合并分支的头，完成合并。属于“快进方式”，不过这种情况如果删除分支，则会丢失分支信息。因为在这个过程中没有创建commitgit merge –squash 是用来把一些不必要commit进行压缩，比如说，你的feature在开发的时候写的commit很乱，那么我们合并的时候不希望把这些历史commit带过来，于是使用–squash进行合并，此时文件已经同合并后一样了，但不移动HEAD，不提交。需要进行一次额外的commit来“总结”一下，然后完成最终的合并。总结：–no-ff：不使用fast-forward方式合并，保留分支的commit历史–squash：使用squash方式合并，把多次分支commit历史压缩为一次 bug分支使用场景 我们正在dev分支上开发，突然接到任务说时让我们赶紧修复一个bug。可是我们当前的工作还没有做完，还不能提交。怎么办？ 我们可以把工作暂时保存起来。git stash就把我们的工作现场给保护起来了。git status一看，工作区都是干净的。1234567891011121314比如bug时在master分支下面，先git checkout master，然后创建bug分支git checkout -b bug001vim main.gogit add mian.gogit commit -m &quot;修复bug001&quot;git checkout mastergit merge --no-ff -m &apos;修复bug001合并&apos; bug001git branch -d bug001// 修复完成后，继续回到dev分支干活git status //工作区干净git stash list //列出保存的工作现场// 恢复现场git stash pop git status //已经回来了 修改bug时，先回到出现bug的分支上面。 分支管理小结 git基本操作小结]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[初识堆栈之大白话堆栈]]></title>
+    <url>%2F2018%2F12%2F20%2Fstudy-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-20-%E5%88%9D%E8%AF%86%E5%A0%86%E6%A0%88%E4%B9%8B%E5%A4%A7%E7%99%BD%E8%AF%9D%E5%A0%86%E6%A0%88%2F</url>
+    <content type="text"><![CDATA[什么是堆栈引出堆栈在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？现在假设我们需要一块内存，它可以满足如下功能 1.主要用于临时存储一些数据 能够记录存储了多少数据 可以很方便的找到需要的数据 对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了 还好有高人还有在我们之前，有那么多厉害的人。有人设计出这样一块内存，虽然简单，但却刚好满足了上面我们的三个需求。为了满足第二条，我们直接top-base；对于第三条，比如我们存储了500个数据，我们需要第50个，我们直接base+50个单位的偏移就可以找到。突然又需要第200个数据，base+200单位的偏移就是。这里的单位是指byte 还需要注意一点，在window系统中堆栈是往低位扩展了，起初会选择一个值比较大的位置作为base，然后每次往低位扩展，top不断变小。 实验，自己实现堆栈 1.我们使用32位寄存器EBX和EDX作为栈顶和栈底 。 为了实验的方便，主要是DTDebug显示的方便。我们每次操作都操作4字节 压入数据我们就选中内存地址0019FF74吧12MOV EBX,0019FF74 //栈底的内存地址（base）MOV EDX,0019FF74 //栈顶的内存地址（top） 接下来我们有三种实现方式 方式一：先存储数据，再移动栈顶12MOV DWORD PTR ds:[EDX-4],0xAAAAAAAASUB EDX,4 方式二：先移动栈顶，再存储数据12SUB EDX,4MOV DWORD PTR DS:[EDX],0xBBBBBBBB 方法三先存储数据，再用LEA12mov dword ptr ds:[edx-4],0xCCCCCCCClea edx, dword ptr ds:[edx-4] 第二句话为什么不是这样lea edx,byte ptr ds:[edx-4]，暂时没有明白?不就是取地址吗？为了一定要4个字节呢？ 方法四：先lea，再存储数据 读取数据读取第N个数 方式一 方式二 弹出数据不光要读取栈顶的数据，还需要将栈顶的位置进行移动 操作系统实现的堆栈push and pop堆栈是软件设计常用的概念。如果每次我们需要的时候，都需要自己手动实现，效率也太低了。为此，操作系统联合cpu给我们实现了堆栈。如何联合的呢？cpu提供两个32位的寄存器，ESP和EBP，一个用来存储宅顶，一个用来存储栈底。其实对于cpu来说，这两个寄存器和其他的寄存器并没有什么特殊的地方，只是操作系统按照自己的习惯把他两区别对待了。这两个就用来存储栈顶和栈底，相当于cpu和操作系统的之间的约定。（突然想到了协议） 那之前我们所有的操作就可以再两个命令代替了12入栈用push出战用POP push和pop操作时，寄存器ESP变化宽度ESP中存储的是栈顶的位置，其实就是栈顶的内存编号。根据上一小节，我们每push一次，ESP中的值应该-4；每pop一次，ESP中值应该+4. question：ESP中的值，每次变化都是4吗？ 这个也是要分情况 push + 立即数,ESP中的内存编号-4push 0x1 push + 寄存器push al // 8位，不允许这样操作push ax // 16位，ESP中的内存编号-2 push + 内存push r8 push 8位的内存是不允许的push r16 push ESP中的内存编号-2push r32 psuh ESP中的内存编号-4 pop is same with push PUSHAD ADN POPADPUASHAD:把8个通用寄存器中的值存储到堆栈中。 然后我们可以随意的操作修改寄存器，当我们又需要恢复寄存器的时候： POPAD ,一个指令就解决问题 这里涉及到一个知识点，堆栈平衡，我们后续再讨论]]></content>
+      <categories>
+        <category>滴水逆向三期视频教程</category>
+      </categories>
+      <tags>
+        <tag>滴水逆向</tag>
+        <tag>汇编</tag>
+        <tag>堆栈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[内存读写-内存寻址]]></title>
+    <url>%2F2018%2F12%2F16%2Fstudy-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-16-%E5%86%85%E5%AD%98%E8%AF%BB%E5%86%99-%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80%2F</url>
+    <content type="text"><![CDATA[DTDebug再介绍 左下角就是内存数据窗口。最下面是命令行窗口。我们可以输入命令查看某一块内存的数据db 0x0019FF74,然后enter，就可以查看到这个内存中的数据 存储数据的顺序问题我们往内存地址0x0019FF74中写入数据,当前0xmov dword ptr ds:[0x0019FF74],0x12345678F8执行内存数据区域显示的数据和堆栈区显示的数据不一致，why? 数据的存储时有顺序的，数据在内存中，总是高位在前，低位在后。 0x0019FF74 存储的是780x0019FF75 存储的是560x0019FF76 存储的是340x0019FF77 存储的是12 内存寻址通过前面很多的联系，我们可以发现，设计到内存读写最关键的就是，找到内存地址，也就是内存编号寻找地址有哪些格式呢，主要有下面5种 下面的所有操作中，我们一定要注意MOV和LEA的区别。 mov的前后操作数不能都是内存单元 mov是操作内存中的值lea是操作内存的地址 [立即数] 演示初始状态我们添加两条指令执行后的结果如果大家有迷惑，到底[0019FF74]位置存储的是12还是78？我们可以用命令证实一下：12mov dword ptr ds:[0x19FF74],0x12345678mov byte ptr ds:[0x19FF74],0x00 结果说明byte ptr ds[0x19FF74]存储的是78 LEA获取内存编号再实验一下：初始状态添加三条命令第二条运行完毕第三条运行完毕 [reg] reg代表寄存器 可以是8个通用寄存器中的任意一个 [reg+立即数] [reg+reg*{1,2,4,8}] 注意这里只能是1、2、4、8，不能是其他的任何数字 [reg+reg*{1,2,4,8}+立即数]]]></content>
+      <categories>
+        <category>滴水逆向三期视频教程</category>
+      </categories>
+      <tags>
+        <tag>滴水逆向</tag>
+        <tag>汇编</tag>
+        <tag>内存读写</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python爬虫005：本地代理proxy请求]]></title>
+    <url>%2F2018%2F12%2F15%2Fstudy-python%E5%88%86%E5%B8%83%E5%BC%8F%E7%88%AC%E8%99%AB%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-2018-12-15-python%E7%88%AC%E8%99%AB005%EF%BC%9A%E6%9C%AC%E5%9C%B0%E4%BB%A3%E7%90%86proxy%2F</url>
+    <content type="text"><![CDATA[post请求1234567#encoding:utf-8import urllib2data="first=true&amp;p=1&amp;kd=python"header=&#123;'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36'&#125;request = urllib2.Request("https://www.lagou.com/jobs/positionAjax.json",headers=header)request.add_data(data) #这行代码就决定了这是一个post请求print urllib2.urlopen(request).read() 这段是模拟拉勾网的请求，但是返回的提示一直是请求过去频繁。说明代码还是有问题的 postcgi暂时不明白，感觉应该是一种post协议吧。希望知道者告知，感激不尽。 为什么有些post请求也可以在url开到请求的的数据？待解决中，只知道确实是有些post请求参数也是现实的url中]]></content>
+      <categories>
+        <category>python分布式爬虫教程</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+        <tag>post</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python爬虫004：模拟手机百度请求]]></title>
+    <url>%2F2018%2F12%2F15%2Fstudy-python%E5%88%86%E5%B8%83%E5%BC%8F%E7%88%AC%E8%99%AB%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-2018-12-15-python%E7%88%AC%E8%99%AB004%EF%BC%9A%E6%A8%A1%E6%8B%9F%E6%89%8B%E6%9C%BA%E7%99%BE%E5%BA%A6%E8%AF%B7%E6%B1%82%2F</url>
+    <content type="text"><![CDATA[post请求1234567#encoding:utf-8import urllib2data="first=true&amp;p=1&amp;kd=python"header=&#123;'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36'&#125;request = urllib2.Request("https://www.lagou.com/jobs/positionAjax.json",headers=header)request.add_data(data) #这行代码就决定了这是一个post请求print urllib2.urlopen(request).read() 这段是模拟拉勾网的请求，但是返回的提示一直是请求过去频繁。说明代码还是有问题的 postcgi暂时不明白，感觉应该是一种post协议吧。希望知道者告知，感激不尽。 为什么有些post请求也可以在url开到请求的的数据？待解决中，只知道确实是有些post请求参数也是现实的url中]]></content>
+      <categories>
+        <category>python分布式爬虫教程</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+        <tag>手机代理proxy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python爬虫003：urllib post请求]]></title>
+    <url>%2F2018%2F12%2F15%2Fstudy-python%E5%88%86%E5%B8%83%E5%BC%8F%E7%88%AC%E8%99%AB%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-2018-12-15-python%E7%88%AC%E8%99%AB003%EF%BC%9Aurllib-post%E8%AF%B7%E6%B1%82%2F</url>
+    <content type="text"><![CDATA[post请求1234567#encoding:utf-8import urllib2data="first=true&amp;p=1&amp;kd=python"header=&#123;'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36'&#125;request = urllib2.Request("https://www.lagou.com/jobs/positionAjax.json",headers=header)request.add_data(data) #这行代码就决定了这是一个post请求print urllib2.urlopen(request).read() 这段是模拟拉勾网的请求，但是返回的提示一直是请求过去频繁。说明代码还是有问题的 postcgi暂时不明白，感觉应该是一种post协议吧。希望知道者告知，感激不尽。 为什么有些post请求也可以在url开到请求的的数据？待解决中，只知道确实是有些post请求参数也是现实的url中]]></content>
+      <categories>
+        <category>python分布式爬虫教程</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+        <tag>post</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python爬虫002：代理user-agent和response信息、get请求]]></title>
+    <url>%2F2018%2F12%2F14%2Fstudy-python%E5%88%86%E5%B8%83%E5%BC%8F%E7%88%AC%E8%99%AB%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-2018-12-14-python%E7%88%AC%E8%99%AB002-%E4%BB%A3%E7%90%86user-agent%E5%92%8Cresponse%E4%BF%A1%E6%81%AF%E3%80%81get%E8%AF%B7%E6%B1%82%2F</url>
+    <content type="text"><![CDATA[response网络详细信息python2中urllib和urllib2的区别参考地址：https://blog.csdn.net/qq_34327480/article/details/79161794 在python2中，urllib和urllib2都是接受URL请求的相关模块，但是提供了不同的功能。两个最显著的不同如下：1、urllib2可以接受一个Request类的实例来设置URL请求的headers2、urllib仅可以接受URL。这意味着，你不可以伪装你的User Agent字符串等。 python3使用urllib123456789#py3import urllib.request#pycharm go declaration to search source codedef download(url): response = urllib.request.urlopen(url, timeout = 5) print(type(response))# class http.client.httpresponseprint(response.info()) #class http.client.HTTPMessageprint(download("http://ww.baidu.com")) python2使用urllib2python2里面没有urllib.reqeust,我们直接用urllib2替换即可还有开头的coding:utf-81234567891011121314151617#py2#coding:utf-8import urllib2def download(url): response = urllib2.urlopen(url, timeout = 5) print(type(response))# class http.client.httpresponse print(response.info()) #包含了网站的详细信息 print(response.read()) #read source coad#括号内是控制多少字符的问题#写爬虫记得try catchtry: print(download("http://ww.google.com"))except urllib2.URLError as e: print("网络异常", e) #抓住错误对象类型当作变量 或者123456import urllib2req = urllib2.Request(&apos;http://www.example.com/&apos;)req.add_header(&apos;Referer&apos;, &apos;http://www.python.org/&apos;)# Customize the default User-Agent header value:req.add_header(&apos;User-Agent&apos;, &apos;urllib-example/0.1 (Contact: . . .)&apos;)r = urllib2.urlopen(req) response信息再贴一下打印response.info()的信息1234567891011121314151617181920Bdpagetype: 1Bdqid: 0xe33c14ce00005740Cache-Control: privateContent-Type: text/htmlCxy_all: baidu+7b2f0340f919578bfe3264aa8c0016f8Date: Sun, 02 Dec 2018 03:03:24 GMTExpires: Sun, 02 Dec 2018 03:03:01 GMTP3p: CP=&quot; OTI DSP COR IVA OUR IND COM &quot;Server: BWS/1.1Set-Cookie: BAIDUID=00813CE4F82EFFA6488DB896F424E587:FG=1; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.comSet-Cookie: BIDUPSID=00813CE4F82EFFA6488DB896F424E587; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.comSet-Cookie: PSTM=1543719804; expires=Thu, 31-Dec-37 23:55:55 GMT; max-age=2147483647; path=/; domain=.baidu.comSet-Cookie: delPer=0; path=/; domain=.baidu.comSet-Cookie: BDSVRTM=0; path=/Set-Cookie: BD_HOME=0; path=/Set-Cookie: H_PS_PSSID=1441_25810_21122_22159; path=/; domain=.baidu.comVary: Accept-EncodingX-Ua-Compatible: IE=Edge,chrome=1Connection: closeTransfer-Encoding: chunked 注意参数里面有一个Bdqid,这是百度给每个用户的唯一标识 response.read()查看全部网页源代码 response.read(100)查看网页源代码的前100个字节 写爬虫的时候多家try，catch agent就像大会狼冒充大白兔1234567891011#encoding: utf-8import urllib2def download(url): headers = &#123;"User Agent : "&#125; request = urllib2.Request(url, headers = headers) #发起请求 data = urllib2.urlopen(request).read() #打开请求，抓取数据 return dataurl = "https://sou.zhaopin.com/?jl=613&amp;kw=" + searchname + "&amp;kt=3"print download(url) 上面这段代码构造了一个request，在python2的情况下 常见的代理手机代理123456789101112131415161718192021222324252627282930safariiOS4.33–iPhoneUser-Agent:Mozilla/5.0(iPhone;U;CPUiPhoneOS4_3_3likeMacOSX;en-us)AppleWebKit/533.17.9(KHTML,likeGecko)Version/5.0.2Mobile/8J2Safari/6533.18.5safariiOS4.33–iPodTouchUser-Agent:Mozilla/5.0(iPod;U;CPUiPhoneOS4_3_3likeMacOSX;en-us)AppleWebKit/533.17.9(KHTML,likeGecko)Version/5.0.2Mobile/8J2Safari/6533.18.5safariiOS4.33–iPadUser-Agent:Mozilla/5.0(iPad;U;CPUOS4_3_3likeMacOSX;en-us)AppleWebKit/533.17.9(KHTML,likeGecko)Version/5.0.2Mobile/8J2Safari/6533.18.5AndroidN1User-Agent:Mozilla/5.0(Linux;U;Android2.3.7;en-us;NexusOneBuild/FRF91)AppleWebKit/533.1(KHTML,likeGecko)Version/4.0MobileSafari/533.1AndroidQQ浏览器ForandroidUser-Agent:MQQBrowser/26Mozilla/5.0(Linux;U;Android2.3.7;zh-cn;MB200Build/GRJ22;CyanogenMod-7)AppleWebKit/533.1(KHTML,likeGecko)Version/4.0MobileSafari/533.1AndroidOperaMobileUser-Agent:Opera/9.80(Android2.3.4;Linux;OperaMobi/build-1107180945;U;en-GB)Presto/2.8.149Version/11.10AndroidPadMotoXoomUser-Agent:Mozilla/5.0(Linux;U;Android3.0;en-us;XoomBuild/HRI39)AppleWebKit/534.13(KHTML,likeGecko)Version/4.0Safari/534.13BlackBerryUser-Agent:Mozilla/5.0(BlackBerry;U;BlackBerry9800;en)AppleWebKit/534.1+(KHTML,likeGecko)Version/6.0.0.337MobileSafari/534.1+WebOSHPTouchpadUser-Agent:Mozilla/5.0(hp-tablet;Linux;hpwOS/3.0.0;U;en-US)AppleWebKit/534.6(KHTML,likeGecko)wOSBrowser/233.70Safari/534.6TouchPad/1.0NokiaN97User-Agent:Mozilla/5.0(SymbianOS/9.4;Series60/5.0NokiaN97-1/20.0.019;Profile/MIDP-2.1Configuration/CLDC-1.1)AppleWebKit/525(KHTML,likeGecko)BrowserNG/7.1.18124WindowsPhoneMangoUser-Agent:Mozilla/5.0(compatible;MSIE9.0;WindowsPhoneOS7.5;Trident/5.0;IEMobile/9.0;HTC;Titan)UC无User-Agent:UCWEB7.0.2.37/28/999UC标准User-Agent:NOKIA5700/UCWEB7.0.2.37/28/999UCOpenwaveUser-Agent:Openwave/UCWEB7.0.2.37/28/999UCOperaUser-Agent:Mozilla/4.0(compatible;MSIE6.0;)Opera/UCWEB7.0.2.37/28/999 电脑代理12345678910111213141516171819202122232425262728293031323334353637383940safari5.1–MACUser-Agent:Mozilla/5.0(Macintosh;U;IntelMacOSX10_6_8;en-us)AppleWebKit/534.50(KHTML,likeGecko)Version/5.1Safari/534.50safari5.1–WindowsUser-Agent:Mozilla/5.0(Windows;U;WindowsNT6.1;en-us)AppleWebKit/534.50(KHTML,likeGecko)Version/5.1Safari/534.50IE9.0User-Agent:Mozilla/5.0(compatible;MSIE9.0;WindowsNT6.1;Trident/5.0IE8.0User-Agent:Mozilla/4.0(compatible;MSIE8.0;WindowsNT6.0;Trident/4.0)IE7.0User-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT6.0)IE6.0User-Agent:Mozilla/4.0(compatible;MSIE6.0;WindowsNT5.1)Firefox4.0.1–MACUser-Agent:Mozilla/5.0(Macintosh;IntelMacOSX10.6;rv:2.0.1)Gecko/20100101Firefox/4.0.1Firefox4.0.1–WindowsUser-Agent:Mozilla/5.0(WindowsNT6.1;rv:2.0.1)Gecko/20100101Firefox/4.0.1Opera11.11–MACUser-Agent:Opera/9.80(Macintosh;IntelMacOSX10.6.8;U;en)Presto/2.8.131Version/11.11Opera11.11–WindowsUser-Agent:Opera/9.80(WindowsNT6.1;U;en)Presto/2.8.131Version/11.11Chrome17.0–MACUser-Agent:Mozilla/5.0(Macintosh;IntelMacOSX10_7_0)AppleWebKit/535.11(KHTML,likeGecko)Chrome/17.0.963.56Safari/535.11傲游（Maxthon）User-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;Maxthon2.0)腾讯TTUser-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;TencentTraveler4.0)世界之窗（TheWorld）2.xUser-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1)世界之窗（TheWorld）3.xUser-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;TheWorld)搜狗浏览器1.xUser-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;Trident/4.0;SE2.XMetaSr1.0;SE2.XMetaSr1.0;.NETCLR2.0.50727;SE2.XMetaSr1.0)360浏览器User-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;360SE)AvantUser-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;AvantBrowser)GreenBrowserUser-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1) 模拟手机浏览器get模拟百度请求urllib的编码和解码浏览器的地址栏经常看到乱码的情况，这就是编码的问题12words=&#123;'wd':'徐晓峰'&#125;urllib.urlencode(words) #'wd=%E5%BE%90%E6%99%93%E5%B3%B0',注意这里是urllib不是urllib2 #coding:urf-8 import urllib import urllib2 url = 'http://www.baidu.com/s' word = {'wd':'徐晓峰'} newurl = url+'?'+urllib.urlencoding(word) reqeust = urllib2.Request(newurl) request.add_header("Connection":"keep-alive") #可以自由的添加头信息 print urllib2.urlopen(request).read()]]></content>
+      <categories>
+        <category>python分布式爬虫教程</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python爬虫001：python urllib读取网页]]></title>
+    <url>%2F2018%2F12%2F14%2Fstudy-python%E5%88%86%E5%B8%83%E5%BC%8F%E7%88%AC%E8%99%AB%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B-2018-12-14-python%E7%88%AC%E8%99%AB001%EF%BC%9Aurllib%E8%AF%BB%E5%8F%96%E7%BD%91%E9%A1%B5%2F</url>
+    <content type="text"><![CDATA[正则表达式re加(),代表我们需要括号里面的东西不加(),表示全部内容我们都需要123456789import remystr = """&lt;span class \"search_yx_t j\"&gt; 共&lt;em&gt;5830&lt;/em&gt;个职位满足条件 &lt;span&gt;"""restr = "&lt;em&gt;(\\d+)&lt;/em&gt;"#d+表示和数字有关；():只要里面的对象regex = re.compile(restr, re, IGNORECASE)mylist = regex.findall(mystr) 读取网页的三种方式123456789101112131415161718#py2#enconding:utf-8import urllib2url = "http://www.baidu.com"#urlopen只能处理http，不可以处理httpsdef download1(url): return urllib2.urlopen(url).read()#读取全部网页def download2(url): return urllib2.urlopen(url).readlines()#读取每一行的网页数据，然后压入列表def download3(url): response = urllib2.orlopen(url)#网页抽象为文件 while True: line = response.readline()#读取一行 if not line: break python2 和python3的区别编码一般抓取英文数据用python2，抓取带中文的数据，就需要用python3 用python2打印中文是，需要在第一行encoding:utf-8 urllib2获取一个网页数据，urllib在python2和python3中有不同的表示 python2 12urllib2.urlopen(url).read()# urllib2只可以处理http，不可以处理https python3 1urllib2.request(url).read() python被网站屏蔽：referer有时候我们请求服务器的时候，服务器可以知道通过请求头中的referer参数，知道是谁在请求它服务器如果发现不是浏览器在请求他，二是python在请求他。直接502.可以直接拒绝我们的请求。 selenium我们需要这个东西来模拟浏览器。selenium可以操作我们的浏览器 抓取智联招聘基于selenium库和selenium.webdriver123456789101112131415161718192021222324import selenium #测试框架import selennium.webdriver #模拟浏览器import remystr = """&lt;span class \"search_yx_t j\"&gt; 共&lt;em&gt;5830&lt;/em&gt;个职位满足条件 &lt;span&gt;"""restr = "&lt;em&gt;(\\d+)&lt;/em&gt;"#d+表示和数字有关；():只要里面的对象regex = re.compile(restr, re. IGNORECASE)mylist = regex.findall(pagesource)def getnumberbyname(searchname): url = "https://sou.zhaopin.com/?jl=613&amp;kw=" + searchname + "&amp;kt=3" driver = selenium.webdriver.Firefox() #调用火狐浏览器 driver.get(url) #访问链接 pagesource = driver.page_source #抓取网页源代码 driver.close()#关闭 return mylist[0]# print getnumberbyname("python") 这是测试函数pythonlist = ["python", "python 运维", "python 测试", "python 数据", "python web"]for oystr in pythonlist: print pystr, getnumberbyname(pystr) 抓取51job123456789101112131415161718192021222324import selenium #测试框架import selennium.webdriver #模拟浏览器import remystr = """&lt;div class = "rt"&gt; 共67条职位 &lt;\div&gt;"""def getnumberbyname(searchname): #可能这里有一些混乱，手头没有python环境就没测试，大致就先这样吧 url="https://search.51job.com/list/240200,000000,0000,00,9,99,"+searchname +",2,1.htmllang=c&amp;stype=&amp;postchannel=0000&amp;workyear=99&amp;cotype=99&amp;degefrom=99&amp;jobterm=99&amp;companysize=99&amp;providesalary=99&amp;lonlat=0%2C0&amp;adius=-1&amp;ord_field=0&amp;confirmdate=9&amp;fromType=&amp;dibiaoid=0&amp;address=&amp;lin=&amp;specialarea=00&amp;from=&amp;welfare= driver = selenium.webdriver.Firefox() #调用火狐浏览器 driver.get(url) #访问链接 pagesource = driver.page_source #抓取网页源代码 restr = """(\\d+)""" #先抓大，再抓小；尤其是空白字 符出现的时候 regex = re.compile(restr, re.IGNORECASE) mylist = regex.findall(pagesource) newstr = mylist[0].strip() driver.close()#关闭 return mylist[0]pythonlist = ["python", "python 运维", "python 测试", "python 数据", "python web"]for oystr in pythonlist: print pystr, getnumberbyname(pystr)]]></content>
+      <categories>
+        <category>python分布式爬虫教程</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+        <tag>urllib</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[内存读写]]></title>
+    <url>%2F2018%2F12%2F13%2Fstudy-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-13-%E5%86%85%E5%AD%98%E8%AF%BB%E5%86%99%2F</url>
+    <content type="text"><![CDATA[为什么需要内存？如果我们只需要这样的计算：1+2=? ,我们当然不需要内存。如果有十亿个数相加呢？寄存器明显不够用。所以就需要内存了 这里所说的内存 严格意义上并不是 内存条 ，但是现在可以这样理解，内存就在内存条中，内存条提供了一个很大的容器 从存储角度来看的话，寄存器和内存条没有什么区别，都是容器，都存储着一些列0、1这样的数字。 寄存器和内存的区别 如何定位内存？ 问题引出：cpu寄存器的数量是有限的，我们可以给每一个寄存器定义名字。但是内存很大，我们如何定义，方便我们找到呢？ 32位、64位计算机 32位计算机：误解：cpu寄存器的最大宽度是32位，所以是32位计算机。这种说法是不对的。32位指的是寻址编号。就是说计算机内部有32根线，每根线都可以代表0和1，每根线变化一下，就可以得到一个地址，就可以根据这个地址找到一块内存。32根线，也就是32位，就是寻找内存的范围。也就是寻址范围。这里的一块指的是8bit | 1byte 根据寻址范围，我们就相当于给内存起好编号了。注意编号都是以字节为单位. 计算最大内存123456732位计算机：2^32个内存编号，一个内存编号代表1byte2^32 byte2^32 / 1024 = 2^32 / 2^10 =2^22 KB2^22 / 1024 = 2^22 / 2^10 = 2^12 MB2^12 / 1024 = 2^12 / 2^10 = 2^2 GB = 4GB即使这里是4GB，不过一般我们看到的内存都是小于4GB的，这是有些系统固件会占用一部分内存。 这个问题仔细扣是不对的。因为计算机还可以扩展内存，正常情况下，计算如果按照32位的寻址规则的话，是4GB，但是计算机也可以打破这个寻址规则。其实，如何寻址，都是计算机自己内部定义的。 内存读写内存的格式内存的读写至少都是8位。涉及到内存，记住单位就是byte 内存地址和立即数mov 0x12345678,0xFFFF这条指令中，0x12345678到底是立即数，还是内存地址。不好区分，所以规定，我们用 []来表示内存mov [0x12345678],0xFFFF上面这条指令还是不好（不是不对）？ 因为0x12345678 表示1byte,而0xFFFF是2 byte.内存不像寄存器，超过的会直接抛弃，所以我们应该指定宽度，下面就是标准格式。 演示每个应用程序打开时，都会有一个4GB的空间DTDebug打开一个应用先认识一下我们的工具。 说明几点： 寄存器ESP一般就是用来处理堆栈的 右下角的堆栈区，我们初学者可以把他理解为内存 内存写MOV DWORD PTR DS:[8FFFFFFF],0x12345678执行报错。每个应用程序打开时，都会有一个4GB的空间，但是有部分地址我们时无法访问的。 怎么知道我们可以访问的地址呢？寄存器ESP中存放的地址肯定时可以访问的。我们更改一下指令MOV DWORD PTR DS:[0x0019FF74],0x12345678执行可以看到已经写入了。还有一个细节：[0x0019FF74]是1byte的地址，可是我们写入0x12345678,4byte,怎么回事？注意看堆栈区的内存标号：每四个才显示一个内存标号。其实我们的0x12345678是存在4个内存标号里的。 内存读MOV EAX,DWORD PTR DS:[0x13FFC4]`]]></content>
+      <categories>
+        <category>滴水逆向三期视频教程</category>
+      </categories>
+      <tags>
+        <tag>滴水逆向</tag>
+        <tag>汇编</tag>
+        <tag>内存读写</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[进一步学习寄存器]]></title>
+    <url>%2F2018%2F12%2F12%2Fstudy-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-12-%E8%BF%9B%E4%B8%80%E6%AD%A5%E5%AD%A6%E4%B9%A0%E5%AF%84%E5%AD%98%E5%99%A8%2F</url>
+    <content type="text"><![CDATA[寄存器的种类现代计算机中，寄存器都是由CPU提供的，寄存器就在cpu里面。计算器按照存储宽度可以划分如下： 说明几点 1.不同的寄存器有不同的功能，这个我们暂时先不用管 寄存器是随着硬件不断发展变化的。现在已经有64位的寄存器了，将来可能还会有128位的寄存器 寄存器的结构可以看到，32位的寄存器中是嵌套着1个16位的寄存器，16位的寄存器嵌套着两个八位的寄存器。 大家可以找找规律，16位的寄存器名称就是把32位寄存器名称中的E给去掉了。而8位的寄存器，把16位寄存器划分为高位和低位，高位用H（high）表示，低位用L（lower）表示。 为什么要设计成这种嵌套关系？ 1.硬件不断发展的原因。将来要增加64位的寄存器，直接套在32位上就可以。既可以保持兼容，有可以自由扩展 存储不浪费。寄存器已经到32位了，我要存储8位的数据，那我们使用8位寄存器就可以。剩下的空间就可以给其他数据使用。 演示我们可以通过mov指令来演示一下这种嵌套关系12345#指定一次如下mov eax,0xAAAAAAAAmov ax,0xBBBBmov al,0xEEmov ah,0xHH 连续4次F8，执行4次。结果以此如下图：根据这个实验，大家就能形象出寄存器的结构 mov指令的用法立即数的概念 通常把在立即寻址方式指令中给出的数称为立即数。立即数可以是8位、16位或32位，该数值紧跟在操作码之后mov eax,0xAAAAAAAA 中 0xAAAAAAAA就是立即数 mov指令的用法 根据语法，我们可以写这样的指令mov eax,0xAAAAAAAA还可以写这样的指令mov eax,ebx 注意这里的mov和我们linux系统的mov是不一样的，linux系统的move是移动，而这里mov是拷贝 几个简单指令123456ADD 指令：加SUB 指令：减AND指令：逻辑与OR指令：逻辑或NOT指令：逻辑非XOR指令：逻辑异或 ADD指令演示ADD指令是源操作数与目标操作数进行逻辑与运算，运算结果再放到目标地址中我们写这样两条命令按F8后，发现eax中值为2，符合我们的预期再按F8后是没有执行吗？不是，如图我们可以再增加一体语句or eax,3执行后结果如图：]]></content>
+      <categories>
+        <category>滴水逆向三期视频教程</category>
+      </categories>
+      <tags>
+        <tag>滴水逆向</tag>
+        <tag>汇编</tag>
+        <tag>通用寄存器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[通用寄存器和初识汇编]]></title>
+    <url>%2F2018%2F12%2F11%2Fstudy-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-11-%E9%80%9A%E7%94%A8%E5%AF%84%E5%AD%98%E5%99%A8%E5%92%8C%E5%88%9D%E8%AF%86%E6%B1%87%E7%BC%96%2F</url>
+    <content type="text"><![CDATA[寄存器初识不论如何存储，在计算机中，我们存储的都是0和1。再熟悉一点计算机的组成，我们就会知道，cpu和硬盘中都可以存储，我们可以理解为cpu和硬盘中都有一些容器。cpu中比较通用的就是 32位通用寄存器 32位通用寄存器的功能如下 这个需要我们牢牢的记住，但是我们也应该知道两点 说是寄存器，其实就是一个容器 这里所说的寄存器的主要功能，其实是操作系统给我们的建议功能。就像我们买一个牙刷钢，建议的功能肯定是刷牙。但是你非要用来喝茶，也是没有关系的。 学习汇编准备开发工具我们谁用滴水推荐的DTdebug工具。https://pan.baidu.com/s/1ck1ii_lsV9ZsAs-4FdjLmA这个是绿色软件，下载解压后直接打开就可以。注意两点 1.以管理身份运行 需要配置一下options这两个存储目录分别对应，我们解压后udd和plugin目录。 DTdebug界面file -&gt; open ,打开一个.exe文件，就可以看到各种汇编代码。 看右边，registers界面，就可以看到我们刚才说的32位通用寄存器中的几个容器。 EIP寄存器我们可以看到，左边黑色就表示cpu当前执行的位置，右边的EIP中位置和左边的相同，说明EIP中存储的就是当前程序的执行位置。 发送指令我们在左边的随意一个命令中双击，就会跳出操作指令的窗口。输入指令后，点击Assemble，就会执行相应的指令。 mov指令汇编指令都是由 操作码+操作数 组成。mov， 0x12就是把十六进制数0x12 移动到寄存器``中。 进一步学习寄存器]]></content>
+      <categories>
+        <category>滴水逆向三期视频教程</category>
+      </categories>
+      <tags>
+        <tag>滴水逆向</tag>
+        <tag>汇编</tag>
+        <tag>通用寄存器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[数据的宽度和逻辑运算]]></title>
+    <url>%2F2018%2F12%2F10%2Fstudy-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-10-%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%BD%E5%BA%A6%E7%9A%84%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%2F</url>
+    <content type="text"><![CDATA[数据的宽度我们需要知道，无论是我们平时看到的视频(avi,mp4)，还是图片png，jpg，在计算机中存储的时候，都是存储为0，1这个符号。 在之前我们的学习中，我们经常会听到原码、反码、补码等消息，这都是后人总结出来的一些概念，计算机本质是没有这些的。 就比如说有符号整型和无符号整型，计算机只知道自己存储的是0和1，是使用它的人自己规定这个是有符号还是无符号的。 我们先把存储比作是容器，如果容器只能装4bit，比如我们存了一个数ffff,我们再给这个数加1，会变成什么？ 答案是0.计算机和真实的世界是不一样的，存不下的时候，直接抛弃。 在有符号数据中，为什么用1表示负数？ 几个重要的计量单位(数据宽度)1231 byte = 8 bit1 word = 16 bit1 dword = 32 bit 二进制的逻辑运算逻辑运算就是CPU计算的本质，汇编语言并不是cpu计算的本质。（这块就设计到了电路的知识） 1234或 or |与 and &amp;异或 xor ^非 not ！ or，and，xor，not就是汇编语言的表示 CPU是如何计算2+3=？先用一个容器X：存放二进制的2：0010在用一个容器Y：存放二进制的3：0011 然后再用一个容器R：存放0010和0011异或的结果。CPU需要判断容器R中是否是最终的结果，是否还需要继续运算。怎么判断呢？ 让0010和0011进行与运算，与运算的结果向左移一位，&lt;&lt;1 ,如果结果是0，那说明上面容器R中的就是真正的结果。 如果不是0，就是容器R中的值放到X中，把刚才判断得到的结果放到Y中，重复上面的操作。 逻辑运算的两个应用 判断某个值第N位的值是多少？ 比如我们要判断第四位的值是多少，我们就构造一个第四位是1的数，然后与这个数进行与运算。如果结果&gt;0,表明第四位是1，不然第四位是0.因为我们构造的数除了第四位是1，其他都是0.与运算的话，除了第四位，其他的肯定都是0.]]></content>
+      <categories>
+        <category>滴水逆向三期视频教程</category>
+      </categories>
+      <tags>
+        <tag>滴水逆向</tag>
+        <tag>汇编</tag>
+        <tag>逻辑运算</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[汇编、进制学习]]></title>
+    <url>%2F2018%2F12%2F09%2Fstudy-%E7%BC%96%E7%A8%8B%E8%BE%BE%E4%BA%BA-%E6%BB%B4%E6%B0%B4%E9%80%86%E5%90%913%E6%9C%9F%E5%AD%A6%E4%B9%A0-2018-12-09-%E6%B1%87%E7%BC%96%E3%80%81%E8%BF%9B%E5%88%B6%2F</url>
+    <content type="text"><![CDATA[进制的概念 二进制：由两个符号组成，分别用0和1表示，逢二进一。 四进制：由四个符号组成，分别用0、1、2、3表示，逢四进一。 八进制：由8个符号组成，分别用0、1、2、3、4、5、6、7表示，逢八进一。 十六进制：由16个符号组成，分别用0、1、2。。。。8、9、A、B、C、D、E、F表示，逢十六进一 由此我们可以得出。n进制：由n个符号组成，分别用n个符号表示，逢n进一。 忽略的地方表示8进制，我们就用0-8，8个数字来表示，那我们能不能用八个图片来表示？八个表情呢？ 答案是肯定的，我们可以用任何的符号来表示，并不局限于8个数字 用别的符号表示，有什么作用呢？ 这就涉及到密码学的问题了，比如两个人商量好，用微笑😊表情表示1，用伤心💔的表情表示0。那我收到两个微笑，两个伤心。😊😊💔💔，我就知道你发的是1100.但是别人就不只知道。如果我们在自己的项目中运用了自定义的元素，别人还以为我们运用了多么高深的加密算法。 进制的转化在以往的概念中，我们一般都是通过10进制作为中间桥梁来进行进制转化。这是没有必要的。往后，我们只需要熟练掌握二进制和16进制之间的转化就可以了。 2进制和16进制-进制转化表 二进制 十六进制 0000 00 0 0001 01 1 0010 02 2 0011 03 3 0100 04 4 0101 05 5 0110 06 6 0111 07 7 1000 08 8 1001 09 9 1010 0A 10 1011 0B 11 1100 0C 12 1101 0D 13 1110 0E 14 1111 0F 15 进制的运算当我们10进制运算16+9的时候，我们可以脱口而出25.我们是怎么做到的？仔细想了想，使我们从小就记住了两张表，一张加法运算表，一张乘法运算表。对于其他进制的运算，以往我们都是转化为10进制，来回转，最后算出结果。但这都偏离了进制的本质。 要想进行进制的运算，我们首先也应该构建两张表。然后进制的运算，我们就是单纯的查表。你说查表麻烦？那你可以选择把它记住，10进制的乘法表，大家不就是已经记住了吗？ 我们就以八进制为例 加法表的构建想要构建加法表，我们首先应该按照8进制从0写道100。0+1 ，我们就从0开始往后数1，就是11+3，我们就从1开始往后数3，就是46+4，我们就从4开始往后数4，就是7，10，11，12 ，就是12了 一次类推我们就会构建出八进制的加法表 乘法表的构建乘法表，当然是从加法表构建出来的。 2✖3，就是3+3，或者2+2+2=4+2，我们在加法表中一查就会知道结果 一次类推，我们也可以得出乘法表。 运算 加法表，乘法表都是单位数，那多位数的加减乘除该如何运算？ 多位数的加法我们可以参照加法表多位数的乘法我们可以参照乘法表多位数的减法，我们可以参照减法表多位数的除法，我们可以参照乘法表 但是切记，进制的运算，我们完全可以在其内部完成，不用在十进制之间来回转换。 自定义三进制的表示涉及到自定义符号的时候，我们一定要注意，0，1，2，3这些都不是数字，只是一个符号 如果我们用2，0，1分别表示三进制的三个元素，三进制表则可以表示如下。不要觉得很简单哦，自己能写出来才知道自己会不会 说明 2 0 1 02 00 01 能得出02就厉害了 12 10 11 注意进位的时候 022 020 021 我们要彻底忘掉十进制的概念，彻底忘掉0，1，2，3的概念。切记，0，1，2，3只是符号，而不是数字]]></content>
+      <categories>
+        <category>滴水逆向三期视频教程</category>
+      </categories>
+      <tags>
+        <tag>滴水逆向</tag>
+        <tag>汇编</tag>
+        <tag>进制</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[真的会有那么两个人]]></title>
+    <url>%2F2018%2F12%2F08%2Fpersonal-2018-12-08-%E7%9C%9F%E7%9A%84%E4%BC%9A%E6%9C%89%E4%B8%A4%E4%B8%AA%E4%BA%BA%2F</url>
+    <content type="text"><![CDATA[后来我发现，原来真的会有两个人，互相喜欢，互相惦记，互相忘不掉，确实不能在一起。忘不掉，放不下，却又回不去。]]></content>
+      <categories>
+        <category>个人</category>
+      </categories>
+      <tags>
+        <tag>回忆</tag>
+        <tag>心灵</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[连回忆都留不住]]></title>
+    <url>%2F2018%2F12%2F06%2Fpersonal-2018-12-06-%E8%BF%9E%E5%9B%9E%E5%BF%86%E9%83%BD%E7%95%99%E4%B8%8D%E4%BD%8F%2F</url>
+    <content type="text"><![CDATA[百年孤独里说，无论走到哪里，都应该记住，过去都是假的，回忆是一条没有尽头的路。一切以往的春天都不复从来。就连那最坚韧而又狂乱的爱情归根结底也不过是一种转瞬即逝的现实。 感觉每天有好多东西要写，可以搭建博客之后，反而不知道自己要写什么了。 马上就要搬到上海了，工作上的调用。想到搬家，我很痛苦，那几天走在路上都是彷徨的。不过这几天我想通了，反正孤身一人，反正一无所有，反正也没有去过上海。那就走吧。 女朋友还在读研，前段时间来京几日。买了不少生活用品，女孩了总是喜欢买，不过这样才更有生活的气息。在搬走之前，把属于她的东西都寄给她。收拾屋子的时候，好多觉得用不到的东西都会扔掉，每件东西都有的她的气息，每件东西后面都有她的影子。不能给她一个家，连回忆都保留不住。深深伤感。]]></content>
+      <categories>
+        <category>个人</category>
+      </categories>
+      <tags>
+        <tag>回忆</tag>
+        <tag>心灵</tag>
+      </tags>
+  </entry>
+</search>
