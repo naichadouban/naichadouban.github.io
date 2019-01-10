@@ -160,7 +160,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="golang强类型golang是一种强类型的静态语言。强类型就是说一旦类型定义了，就不能够再改变它的类型。静态是说，程序在运行前检测类型，而不是像JavaScript和python等动态语言，运行时才检测  为了安全考虑，golang时不允许两种指针类型 之间相互转化的。  指针类型转换即使有相同的底层类型也是不能转换的123456func main() &amp;#123;	var i Myint =">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-04T11:12:41.204Z">
+<meta property="og:updated_time" content="2019-01-04T11:16:16.167Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="go指针类型转化 unsafe Pointer">
 <meta name="twitter:description" content="golang强类型golang是一种强类型的静态语言。强类型就是说一旦类型定义了，就不能够再改变它的类型。静态是说，程序在运行前检测类型，而不是像JavaScript和python等动态语言，运行时才检测  为了安全考虑，golang时不允许两种指针类型 之间相互转化的。  指针类型转换即使有相同的底层类型也是不能转换的123456func main() &amp;#123;	var i Myint =">
@@ -542,8 +542,8 @@
 </blockquote>
 <h1 id="指针类型转换"><a href="#指针类型转换" class="headerlink" title="指针类型转换"></a>指针类型转换</h1><p>即使有相同的底层类型也是不能转换的<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i Myint = <span class="number">2</span></span><br><span class="line">	<span class="keyword">var</span> j <span class="keyword">int</span> =<span class="number">3</span></span><br><span class="line">	j = i   <span class="comment">// cannot use i (type Myint) as type int in assignment</span></span><br><span class="line">	fmt.Println(j)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := <span class="number">10</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T:%v,%p,%T\n"</span>,i,i,&amp;i,&amp;i)  <span class="comment">// int:10,0x416020,*in</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> j <span class="keyword">float64</span> = <span class="number">3.434</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T:%v,%p,%T\n"</span>,j,j,&amp;j,&amp;j)  <span class="comment">// float64:3.434,0x416038,*float64</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 类型转化</span></span><br><span class="line">	m := <span class="keyword">float64</span>(i)</span><br><span class="line">	fmt.Printf(<span class="string">"%T:%v,%p,%T\n"</span>,m,m,&amp;m,&amp;m) <span class="comment">// float64:10,0x416060,*float64</span></span><br><span class="line">	<span class="comment">// 指针类型转化</span></span><br><span class="line">	n := (*<span class="keyword">float64</span>)(&amp;i)  <span class="comment">//cannot convert &amp;i (type *int) to type *float64</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T:%v,%p,%T\n"</span>,n,n,&amp;n,&amp;n)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
 <p>程序中我们需明白</p>
+<blockquote>
 <ol>
 <li><em>int，表示int类型的指针，</em>float表示float类型的指针</li>
 <li><code>float64(i)</code>就是普通的类型转化，golang时允许的</li>
@@ -626,6 +626,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/01/04/golang-2019-01-06-go日志系统/" rel="prev" title="go 日志系统">
+                go 日志系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -694,7 +698,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -772,7 +776,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">21</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
