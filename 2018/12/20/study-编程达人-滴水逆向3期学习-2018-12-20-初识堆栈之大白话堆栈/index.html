@@ -171,7 +171,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-a2714e24e1b83bd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-dfba00669dfda926.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-c50ca5a16de53c96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-03T11:57:05.828Z">
+<meta property="og:updated_time" content="2019-01-25T03:58:42.594Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识堆栈之大白话堆栈">
 <meta name="twitter:description" content="什么是堆栈引出堆栈在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？现在假设我们需要一块内存，它可以满足如下功能  1.主要用于临时存储一些数据  能够记录存储了多少数据 可以很方便的找到需要的数据   对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了 还好有高人还">
@@ -562,10 +562,7 @@
 <p>还需要注意一点，在window系统中堆栈是往低位扩展了，起初会选择一个值比较大的位置作为base，然后每次往低位扩展，top不断变小。</p>
 </blockquote>
 <h1 id="实验，自己实现堆栈"><a href="#实验，自己实现堆栈" class="headerlink" title="实验，自己实现堆栈"></a>实验，自己实现堆栈</h1><blockquote>
-<p>1.我们使用32位寄存器EBX和EDX作为栈顶和栈底 。</p>
-<ol start="2">
-<li>为了实验的方便，主要是DTDebug显示的方便。我们每次操作都操作4字节</li>
-</ol>
+<p>1.我们使用32位寄存器EBX和EDX作为栈顶和栈底 。<br>2.为了实验的方便，主要是DTDebug显示的方便。我们每次操作都操作4字节</p>
 </blockquote>
 <h2 id="压入数据"><a href="#压入数据" class="headerlink" title="压入数据"></a>压入数据</h2><p><img src="https://upload-images.jianshu.io/upload_images/422094-7e971006ce1037ab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>我们就选中内存地址0019FF74吧<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MOV EBX,0019FF74  //栈底的内存地址（base）</span><br><span class="line">MOV EDX,0019FF74  //栈顶的内存地址（top）</span><br></pre></td></tr></table></figure></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/422094-cb4e46e42f07f0ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
@@ -732,7 +729,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -755,7 +752,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -818,7 +833,49 @@
                     
                       
                     
-                    <span class="site-state-item-count">25</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

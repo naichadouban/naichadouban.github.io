@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Buffer 介绍Buffer 是 bytes 包中的一个 type Buffer struct{…}A buffer is a variable-sized buffer of bytes with Read and Write methods. The zero value for Buffer is an empty buffer ready to use.（是一个变长的 buffer，具有">
+<meta name="keywords" content="golang,bytes,Buffer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go bytes.Buffer">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/golang-2019-01-10-go-bytes-Buffer/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Buffer 介绍Buffer 是 bytes 包中的一个 type Buffer struct{…}A buffer is a variable-sized buffer of bytes with Read and Write methods. The zero value for Buffer is an empty buffer ready to use.（是一个变长的 buffer，具有">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-01-11T11:33:18.146Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go bytes.Buffer">
+<meta name="twitter:description" content="Buffer 介绍Buffer 是 bytes 包中的一个 type Buffer struct{…}A buffer is a variable-sized buffer of bytes with Read and Write methods. The zero value for Buffer is an empty buffer ready to use.（是一个变长的 buffer，具有">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/10/golang-2019-01-10-go-bytes-Buffer/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>go bytes.Buffer | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-学习规划">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/plan/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>学习规划</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/golang-2019-01-10-go-bytes-Buffer/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="徐晓峰">
+      <meta itemprop="description" content="记录自己走过的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">go bytes.Buffer
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-01-10 00:00:00" itemprop="dateCreated datePublished" datetime="2019-01-10T00:00:00+08:00">2019-01-10</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/golang学习/" itemprop="url" rel="index"><span itemprop="name">golang学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Buffer-介绍"><a href="#Buffer-介绍" class="headerlink" title="Buffer 介绍"></a>Buffer 介绍</h1><p>Buffer 是 bytes 包中的一个 type Buffer struct{…}<br>A buffer is a variable-sized buffer of bytes with Read and Write methods. The zero value for Buffer is an empty buffer ready to use.<br>（是一个变长的 buffer，具有 Read 和Write 方法。 Buffer 的 零值 是一个 空的 buffer，但是可以使用）<br>Buffer 就像一个集装箱容器，可以存东西，取东西（存取数据）</p>
+<h1 id="创建缓冲器"><a href="#创建缓冲器" class="headerlink" title="创建缓冲器"></a>创建缓冲器</h1><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	buf1 := bytes.NewBufferString(<span class="string">"hello"</span>)</span><br><span class="line">	buf2 := bytes.NewBuffer([]<span class="keyword">byte</span>(<span class="string">"hello"</span>))</span><br><span class="line">	buf3 := bytes.NewBuffer([]<span class="keyword">byte</span>&#123;<span class="string">'h'</span>,<span class="string">'e'</span>,<span class="string">'l'</span>,<span class="string">'l'</span>,<span class="string">'o'</span>&#125;)</span><br><span class="line">	fmt.Printf(<span class="string">"%v,%v,%v\n"</span>,buf1,buf2,buf3)</span><br><span class="line">	fmt.Printf(<span class="string">"%v,%v,%v\n"</span>,buf1.Bytes(),buf2.Bytes(),buf3.Bytes())</span><br><span class="line"></span><br><span class="line">	buf4 := bytes.NewBufferString(<span class="string">""</span>)</span><br><span class="line">	buf5 := bytes.NewBuffer([]<span class="keyword">byte</span>&#123;&#125;)</span><br><span class="line">	fmt.Println(buf4.Bytes(),buf5.Bytes())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hello,hello,hello</span><br><span class="line">[104 101 108 108 111],[104 101 108 108 111],[104 101 108 108 111]</span><br><span class="line">[] []</span><br></pre></td></tr></table></figure></p>
+<h1 id="写入到缓冲器"><a href="#写入到缓冲器" class="headerlink" title="写入到缓冲器"></a>写入到缓冲器</h1><p>buffer在new的时候是空的，也是可以直接Write的</p>
+<h2 id="Write"><a href="#Write" class="headerlink" title="Write"></a>Write</h2><p><code>func (b *Buffer) Write(p []byte) (n int,err error)</code><br>func main() {<br>    s := []byte(“ world”)<br>    buf := bytes.NewBufferString(“hello”)<br>    fmt.Printf(“%v,%v\n”,buf.String(),buf.Bytes())<br>    buf.Write(s)<br>    fmt.Printf(“%v,%v\n”,buf.String(),buf.Bytes())<br>}<br>结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello,[104 101 108 108 111]</span><br><span class="line">hello world,[104 101 108 108 111 32 119 111 114 108 100]</span><br></pre></td></tr></table></figure></p>
+<h2 id="WriteString"><a href="#WriteString" class="headerlink" title="WriteString"></a>WriteString</h2><p><code>func (b *Buffer) WriteString(s string)(n int,err error)</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">" world"</span></span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"hello"</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%v,%v\n"</span>,buf.String(),buf.Bytes())</span><br><span class="line">	buf.WriteString(s)</span><br><span class="line">	fmt.Printf(<span class="string">"%v,%v\n"</span>,buf.String(),buf.Bytes())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hello,[104 101 108 108 111]</span><br><span class="line">hello world,[104 101 108 108 111 32 119 111 114 108 100]</span><br></pre></td></tr></table></figure></p>
+<h2 id="WriteByte"><a href="#WriteByte" class="headerlink" title="WriteByte"></a>WriteByte</h2><p><code>func (b *Buffer) WriteByte(c byte) error</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> s <span class="keyword">byte</span> = <span class="string">'?'</span></span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"hello"</span>)</span><br><span class="line">	fmt.Println(buf.Bytes()) <span class="comment">// [104 101 108 108 111]</span></span><br><span class="line">	buf.WriteByte(s)</span><br><span class="line">	fmt.Println(buf.Bytes())	<span class="comment">// [104 101 108 108 111 63]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="WriteRune"><a href="#WriteRune" class="headerlink" title="WriteRune"></a>WriteRune</h2><p><code>func (b *Buffer) WriteRune(r Rune) (n int,err error)</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">   <span class="keyword">var</span> s <span class="keyword">rune</span> = <span class="string">'好'</span></span><br><span class="line">   buf := bytes.NewBufferString(<span class="string">"hello"</span>)</span><br><span class="line">   fmt.Println(buf.String()) <span class="comment">//hello</span></span><br><span class="line">   buf.WriteRune(s)   </span><br><span class="line">   fmt.Println(buf.String()) <span class="comment">//hello好</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">22909</span><br><span class="line">[104 101 108 108 111]</span><br><span class="line">[104 101 108 108 111 229 165 189]</span><br></pre></td></tr></table></figure></p>
+<h1 id="从缓冲器中写出"><a href="#从缓冲器中写出" class="headerlink" title="从缓冲器中写出"></a>从缓冲器中写出</h1><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	file,_ := os.Create(<span class="string">"test.txt"</span>)</span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"hello world"</span>)</span><br><span class="line">	buf.WriteTo(file)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="读出缓冲器"><a href="#读出缓冲器" class="headerlink" title="读出缓冲器"></a>读出缓冲器</h1><h2 id="Read"><a href="#Read" class="headerlink" title="Read"></a>Read</h2><p><code>func (b *Buffer) Read(p []byte)(n int,err error)</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s1 := []<span class="keyword">byte</span>(<span class="string">"hello"</span>)</span><br><span class="line">	buff :=bytes.NewBuffer(s1)</span><br><span class="line">	s2 := []<span class="keyword">byte</span>(<span class="string">" world"</span>)</span><br><span class="line">	buff.Write(s2)</span><br><span class="line">	fmt.Println(buff.String())  <span class="comment">//hello world</span></span><br><span class="line"></span><br><span class="line">	s3 := <span class="built_in">make</span>([]<span class="keyword">byte</span>,<span class="number">3</span>)</span><br><span class="line">	buff.Read(s3)</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(s3))  <span class="comment">//hel,s3的容量为3，只能读3个</span></span><br><span class="line">	fmt.Println(buff.String()) <span class="comment">//lo world</span></span><br><span class="line"></span><br><span class="line">	buff.Read(s3)  <span class="comment">// 会把s3覆盖掉</span></span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(s3))  <span class="comment">// lo </span></span><br><span class="line">	fmt.Println(buff.String())  <span class="comment">// world</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ReadByte"><a href="#ReadByte" class="headerlink" title="ReadByte"></a>ReadByte</h2><p>返回缓冲器头部的第一个byte<br><code>func (b *Buffer) ReadByte() (c byte,err error)</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"hello"</span>)</span><br><span class="line">	fmt.Println(buf.String())  <span class="comment">// hello</span></span><br><span class="line">	b,_:= buf.ReadByte()</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(b))	<span class="comment">//h</span></span><br><span class="line">	fmt.Println(buf.String())	<span class="comment">//ello</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ReadRun"><a href="#ReadRun" class="headerlink" title="ReadRun"></a>ReadRun</h2><p>ReadRune方法，返回缓冲器头部的第一个rune<br><code>func (b *Buffer) ReadRune() (r rune,size int,err error)</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	buf1 := bytes.NewBufferString(<span class="string">"你好xuxiaofeng"</span>)</span><br><span class="line">	fmt.Println(buf1.Bytes()) <span class="comment">//[228 189 160 229 165 189 120 117 120 105 97 111 102 101 110 103]</span></span><br><span class="line">	b1,n1,_ := buf1.ReadRune()</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(b1)) <span class="comment">// 你</span></span><br><span class="line">	fmt.Println(n1)</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"hello"</span>)</span><br><span class="line">	fmt.Println(buf.String())  <span class="comment">//hello</span></span><br><span class="line">	b,n,_:= buf.ReadRune()</span><br><span class="line">	fmt.Println(n) <span class="comment">// 1</span></span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(b))  <span class="comment">//h</span></span><br><span class="line">	fmt.Println(buf.String())	<span class="comment">//ello</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为什么n==3，而n1==1呢？我们看下<code>ReadRune</code> 的源码<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Buffer)</span> <span class="title">ReadRune</span><span class="params">()</span> <span class="params">(r <span class="keyword">rune</span>, size <span class="keyword">int</span>, err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> b.empty() &#123;</span><br><span class="line">		<span class="comment">// Buffer is empty, reset to recover space.</span></span><br><span class="line">		b.Reset()</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>, <span class="number">0</span>, io.EOF</span><br><span class="line">	&#125;</span><br><span class="line">	c := b.buf[b.off]</span><br><span class="line">	<span class="keyword">if</span> c &lt; utf8.RuneSelf &#123;   <span class="comment">// 就是在这里判断，读取的第一个字符是不是Rune</span></span><br><span class="line">		b.off++</span><br><span class="line">		b.lastRead = opReadRune1</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">rune</span>(c), <span class="number">1</span>, <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	r, n := utf8.DecodeRune(b.buf[b.off:])</span><br><span class="line">	b.off += n</span><br><span class="line">	b.lastRead = readOp(n)</span><br><span class="line">	<span class="keyword">return</span> r, n, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="ReadBytes"><a href="#ReadBytes" class="headerlink" title="ReadBytes"></a>ReadBytes</h2><p>ReadBytes方法，需要一个byte作为分隔符，读的时候从缓冲器里找出第一个出现的分隔符，缓冲器头部开始到分隔符之间的byte返回。<br><code>func (b *Buffer) ReadBytes(delim byte) (line []byte,err error)</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> d <span class="keyword">byte</span> = <span class="string">'f'</span></span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"xuxiaofeng"</span>)</span><br><span class="line">	fmt.Println(buf.String())</span><br><span class="line"></span><br><span class="line">	b,_ :=buf.ReadBytes(d)</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(b))</span><br><span class="line">	fmt.Println(buf.String())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>相当于有一个分隔符</p>
+<h2 id="ReadString"><a href="#ReadString" class="headerlink" title="ReadString"></a>ReadString</h2><p>和readBytes方法类似</p>
+<h1 id="读入缓冲器"><a href="#读入缓冲器" class="headerlink" title="读入缓冲器"></a>读入缓冲器</h1><p>ReadFrom方法，从一个实现io.Reader接口的r，把r的内容读到缓冲器里，n返回读的数量<br><code>func (b *Buffer) ReadFrom(r io.Reader) (n int64,err error</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">   file, _ := os.Open(<span class="string">"text.txt"</span>)</span><br><span class="line">   buf := bytes.NewBufferString(<span class="string">"bob "</span>)</span><br><span class="line">   buf.ReadFrom(file)</span><br><span class="line">   fmt.Println(buf.String()) <span class="comment">//bob hello world</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="从缓冲器取出"><a href="#从缓冲器取出" class="headerlink" title="从缓冲器取出"></a>从缓冲器取出</h1><p>Next方法，返回前n个byte（slice），原缓冲器变<br><code>func (b *Buffer) Next(n int) []byte</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"helloworld"</span>)</span><br><span class="line">	fmt.Println(buf.String())  <span class="comment">// helloworld</span></span><br><span class="line">	b := buf.Next(<span class="number">2</span>)</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(b))  <span class="comment">// he</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="缓冲区原理介绍"><a href="#缓冲区原理介绍" class="headerlink" title="缓冲区原理介绍"></a>缓冲区原理介绍</h1><p>go字节缓冲区底层以字节切片做存储，切片存在长度len与容量cap, 缓冲区写从长度len的位置开始写，当len&gt;cap时，会自动扩容。缓冲区读会从内置标记off位置开始读(off始终记录读的起始位置)，当off==len时，表明缓冲区已全部读完<br>并重置缓冲区(len=off=0),此外当将要内容长度+已写的长度(即len) &lt;= cap/2时，缓冲区前移覆盖掉已读的内容(off=0，len-=off)，从避免缓冲区不断扩容<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    byteSlice := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">20</span>) </span><br><span class="line">    byteSlice[<span class="number">0</span>] = <span class="number">1</span>                                  <span class="comment">// 将缓冲区第一个字节置1</span></span><br><span class="line">    byteBuffer := bytes.NewBuffer(byteSlice)          <span class="comment">// 创建20字节缓冲区 len = 20 off = 0</span></span><br><span class="line">    c, _ := byteBuffer.ReadByte()                     <span class="comment">// off+=1</span></span><br><span class="line">    fmt.Printf(<span class="string">"len:%d, c=%d\n"</span>, byteBuffer.Len(), c) <span class="comment">// len = 20 off =1   打印c=1</span></span><br><span class="line">    byteBuffer.Reset()                                <span class="comment">// len = 0 off = 0</span></span><br><span class="line">    fmt.Printf(<span class="string">"len:%d\n"</span>, byteBuffer.Len())          <span class="comment">// 打印len=0</span></span><br><span class="line">    byteBuffer.Write([]<span class="keyword">byte</span>(<span class="string">"hello byte buffer"</span>))     <span class="comment">// 写缓冲区  len+=17</span></span><br><span class="line">    fmt.Printf(<span class="string">"len:%d\n"</span>, byteBuffer.Len())          <span class="comment">// 打印len=17</span></span><br><span class="line">    byteBuffer.Next(<span class="number">4</span>)                                <span class="comment">// 跳过4个字节 off+=4</span></span><br><span class="line">    c, _ = byteBuffer.ReadByte()                      <span class="comment">// 读第5个字节 off+=1</span></span><br><span class="line">    fmt.Printf(<span class="string">"第5个字节:%d\n"</span>, c)                    <span class="comment">// 打印:111(对应字母o)    len=17 off=5</span></span><br><span class="line">    byteBuffer.Truncate(<span class="number">3</span>)                            <span class="comment">// 将未字节数置为3        len=off+3=8   off=5</span></span><br><span class="line">    fmt.Printf(<span class="string">"len:%d\n"</span>, byteBuffer.Len())          <span class="comment">// 打印len=3为未读字节数  上面len=8是底层切片长度</span></span><br><span class="line">    byteBuffer.WriteByte(<span class="number">96</span>)                          <span class="comment">// len+=1=9 将y改成A</span></span><br><span class="line">    byteBuffer.Next(<span class="number">3</span>)                                <span class="comment">// len=9 off+=3=8</span></span><br><span class="line">    c, _ = byteBuffer.ReadByte()                      <span class="comment">// off+=1=9    c=96</span></span><br><span class="line">    fmt.Printf(<span class="string">"第9个字节:%d\n"</span>, c)                    <span class="comment">// 打印:96</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="徐晓峰 wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      </div>
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/golang/" rel="tag"># golang</a>
+          
+            <a href="/tags/bytes/" rel="tag"># bytes</a>
+          
+            <a href="/tags/Buffer/" rel="tag"># Buffer</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/07/golang-2019-01-07-go日志系统/" rel="next" title="go 日志系统">
+                <i class="fa fa-chevron-left"></i> go 日志系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/11/golang-2019-01-11-go-格式化打印/" rel="prev" title="go 格式化打印-utf-8编码规则">
+                go 格式化打印-utf-8编码规则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">徐晓峰</p>
+              <p class="site-description motion-element" itemprop="description">记录自己走过的点滴</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/naichadouban" title="GitHub-job &rarr; https://github.com/naichadouban" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-job</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xulove" title="GitHub-personal &rarr; https://github.com/xulove" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-personal</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Buffer-介绍"><span class="nav-number">1.</span> <span class="nav-text">Buffer 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建缓冲器"><span class="nav-number">2.</span> <span class="nav-text">创建缓冲器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写入到缓冲器"><span class="nav-number">3.</span> <span class="nav-text">写入到缓冲器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Write"><span class="nav-number">3.1.</span> <span class="nav-text">Write</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WriteString"><span class="nav-number">3.2.</span> <span class="nav-text">WriteString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WriteByte"><span class="nav-number">3.3.</span> <span class="nav-text">WriteByte</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WriteRune"><span class="nav-number">3.4.</span> <span class="nav-text">WriteRune</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从缓冲器中写出"><span class="nav-number">4.</span> <span class="nav-text">从缓冲器中写出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#读出缓冲器"><span class="nav-number">5.</span> <span class="nav-text">读出缓冲器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Read"><span class="nav-number">5.1.</span> <span class="nav-text">Read</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadByte"><span class="nav-number">5.2.</span> <span class="nav-text">ReadByte</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadRun"><span class="nav-number">5.3.</span> <span class="nav-text">ReadRun</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadBytes"><span class="nav-number">5.4.</span> <span class="nav-text">ReadBytes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadString"><span class="nav-number">5.5.</span> <span class="nav-text">ReadString</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#读入缓冲器"><span class="nav-number">6.</span> <span class="nav-text">读入缓冲器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从缓冲器取出"><span class="nav-number">7.</span> <span class="nav-text">从缓冲器取出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缓冲区原理介绍"><span class="nav-number">8.</span> <span class="nav-text">缓冲区原理介绍</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">徐晓峰</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

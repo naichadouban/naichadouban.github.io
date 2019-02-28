@@ -175,7 +175,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-8abdfd10ccdf896a.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-888882dc38847c1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-ea96ccde72a26dda.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-03T11:57:05.826Z">
+<meta property="og:updated_time" content="2019-01-25T03:58:42.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="进一步学习寄存器">
 <meta name="twitter:description" content="寄存器的种类现代计算机中，寄存器都是由CPU提供的，寄存器就在cpu里面。计算器按照存储宽度可以划分如下： 说明几点  1.不同的寄存器有不同的功能，这个我们暂时先不用管  寄存器是随着硬件不断发展变化的。现在已经有64位的寄存器了，将来可能还会有128位的寄存器   寄存器的结构可以看到，32位的寄存器中是嵌套着1个16位的寄存器，16位的寄存器嵌套着两个八位的寄存器。  大家可以找找规律，16">
@@ -571,7 +571,7 @@
 <li>存储不浪费。寄存器已经到32位了，我要存储8位的数据，那我们使用8位寄存器就可以。剩下的空间就可以给其他数据使用。</li>
 </ol>
 </blockquote>
-<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>我们可以通过mov指令来演示一下这种嵌套关系<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#指定一次如下</span><br><span class="line">mov eax,0xAAAAAAAA</span><br><span class="line">mov ax,0xBBBB</span><br><span class="line">mov al,0xEE</span><br><span class="line">mov ah,0xHH</span><br></pre></td></tr></table></figure></p>
+<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>我们可以通过mov指令来演示一下这种嵌套关系<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#指令如下</span><br><span class="line">mov eax,0xAAAAAAAA</span><br><span class="line">mov ax,0xBBBB</span><br><span class="line">mov al,0xEE</span><br><span class="line">mov ah,0xHH</span><br></pre></td></tr></table></figure></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/422094-9e51ebc18e96279f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>连续4次F8，执行4次。结果以此如下图：<br><img src="https://upload-images.jianshu.io/upload_images/422094-0ed3ade2b93327fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/422094-894815fdee5621ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="https://upload-images.jianshu.io/upload_images/422094-16232de601b0346a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br><img src="https://upload-images.jianshu.io/upload_images/422094-9bde64c42af54a11.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>根据这个实验，大家就能形象出寄存器的结构</p>
 <h1 id="mov指令的用法"><a href="#mov指令的用法" class="headerlink" title="mov指令的用法"></a>mov指令的用法</h1><h2 id="立即数的概念"><a href="#立即数的概念" class="headerlink" title="立即数的概念"></a>立即数的概念</h2><blockquote>
 <p>通常把在立即寻址方式指令中给出的数称为立即数。<br>立即数可以是8位、16位或32位，该数值紧跟在操作码之后<br><code>mov eax,0xAAAAAAAA</code> 中 <code>0xAAAAAAAA</code>就是立即数</p>
@@ -713,7 +713,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -736,7 +736,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -799,7 +817,49 @@
                     
                       
                     
-                    <span class="site-state-item-count">25</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

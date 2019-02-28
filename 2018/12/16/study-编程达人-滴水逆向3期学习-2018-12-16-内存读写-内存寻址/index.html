@@ -177,7 +177,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-1ad3208fdbd6be78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-e0b24931e13a828e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-73eff49484669993.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-03T11:57:05.827Z">
+<meta property="og:updated_time" content="2019-01-25T03:58:42.592Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="内存读写-内存寻址">
 <meta name="twitter:description" content="DTDebug再介绍 左下角就是内存数据窗口。最下面是命令行窗口。我们可以输入命令查看某一块内存的数据db 0x0019FF74,然后enter，就可以查看到这个内存中的数据 存储数据的顺序问题我们往内存地址0x0019FF74中写入数据,当前0xmov dword ptr ds:[0x0019FF74],0x12345678F8执行内存数据区域显示的数据和堆栈区显示的数据不一致，why?  数据">
@@ -558,10 +558,11 @@
 <p>左下角就是内存数据窗口。<br>最下面是命令行窗口。我们可以输入命令查看某一块内存的数据<br><code>db 0x0019FF74</code>,然后enter，就可以查看到这个内存中的数据<br><img src="https://upload-images.jianshu.io/upload_images/422094-4b38ec0c282b74cf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <h1 id="存储数据的顺序问题"><a href="#存储数据的顺序问题" class="headerlink" title="存储数据的顺序问题"></a>存储数据的顺序问题</h1><p>我们往内存地址0x0019FF74中写入数据,当前0x<br><code>mov dword ptr ds:[0x0019FF74],0x12345678</code><br>F8执行<br><img src="https://upload-images.jianshu.io/upload_images/422094-a5227910ba0ea03b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>内存数据区域显示的数据和堆栈区显示的数据不一致，why?</p>
 <blockquote>
-<p>数据的存储时有顺序的，数据在内存中，总是高位在前，低位在后。<br><img src="https://upload-images.jianshu.io/upload_images/422094-34de7b27043ea78b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>数据的存储时有顺序的，数据在内存中，总是高位在前，低位在后。</p>
 </blockquote>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-34de7b27043ea78b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <p>0x0019FF74 存储的是78<br>0x0019FF75 存储的是56<br>0x0019FF76 存储的是34<br>0x0019FF77 存储的是12</p>
-<h1 id="内存寻址"><a href="#内存寻址" class="headerlink" title="内存寻址"></a>内存寻址</h1><p>通过前面很多的联系，我们可以发现，设计到内存读写最关键的就是，<strong>找到内存地址，也就是内存编号</strong><br>寻找地址有哪些格式呢，主要有下面5种</p>
+<h1 id="内存寻址"><a href="#内存寻址" class="headerlink" title="内存寻址"></a>内存寻址</h1><p>通过前面很多的练习，我们可以发现，设计到内存读写最关键的就是，<strong>找到内存地址，也就是内存编号</strong><br>寻找地址有哪些格式呢，主要有下面5种</p>
 <blockquote>
 <p>下面的所有操作中，我们一定要注意MOV和LEA的区别。</p>
 <ol>
@@ -710,7 +711,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -733,7 +734,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -796,7 +815,49 @@
                     
                       
                     
-                    <span class="site-state-item-count">25</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

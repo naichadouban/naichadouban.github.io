@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Grin is an exciting new cryptocurrency leveraging the MimbleWimble protocol. But tutorials on Grin are notoriously nondescript. 这篇文章旨在确切的分享grin的交易过程。  在grin中，一个输出就是一个Pedersen Commitment,任何输出都呈现下面的形式：">
+<meta name="keywords" content="grin,交易,Mimblewimble,区块链blockchain,隐私交易">
+<meta property="og:type" content="article">
+<meta property="og:title" content="grin交易流程深入分析">
+<meta property="og:url" content="http://yoursite.com/2019/02/27/grin-2019-02-27-grin交易流程深入分析/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Grin is an exciting new cryptocurrency leveraging the MimbleWimble protocol. But tutorials on Grin are notoriously nondescript. 这篇文章旨在确切的分享grin的交易过程。  在grin中，一个输出就是一个Pedersen Commitment,任何输出都呈现下面的形式：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-fb8e18602a876986.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-f856c5bd6939ee85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-147c9a9b0d3120ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-f6ff8bcd2ea7ba7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-41b33980d9f42a1b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-85f530d564597936.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-ab262f373c7d30bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-bfc74a55e7b3423a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-600ce62610a8b2c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-c7215bd74d0df7e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-4537913154cc27de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-0ff2cd0e060a4864.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-c11f26d0b940c7b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-db5d42baf2f3beeb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-675d4cdfaedc8fbc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-83fddb938cb10183.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-e6bfac1f00c6fc85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-a46e78f8c49fb186.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-959d5f16cf29a967.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-1d43d6b0b44a3aef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-02-28T03:37:55.508Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="grin交易流程深入分析">
+<meta name="twitter:description" content="Grin is an exciting new cryptocurrency leveraging the MimbleWimble protocol. But tutorials on Grin are notoriously nondescript. 这篇文章旨在确切的分享grin的交易过程。  在grin中，一个输出就是一个Pedersen Commitment,任何输出都呈现下面的形式：">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/422094-fb8e18602a876986.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/27/grin-2019-02-27-grin交易流程深入分析/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>grin交易流程深入分析 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-学习规划">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/plan/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>学习规划</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/27/grin-2019-02-27-grin交易流程深入分析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="徐晓峰">
+      <meta itemprop="description" content="记录自己走过的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">grin交易流程深入分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-27 00:00:00" itemprop="dateCreated datePublished" datetime="2019-02-27T00:00:00+08:00">2019-02-27</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/grin/" itemprop="url" rel="index"><span itemprop="name">grin</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://grin-tech.org/" target="_blank" rel="noopener">Grin</a> is an exciting new cryptocurrency leveraging the MimbleWimble protocol. But tutorials on Grin are notoriously nondescript.</p>
+<p>这篇文章旨在确切的分享<code>grin</code>的交易过程。<br><img src="https://upload-images.jianshu.io/upload_images/422094-fb8e18602a876986.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<hr>
+<p>在<code>grin</code>中，一个输出就是一个<code>Pedersen Commitment</code>,任何输出都呈现下面的形式：<br><img src="https://upload-images.jianshu.io/upload_images/422094-f856c5bd6939ee85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="A Grin output, which is a Pedersen Commitment."></p>
+<p><code>Pedersen Commitment(Pedersen 承诺)</code>用一种和聪明的方式隐藏了信息。如果你是刚听说<code>commitments（承诺）</code>， 那看到它把它理解成<code>shielded value(屏蔽值)</code>就可以了。</p>
+<p>下面的内容来<a href="https://github.com/mimblewimble/grin/blob/master/doc/intro.md" target="_blank" rel="noopener">Grin wiki</a>，对理解这篇文章来说是很好的入门。</p>
+<blockquote>
+<p>• 如果选择一个很大的数<code>k</code>作为私钥，<code>k*H</code>就是对应的公钥。即使一个人知道公钥<code>k*H</code>值，想推导出<code>k</code>几乎不可能</p>
+<p>• <code>r</code>是被用作致盲因子的私钥，<code>G</code>是椭圆曲线上的固定点，它们的乘积<code>r*G</code>是<code>r</code>在曲线上的公钥。</p>
+<p>• <code>v</code> 是输入或输出的金额，<code>H</code>是椭圆曲线上的另一个固定点。</p>
+<p><code>(k+j)*H = k*H + j*H</code>，<code>k</code>和<code>j</code>都是私钥。等式表明从两个私钥的和获取公钥<code>（k + j）* H</code>，等价于每个私钥的对应公钥的和 <code>（k * H + j * H）</code></p>
+</blockquote>
+<p>更深入的密码学研究可以在这里<a href="https://andrea.corbellini.name/2015/05/17/elliptic-curve-cryptography-a-gentle-introduction/" target="_blank" rel="noopener">ECC primer</a>找到。但简而言之，要花费Grin的输出，你必须知道致盲因子（r）和Grin（v）的数量。要解构承诺来推断这些值是不可能的。你必须提前知道它们。</p>
+<p>致盲因素的存在是因为有人支付给你这些grin，他也会知道<code>v</code>的值（他给你发送了多少grin）。但只有你（甚至都不是Grin的发送者）将会知道这个输出的致盲因子，因此只有你能够花掉这个输出。</p>
+<p>假设此输出使用致盲因子20，此输出包含40 Grin。（注意： Grin的数量实际上是以原子单位<code>1 NanoGrin</code>的倍数发送的。在这里直接使用<code>grin</code>简化了）：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-147c9a9b0d3120ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="In this output, the blinding factor is 20, and the amount of Grin is 40."></p>
+<p>如果我们看<a href="https://grinexplorer.net/block/00000317907f10bc6dd3101574d2d4412839602381ed4c5365aafe3f2771fd94" target="_blank" rel="noopener">Grin 区块链浏览器</a>，输出不会像上面那样优雅的分解。就像我们所说的，这才是Grin真正输出的样子，</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-f6ff8bcd2ea7ba7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="What a Grin output looks like (under the Commit column)."></p>
+<p>再重复一次，从这个输出中推导出<code>20(致盲因子)</code>或者<code>40(grin 数量)</code>是不可能的。</p>
+<h1 id="花费输出"><a href="#花费输出" class="headerlink" title="花费输出"></a>花费输出</h1><p>假设刚才展示的输出属于Alice。现在，Alice希望将40个Grin中的25个发送给Bob。为简单起见，我们会忽略挖矿费。</p>
+<p>假如您有5美元，购买3美元的东西，您将获得2美元的找零。比特币交易是这样的，Grin也不例外。如果Alice想要从她40个未花费的Grin输出中向Bob发送25个Grin，她也会在同一笔交易中创建一个输出，把剩余的15个 Grin（她的零钱）返还自己。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-41b33980d9f42a1b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Alice identifies how much Grin she wants to send to Bob, and also her change."></p>
+<p>这15个Grin将会返还Alice，这意味着只有她能够控制它并再次花费它。换句话说，Bob不应该花费Alice的找零。为此，Alice必须为她的找零输出创建一个新的致盲因子。假设Alice选择34。</p>
+<p>Alice知道<code>r</code>（为她找零输出的致盲因子）和 <code>v</code>（她找零的grin的数量），她拥有创建找零输出（<code>co</code>）所需的一切。这将作为一个输出记录在区块链上，就像Alice创建的将25个Grin发送给Bob的输出一样。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-85f530d564597936.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Alice’s change output."></p>
+<p>正如我之前提到的，要花费任何输出，您必须知道该输出中使用的致盲因子。Alice知道她想要花费的输出中所使用的致盲因素（20），但她需要一种方法向所有人证明她知道。</p>
+<p>这就是为什么她需要创建一个完全独立的计算，就是<em>致盲因子的和</em>。这涉及到Alice刚才为她的找零输出采用的致盲因子（34），并从中减去她想要花费的输出的致盲因子（20）。<br><img src="https://upload-images.jianshu.io/upload_images/422094-ab262f373c7d30bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Alice’s sum of her blinding factors."></p>
+<p><code>rs</code>（s表示发送者，现在是Alice）是Alice所有致盲因子的总和，现在的情况下它是14。（Note: I am intentionally leaving out kernel offsets）。</p>
+<p>Alice做的就是创建一个随机的nonce <code>ks</code>（再次说明，s表示发送者）。她将使用这个随机的nonce来帮助她对这笔交易签名，我们稍后将会展示。Alice不会将实际的nonce发送给Bob。相反，她发送<code>ks•G</code>，这是对该nonce 的承诺。如前所述，通过将nonce乘以生成点<code>G</code>，Alice屏蔽了她实际的nonce值。</p>
+<p>Alice将以下信息发送给Bob。实际上，Grin数据不会区分“Metadata”和“Data”字段，这里只是为了清楚的显示。<br><img src="https://upload-images.jianshu.io/upload_images/422094-bfc74a55e7b3423a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Everything Alice sends Bob in the first step of this Grin transaction."></p>
+<p><strong>Metadata</strong>中的数据：</p>
+<ul>
+<li><strong>Amount to send:</strong> Alice想要发送给Bob的grin数量（现在是25）。</li>
+<li><strong>TX UUID:</strong> Alice和Bob用于在来回发送数据时，标识此交易的唯一标识符。</li>
+<li><strong>TX fee:</strong> 交易费（这篇文章先不讨论）。</li>
+<li><strong>lock_height:</strong> 区块数，在此之后交易将有效。</li>
+</ul>
+<p><strong>Data</strong>中的数据</p>
+<ul>
+<li><strong>TX Inputs</strong>: Alice为她给Bob的交易的使用的未花费输入。</li>
+<li><strong>co</strong>: Alice的找零输出</li>
+<li><strong>ks • G</strong>: Alice的nonce变成对应的承诺通过乘以生成点<code>G</code>.</li>
+<li><strong>rs • G*</strong>: Alice致盲因子的和对应的承诺通过乘以生成点<code>G</code>.</li>
+</ul>
+<p>Alice将所有这些发送给Bob，Bob继续下一步。</p>
+<h1 id="Bob的回合"><a href="#Bob的回合" class="headerlink" title="Bob的回合"></a>Bob的回合</h1><p>一旦从Alice接收到该数据后，Bob将<strong>TX fee</strong>和<strong>lock_height</strong>连接起来以创建<strong>M</strong>，称为交易的“Message”。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-600ce62610a8b2c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="The “message” of the transaction."></p>
+<p>Bob为他希望从Alice哪里收到的25个grin选择一个致盲因子<strong>rr</strong>（r表示接受者，在这里是Bob）。假设他选择 <strong>11</strong>。他还选择了他自己的随机的nonce <strong>kr</strong>（r表示接受者）。</p>
+<p>就像Alice一样，Bob通过将每个值乘以生成点<strong>G</strong>来创建对这两个值的<em>承诺</em>。使用这些值，Bob 为此交易生成 <strong>Schnorr challenge</strong>，由变量<strong><code>e</code></strong>表示：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-c7215bd74d0df7e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="The Schnorr challenge for the transaction."></p>
+<p><strong>Schnorr challenge</strong>由以下值的 <strong>SHA256 hash</strong>组成：</p>
+<ul>
+<li>交易的message。</li>
+<li>Alice和Bob使用的nonce对应承诺的和。</li>
+<li>Bob的致盲因子（为他25个grin的输出）对应的承诺 + Alice致盲因子和对应的承诺。</li>
+</ul>
+<p>Bob使用<strong>e</strong>为此交易生成他的<strong>Schnorr signature</strong> ，简称<strong>sr</strong>（r为收件人）。虽然它是Bob签名的全部，但我们称之为<strong>Bob方签名</strong>，因为它最终将被添加到<strong>Alice方签名</strong>中来创建整个交易的签名。<br><img src="https://upload-images.jianshu.io/upload_images/422094-4537913154cc27de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="The Schnorr challenge for the transaction."></p>
+<p>当Alice最终收到<strong>sr</strong>时，她将无法从中推断出<strong>kr</strong>或<strong>rr</strong>的值。</p>
+<h2 id="Bob将以下内容发送回Alice"><a href="#Bob将以下内容发送回Alice" class="headerlink" title="Bob将以下内容发送回Alice"></a>Bob将以下内容发送回Alice</h2><p><img src="https://upload-images.jianshu.io/upload_images/422094-0ff2cd0e060a4864.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Bob sends his partial signature, commitment to his nonce, and commitment to his blinding factor for his output back to Alice."><br>包括：</p>
+<ul>
+<li><strong>sr:</strong> Bob方的签名</li>
+<li><strong>kr • G：</strong> Bob的nonce对应的承诺</li>
+<li><strong>rr • G：</strong> Bob为他期望收到的25个grin选择的致盲因子对应的承诺。</li>
+</ul>
+<h1 id="最后一步：返回给Alice"><a href="#最后一步：返回给Alice" class="headerlink" title="最后一步：返回给Alice"></a>最后一步：返回给Alice</h1><p>Alice现在有所需的一切，她也需要计算<strong>e</strong>（这笔交易的Schnorr challenge）。在本地计算e之后，Alice就可以<strong>验证Bob方的签名</strong>。<br>回顾一下Bob方的签名<strong>sr</strong>,由一下组成：<br><img src="https://upload-images.jianshu.io/upload_images/422094-c11f26d0b940c7b9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Bob’s partial signature for this transaction."></p>
+<p>基于我们前面描述的椭圆曲线的性质，Alice可以将生成点<strong>G</strong> 引入等式的两边，等式任然成立。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-db5d42baf2f3beeb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Alice multiples each side of the equation by generator point G."></p>
+<p>由于Alice收到了Bob的<strong>kr • G</strong>（Bob的nonce对应的承诺）和<strong>rr•G</strong>（Bob为他期望收到的25个Grin选择的致盲因子对应的承诺），并且因为她已经在本地计算了<strong>e</strong>，所以Alice验证Bob方签名<strong>sr</strong>，通过简单地将它乘以生成器<strong>G</strong>并确保等式的右边等于该值。<br>通过这样做，Alice证明：</p>
+<ol>
+<li>Bob知道他将收到多少grin</li>
+<li>Bob知道他的nonce</li>
+<li>Bob知道他期望收到的25grin的致盲因子</li>
+</ol>
+<p>Alice并不知道Bob的nonce和他选择的致盲因子。</p>
+<p>然后Alice生成自己方的签名：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-675d4cdfaedc8fbc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Alice generates her partial signature for the transaction."><br>Alice现在可以生成整个交易的签名，该签名包括她和Bob的签名：<br><img src="https://upload-images.jianshu.io/upload_images/422094-83fddb938cb10183.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p><strong>签名</strong>包括</p>
+<ul>
+<li>Alice和Bob方签名的和</li>
+<li>Alice和Bob的nonces对应的承诺（他们都不知道对方真正的nonce）</li>
+</ul>
+<p>再简明一点，它可以是这样：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-e6bfac1f00c6fc85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="The signature for the transaction."></p>
+<p>其中 <code>s = ss + sr</code>  ，<code>k = ks + kr</code>.</p>
+<p>记住这个签名，它马上会很有意义。</p>
+<h1 id="完成交易"><a href="#完成交易" class="headerlink" title="完成交易"></a>完成交易</h1><p>数字货币需要一个”memory” , 也就是说，当你向一个人转账后，你不能将同样的钱再发给别人。在Grin中，我们隐藏了发送的Grin数和接受者。那么我们怎么能证明没有钱被双花或者凭空产生呢？</p>
+<p>在Grin交易中，当您从输入中减去所有输出时，剩余的Grin数应该等于0。回到刚才的5美元的比喻，有下面的公式：</p>
+<blockquote>
+<p>3 dollars to cashier (output) + 2 dollars in change back to me (output) - 5 dollar bill (input) = 0</p>
+</blockquote>
+<p>在Grin中，当交易合法时，相同的求和使<strong>v</strong>值总和为零。但是，我们如何在不知道<strong>value</strong>的情况下证明这一点？让我们看一下从Alice到Bob的交易中使用的输入和输出：</p>
+<blockquote>
+<p>（34•G）+（15•H）+（11•G）+（25•H） - （20•G） - （40•H）=（25•G）+（0•H）</p>
+</blockquote>
+<p>这里比较巧妙的属性是，当Grin金额抵消时（因为没有钱是凭空创造的），从输入中减去输出所剩下的全部是“<strong>the excess blinding factor</strong>” 的承诺，或者“<strong>kernel excess</strong>”。这个“<strong>the excess blinding factor</strong>”的承诺，现在是<strong>25•G</strong>，就是椭圆曲线上的公钥。</p>
+<p>如果Grin交易的输出总和减去输入的总和会在曲线上产生有效的公钥，你便知道<strong>v</strong>值肯定已经抵消了。如果等式的右边不是<strong>n•G + 0•H</strong>的形式 【for some known value of <em>n</em>】 ，你便知道该交易无效。这意味着花费的金额大于输入金额（例如，您提供5美元的账单，向收银员支付3美元，并在找零中获得10美元），或者输入大于输出（例如，您提供5美元的账单，向收银员支付3美元，并且没有找零）。</p>
+<p>记得之前的签名吗？<br><img src="https://upload-images.jianshu.io/upload_images/422094-a46e78f8c49fb186.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="The signature from the transaction."></p>
+<p>这个签名实际上已经签署了我刚刚提到的<strong>excess blinding factor</strong>对应的承诺。这是如何做的？</p>
+<p>如果你还记得，当你用生成器<strong>G</strong>乘以等式的两边时，这就是Bob方签名。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/422094-959d5f16cf29a967.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Bob’s partial signature when you multiply both sides by generator G."></p>
+<p>类似地，当你用生成器<strong>G</strong>乘以等式两边时，Alice方签名就是这样：<br><img src="https://upload-images.jianshu.io/upload_images/422094-1d43d6b0b44a3aef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Bob’s partial signature when you multiply both sides by generator G."><br>如果将两个方程式加在一起会发生什么？你会得到：</p>
+<blockquote>
+<p>sr•G + ss•G =（kr•G）+（ks•G）+（e•（rr•G + rs•G））</p>
+</blockquote>
+<p>请记住，<strong>rr</strong>是Bob的致盲因子，<strong>rs</strong>是Alice的盲目因子之和。还需要记住<code>rr•G + rs•G</code> 和 <code>(rr + rs)•G</code>是等价的。</p>
+<p>Bob的致盲因子对应的承诺是<strong>11•G</strong>。Alice所有致盲因子的和对应的承诺是<code>14•G</code>。将它们加在一起得到<strong>25•G</strong>，这是交易的<strong> excess blinding factor</strong>对应的承诺。因此，添加<strong>sr</strong>和<strong>ss</strong>（ Bob和Alice各自的部分签名）证明了整个交易的有效性，因为它们加起来是<strong> excess blinding factor</strong>对应的承诺。<br>Further simplifying that equation, we get:<br>进一步简化该等式，我们得到：</p>
+<blockquote>
+<p>sr•G + ss•G = (k•G) + (e • (r•G))</p>
+</blockquote>
+<p>或者</p>
+<blockquote>
+<p>sr•G + ss•G = (k•G) + (e • (25•G))</p>
+</blockquote>
+<p>剩下要做的就是检查等式左侧等于右侧。</p>
+<p>请记住，这个等式中的所有内容（双方签名的和，<strong>e</strong>中的所有内容，<strong> excess blinding factor</strong>对应的承诺，nonce和对应的承诺）都是公开可见的，因此任何人都可以进行此验证。我们不需要Alice和Bob的致盲因子来验证交易。By adding their partial signatures and verifying that they summed to the commitment to the excess blinding factor，我们证明：</p>
+<ol>
+<li>再花费Alice之前的输入时，没有钱凭空产生。</li>
+<li>Alice and Bob both knew the blinding factors for their outputs when they created this transaction. This means the new outputs are spendable by them, and not lost to the abyss.Alice和Bob都知道他们的输出对应的致盲因子。这意味着他们可以花费新的输出，而不是丢失【这里翻译不好】</li>
+</ol>
+<p>我们用来验证交易的信息放在所谓的<strong>transaction kernel</strong>中了。</p>
+<h1 id="交易核"><a href="#交易核" class="headerlink" title="交易核"></a>交易核</h1><p>除了输出之外，<strong>transaction kernel（交易核）</strong>是从Grin交易中产生的另一块信息。每个交易都会产生一个<strong>transaction kernel（交易核）</strong>，但是没有办法通过Grin区块链将输出和交易核关联起来。每个Grin交易都存在一个，它包含没有钱凭空产生的证明。</p>
+<p>下面的信息存储来交易核中：</p>
+<ul>
+<li>交易的签名(s, k • G)</li>
+<li>和“<strong>excess blinding factor</strong>” 相关联的公钥（这里指<strong>25•G</strong>），如上所述，它可以用来验证<strong>s</strong>。</li>
+<li>交易的<strong>交易费</strong>和<strong>锁定高度</strong>(注意:如果这是Coinbase交易，那么这些交易都不存在).</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>After all this is said and done, the only things broadcast to the network from the transaction are:<br>完成所有这些之后，只把交易的以下内容向网络广播：</p>
+<ul>
+<li>所用的输入</li>
+<li>新的输出</li>
+<li>交易核</li>
+<li>核偏移 (这篇文章没有讲到).</li>
+</ul>
+<p>None of the transaction metadata from earlier are relayed. Even better, some of this information may get discarded, too — but we will save that for another post.</p>
+<p>希望这篇文章能够说明Grin交易是如何运作的。我遗漏了范围证明，内核偏移和交易费用。请留意更多关于Grin如何实现切入工作的帖子，多参与者交易的外观以及一些实验性功能。Look out for more posts on how cut-through works in Grin, what multi-participant transactions look like, and some experimental features.</p>
+<hr>
+<p><strong>原文链接:</strong> <a href="https://medium.com/@brandonarvanaghi/grin-transactions-explained-step-by-step-fdceb905a853" target="_blank" rel="noopener">https://medium.com/@brandonarvanaghi/grin-transactions-explained-step-by-step-fdceb905a853</a><br><strong>作者:</strong> <a href="https://medium.com/@brandonarvanaghi" title="Go to the profile of Brandon Arvanaghi" target="_blank" rel="noopener">Brandon Arvanaghi</a></p>
+<p><strong>翻译&amp;校对:</strong> 徐晓峰</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="徐晓峰 wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      </div>
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/grin/" rel="tag"># grin</a>
+          
+            <a href="/tags/交易/" rel="tag"># 交易</a>
+          
+            <a href="/tags/Mimblewimble/" rel="tag"># Mimblewimble</a>
+          
+            <a href="/tags/区块链blockchain/" rel="tag"># 区块链blockchain</a>
+          
+            <a href="/tags/隐私交易/" rel="tag"># 隐私交易</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/20/golang-2019-02-20-Simple-Golang-HTTPS-TLS-Examples/" rel="next" title="Simple Golang HTTPS/TLS Examples">
+                <i class="fa fa-chevron-left"></i> Simple Golang HTTPS/TLS Examples
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">徐晓峰</p>
+              <p class="site-description motion-element" itemprop="description">记录自己走过的点滴</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/naichadouban" title="GitHub-job &rarr; https://github.com/naichadouban" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-job</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xulove" title="GitHub-personal &rarr; https://github.com/xulove" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-personal</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#花费输出"><span class="nav-number">1.</span> <span class="nav-text">花费输出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bob的回合"><span class="nav-number">2.</span> <span class="nav-text">Bob的回合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bob将以下内容发送回Alice"><span class="nav-number">2.1.</span> <span class="nav-text">Bob将以下内容发送回Alice</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最后一步：返回给Alice"><span class="nav-number">3.</span> <span class="nav-text">最后一步：返回给Alice</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完成交易"><span class="nav-number">4.</span> <span class="nav-text">完成交易</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#交易核"><span class="nav-number">5.</span> <span class="nav-text">交易核</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">徐晓峰</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

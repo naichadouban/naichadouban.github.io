@@ -170,7 +170,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-dcb82122c86bd0d3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-7bae2ea61cec4a30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-28d1479db1025f72.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-09T09:01:19.963Z">
+<meta property="og:updated_time" content="2019-01-15T07:20:32.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git系统学习">
 <meta name="twitter:description" content="git的特性 版本控制最终版，最终版1，最终版2 分布式分布式和集中式都需要中央服务器，不同的是分布式在工作电脑上保存了服务器的完整工程，即使服务器挂掉了，也不会影响工作电脑上的开发。集中式就不可以了。中央服务器挂掉，其他人就都不可以开发了。  git的安装和基本使用安装1sudo apt-get install git 基本使用1234567891011//目录初始化git init // 创建">
@@ -616,6 +616,8 @@
 <p>修改bug时，先回到出现bug的分支上面。</p>
 <h2 id="分支管理小结"><a href="#分支管理小结" class="headerlink" title="分支管理小结"></a>分支管理小结</h2><p><img src="https://upload-images.jianshu.io/upload_images/422094-7bae2ea61cec4a30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br> git基本操作小结<br><img src="https://upload-images.jianshu.io/upload_images/422094-28d1479db1025f72.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <h1 id="git常用操作"><a href="#git常用操作" class="headerlink" title="git常用操作"></a>git常用操作</h1><h2 id="github清空历史提交记录"><a href="#github清空历史提交记录" class="headerlink" title="github清空历史提交记录"></a>github清空历史提交记录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">1.Checkout</span><br><span class="line"></span><br><span class="line">   git checkout --orphan latest_branch</span><br><span class="line"></span><br><span class="line">2. Add all the files</span><br><span class="line"></span><br><span class="line">   git add -A</span><br><span class="line"></span><br><span class="line">3. Commit the changes</span><br><span class="line"></span><br><span class="line">   git commit -am &quot;commit message&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4. Delete the branch</span><br><span class="line"></span><br><span class="line">   git branch -D master</span><br><span class="line"></span><br><span class="line">5.Rename the current branch to master</span><br><span class="line"></span><br><span class="line">   git branch -m master</span><br><span class="line"></span><br><span class="line">6.Finally, force update your repository</span><br><span class="line"></span><br><span class="line">   git push -f origin master</span><br></pre></td></tr></table></figure>
+<h2 id="修改commit提示"><a href="#修改commit提示" class="headerlink" title="修改commit提示"></a>修改commit提示</h2><p>已经<code>git add</code>,<code>git commit</code>，还没有<code>git push</code> ,如何修改commit信息？<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git commit –amend</span><br><span class="line">在打开的vim编辑器中修改信息即可</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
 
@@ -741,7 +743,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -764,7 +766,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -827,7 +847,49 @@
                     
                       
                     
-                    <span class="site-state-item-count">25</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -888,7 +950,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git的特性"><span class="nav-number">1.</span> <span class="nav-text">git的特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git的安装和基本使用"><span class="nav-number">2.</span> <span class="nav-text">git的安装和基本使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工作区和版本库"><span class="nav-number">3.</span> <span class="nav-text">工作区和版本库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#撤销修改"><span class="nav-number">3.1.</span> <span class="nav-text">撤销修改</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git对比文件"><span class="nav-number">4.</span> <span class="nav-text">git对比文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作区和版本库中的对比"><span class="nav-number">4.1.</span> <span class="nav-text">工作区和版本库中的对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两个版本库中的对比"><span class="nav-number">4.2.</span> <span class="nav-text">两个版本库中的对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除文件"><span class="nav-number">5.</span> <span class="nav-text">删除文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#恢复删除"><span class="nav-number">5.1.</span> <span class="nav-text">恢复删除</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支管理"><span class="nav-number">6.</span> <span class="nav-text">分支管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建分支与合并分支"><span class="nav-number">6.1.</span> <span class="nav-text">创建分支与合并分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">6.2.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支-解决冲突"><span class="nav-number">6.3.</span> <span class="nav-text">分支-解决冲突</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支管理策略"><span class="nav-number">7.</span> <span class="nav-text">分支管理策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#没有快速合并，但是也没有冲突"><span class="nav-number">7.1.</span> <span class="nav-text">没有快速合并，但是也没有冲突</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强制禁止快速合并"><span class="nav-number">7.2.</span> <span class="nav-text">强制禁止快速合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bug分支"><span class="nav-number">7.3.</span> <span class="nav-text">bug分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支管理小结"><span class="nav-number">7.4.</span> <span class="nav-text">分支管理小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git常用操作"><span class="nav-number">8.</span> <span class="nav-text">git常用操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#github清空历史提交记录"><span class="nav-number">8.1.</span> <span class="nav-text">github清空历史提交记录</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git的特性"><span class="nav-number">1.</span> <span class="nav-text">git的特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git的安装和基本使用"><span class="nav-number">2.</span> <span class="nav-text">git的安装和基本使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#工作区和版本库"><span class="nav-number">3.</span> <span class="nav-text">工作区和版本库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#撤销修改"><span class="nav-number">3.1.</span> <span class="nav-text">撤销修改</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git对比文件"><span class="nav-number">4.</span> <span class="nav-text">git对比文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作区和版本库中的对比"><span class="nav-number">4.1.</span> <span class="nav-text">工作区和版本库中的对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两个版本库中的对比"><span class="nav-number">4.2.</span> <span class="nav-text">两个版本库中的对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除文件"><span class="nav-number">5.</span> <span class="nav-text">删除文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#恢复删除"><span class="nav-number">5.1.</span> <span class="nav-text">恢复删除</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支管理"><span class="nav-number">6.</span> <span class="nav-text">分支管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建分支与合并分支"><span class="nav-number">6.1.</span> <span class="nav-text">创建分支与合并分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">6.2.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支-解决冲突"><span class="nav-number">6.3.</span> <span class="nav-text">分支-解决冲突</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支管理策略"><span class="nav-number">7.</span> <span class="nav-text">分支管理策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#没有快速合并，但是也没有冲突"><span class="nav-number">7.1.</span> <span class="nav-text">没有快速合并，但是也没有冲突</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强制禁止快速合并"><span class="nav-number">7.2.</span> <span class="nav-text">强制禁止快速合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bug分支"><span class="nav-number">7.3.</span> <span class="nav-text">bug分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分支管理小结"><span class="nav-number">7.4.</span> <span class="nav-text">分支管理小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git常用操作"><span class="nav-number">8.</span> <span class="nav-text">git常用操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#github清空历史提交记录"><span class="nav-number">8.1.</span> <span class="nav-text">github清空历史提交记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改commit提示"><span class="nav-number">8.2.</span> <span class="nav-text">修改commit提示</span></a></li></ol></li></ol></div>
             
 
           </div>

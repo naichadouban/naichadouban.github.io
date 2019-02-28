@@ -171,7 +171,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-40fb7a58383a8153.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-6f2365cc4e601eda.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-7184e842698d25a8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-03T12:04:33.872Z">
+<meta property="og:updated_time" content="2019-01-25T03:58:42.596Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="标志寄存器">
 <meta name="twitter:description" content="crackme.exe 引出标志寄存器现在有一个crackme.exe的程序，进去后需要我们注册成功后才可以使用。要想破解这个小软件，我们需要掌握哪些东西呢？  PE 断点我们随便输入一个用户名和密码，就会弹出一个失败提示框。我们就在弹出提示框的地方打断点。 win32 API我们知道要在弹出提示框的地方打断点，可是只有我们知道了win32的API后，我们才知道， 那就是一个messageBoxA">
@@ -600,7 +600,7 @@
 <p>好好看这个图就什么都明白了<br><img src="https://upload-images.jianshu.io/upload_images/422094-3ad495cb7405f026.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="https://upload-images.jianshu.io/upload_images/422094-f6ffe2cae7646bfe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p>正数+负数，一定在圈内，永远不会溢出<br>正数+正数，如果结果为负数（超过7F内），一定溢出。因为越界了，两个正数相加不应该是负数。</p>
 <p>说结果之前，一定要指定到底是无符号运算还是有符号预算。<br><img src="https://upload-images.jianshu.io/upload_images/422094-4a9e51373fbc748d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>自己这个分析判断是错误的，其实只要是圈上的点可以表示的，都没有溢出，圈上的店不能表示的，就是溢出了。<br>只是有符号的话，只有右边区域表示正数，左边区域表示负数<br>无符号的话，整个区域都可以表示</p>
+<p>自己这个分析判断是错误的，其实只要是圈上的点可以表示的，都没有溢出，圈上的点不能表示的，就是溢出了。<br>只是有符号的话，只有右边区域表示正数，左边区域表示负数<br>无符号的话，整个区域都可以表示</p>
 <h1 id="和标志寄存器相关的指令"><a href="#和标志寄存器相关的指令" class="headerlink" title="和标志寄存器相关的指令"></a>和标志寄存器相关的指令</h1><h2 id="ADC指令：带进位加法"><a href="#ADC指令：带进位加法" class="headerlink" title="ADC指令：带进位加法"></a>ADC指令：带进位加法</h2><p><img src="https://upload-images.jianshu.io/upload_images/422094-1ec8a53efc66fbaa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <blockquote>
 <p>百度百科：<br>ADC 带进位的加法指令 ADC Reg/Mem, Reg/Mem/Imm 功能，将目的<a href="https://baike.baidu.com/item/%E6%93%8D%E4%BD%9C%E6%95%B0" target="_blank" rel="noopener">操作数</a>和源操作数相加再加低位进位，结果送入目的的地址 dst+src+cf-&gt;dst， 受影响的标志位：AF、CF、OF、PF、SF和ZF，该指令的功能是把源操作数和进位标志位CF的值(0/1)一起加到目的操作数中。</p>
@@ -768,7 +768,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -791,7 +791,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -854,7 +872,49 @@
                     
                       
                     
-                    <span class="site-state-item-count">25</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
