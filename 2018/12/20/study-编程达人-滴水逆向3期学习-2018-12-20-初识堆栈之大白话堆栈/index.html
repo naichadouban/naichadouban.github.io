@@ -152,13 +152,13 @@
 
 
 
-  <meta name="description" content="什么是堆栈引出堆栈在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？现在假设我们需要一块内存，它可以满足如下功能  1.主要用于临时存储一些数据  能够记录存储了多少数据 可以很方便的找到需要的数据   对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了 还好有高人还">
+  <meta name="description" content="什么是堆栈引出堆栈在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？现在假设我们需要一块内存，它可以满足如下功能  1、主要用于临时存储一些数据2、 能够记录存储了多少数据3、 可以很方便的找到需要的数据  对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了 还好有高">
 <meta name="keywords" content="滴水逆向,汇编,堆栈">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初识堆栈之大白话堆栈">
 <meta property="og:url" content="http://yoursite.com/2018/12/20/study-编程达人-滴水逆向3期学习-2018-12-20-初识堆栈之大白话堆栈/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="什么是堆栈引出堆栈在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？现在假设我们需要一块内存，它可以满足如下功能  1.主要用于临时存储一些数据  能够记录存储了多少数据 可以很方便的找到需要的数据   对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了 还好有高人还">
+<meta property="og:description" content="什么是堆栈引出堆栈在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？现在假设我们需要一块内存，它可以满足如下功能  1、主要用于临时存储一些数据2、 能够记录存储了多少数据3、 可以很方便的找到需要的数据  对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了 还好有高">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-abe526fe10e2bc5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-7e971006ce1037ab.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -171,10 +171,10 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-a2714e24e1b83bd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-dfba00669dfda926.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-c50ca5a16de53c96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-25T03:58:42.594Z">
+<meta property="og:updated_time" content="2019-03-18T06:34:16.311Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识堆栈之大白话堆栈">
-<meta name="twitter:description" content="什么是堆栈引出堆栈在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？现在假设我们需要一块内存，它可以满足如下功能  1.主要用于临时存储一些数据  能够记录存储了多少数据 可以很方便的找到需要的数据   对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了 还好有高人还">
+<meta name="twitter:description" content="什么是堆栈引出堆栈在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？现在假设我们需要一块内存，它可以满足如下功能  1、主要用于临时存储一些数据2、 能够记录存储了多少数据3、 可以很方便的找到需要的数据  对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了 还好有高">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/422094-abe526fe10e2bc5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -550,11 +550,7 @@
       
         <h1 id="什么是堆栈"><a href="#什么是堆栈" class="headerlink" title="什么是堆栈"></a>什么是堆栈</h1><h2 id="引出堆栈"><a href="#引出堆栈" class="headerlink" title="引出堆栈"></a>引出堆栈</h2><p>在学习堆栈之前，我们需要从之前寄存器和内存中引出堆栈，我们要思考堆栈有什么必要性？<br>现在假设我们需要一块内存，它可以满足如下功能</p>
 <blockquote>
-<p>1.主要用于临时存储一些数据</p>
-<ol start="2">
-<li>能够记录存储了多少数据</li>
-<li>可以很方便的找到需要的数据</li>
-</ol>
+<p>1、主要用于临时存储一些数据<br>2、 能够记录存储了多少数据<br>3、 可以很方便的找到需要的数据</p>
 </blockquote>
 <p>对于第一条，有人说直接放寄存器不就可以了吗？但是如果我们有2个字节的数据，有5个字节的数据，都好说。但是如果我有几百，几千个数据呢？寄存器明显就不行了</p>
 <h2 id="还好有高人"><a href="#还好有高人" class="headerlink" title="还好有高人"></a>还好有高人</h2><p>还有在我们之前，有那么多厉害的人。有人设计出这样一块内存，虽然简单，但却刚好满足了上面我们的三个需求。<br><img src="https://upload-images.jianshu.io/upload_images/422094-abe526fe10e2bc5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>为了满足第二条，我们直接top-base；<br>对于第三条，比如我们存储了500个数据，我们需要第50个，我们直接base+50个单位的偏移就可以找到。突然又需要第200个数据，base+200单位的偏移就是。<strong>这里的单位是指byte</strong></p>
@@ -582,7 +578,7 @@
 <h3 id="方式二"><a href="#方式二" class="headerlink" title="方式二"></a>方式二</h3><p><img src="https://upload-images.jianshu.io/upload_images/422094-a2714e24e1b83bd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <h2 id="弹出数据"><a href="#弹出数据" class="headerlink" title="弹出数据"></a>弹出数据</h2><p>不光要读取栈顶的数据，还需要将栈顶的位置进行移动<br><img src="https://upload-images.jianshu.io/upload_images/422094-dfba00669dfda926.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <h1 id="操作系统实现的堆栈"><a href="#操作系统实现的堆栈" class="headerlink" title="操作系统实现的堆栈"></a>操作系统实现的堆栈</h1><h2 id="push-and-pop"><a href="#push-and-pop" class="headerlink" title="push and pop"></a>push and pop</h2><p>堆栈是软件设计常用的概念。如果每次我们需要的时候，都需要自己手动实现，效率也太低了。<br>为此，<strong>操作系统</strong>联合<strong>cpu</strong>给我们实现了堆栈。如何联合的呢？<br>cpu提供两个32位的寄存器，ESP和EBP，一个用来存储宅顶，一个用来存储栈底。其实对于cpu来说，这两个寄存器和其他的寄存器并没有什么特殊的地方，只是操作系统按照自己的习惯把他两区别对待了。这两个就用来存储栈顶和栈底，相当于cpu和操作系统的之间的约定。（突然想到了协议）</p>
-<p>那之前我们所有的操作就可以再两个命令代替了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">入栈用push</span><br><span class="line">出战用POP</span><br></pre></td></tr></table></figure></p>
+<p>那之前我们所有的操作就可以用两个命令代替了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">入栈用push</span><br><span class="line">出战用POP</span><br></pre></td></tr></table></figure></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/422094-c50ca5a16de53c96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <h2 id="push和pop操作时，寄存器ESP变化宽度"><a href="#push和pop操作时，寄存器ESP变化宽度" class="headerlink" title="push和pop操作时，寄存器ESP变化宽度"></a>push和pop操作时，寄存器ESP变化宽度</h2><p>ESP中存储的是栈顶的位置，其实就是栈顶的内存编号。根据上一小节，我们每push一次，ESP中的值应该-4；每pop一次，ESP中值应该+4.</p>
 <blockquote>
@@ -729,7 +725,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -770,7 +766,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -875,7 +893,51 @@
                     
                       
                     
-                    <span class="site-state-item-count">46</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

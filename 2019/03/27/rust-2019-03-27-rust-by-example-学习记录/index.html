@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="文章不是教程，只是记录一些自己可能忘记的代码片段.中文：https://rustwiki.org/zh-CN/rust-by-example/英文：https://doc.rust-lang.org/stable/rust-by-example/f  中文读起来很快，如果有些地方感觉不知所云，看不懂，一定要打开英文看看，看英文就是慢点，但是一段话到底是在讲什么，很透彻。  自定义类型结构体、枚举[">
+<meta name="keywords" content="rust">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rust by example 学习记录">
+<meta property="og:url" content="http://yoursite.com/2019/03/27/rust-2019-03-27-rust-by-example-学习记录/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="文章不是教程，只是记录一些自己可能忘记的代码片段.中文：https://rustwiki.org/zh-CN/rust-by-example/英文：https://doc.rust-lang.org/stable/rust-by-example/f  中文读起来很快，如果有些地方感觉不知所云，看不懂，一定要打开英文看看，看英文就是慢点，但是一段话到底是在讲什么，很透彻。  自定义类型结构体、枚举[">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-30T08:39:11.490Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rust by example 学习记录">
+<meta name="twitter:description" content="文章不是教程，只是记录一些自己可能忘记的代码片段.中文：https://rustwiki.org/zh-CN/rust-by-example/英文：https://doc.rust-lang.org/stable/rust-by-example/f  中文读起来很快，如果有些地方感觉不知所云，看不懂，一定要打开英文看看，看英文就是慢点，但是一段话到底是在讲什么，很透彻。  自定义类型结构体、枚举[">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/27/rust-2019-03-27-rust-by-example-学习记录/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>rust by example 学习记录 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-学习规划">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/plan/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>学习规划</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/rust-2019-03-27-rust-by-example-学习记录/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="徐晓峰">
+      <meta itemprop="description" content="记录自己走过的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">rust by example 学习记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-27 19:30:00" itemprop="dateCreated datePublished" datetime="2019-03-27T19:30:00+08:00">2019-03-27</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>文章不是教程，只是记录一些自己可能忘记的代码片段.<br>中文：<br><a href="https://rustwiki.org/zh-CN/rust-by-example/" target="_blank" rel="noopener">https://rustwiki.org/zh-CN/rust-by-example/</a><br>英文：<br><a href="https://doc.rust-lang.org/stable/rust-by-example/f" target="_blank" rel="noopener">https://doc.rust-lang.org/stable/rust-by-example/f</a></p>
+<blockquote>
+<p>中文读起来很快，如果有些地方感觉不知所云，看不懂，一定要打开英文看看，看英文就是慢点，但是一段话到底是在讲什么，很透彻。</p>
+</blockquote>
+<h1 id="自定义类型"><a href="#自定义类型" class="headerlink" title="自定义类型"></a>自定义类型</h1><p>结构体、枚举[使用use，C风格用法，测试实例：链表]、常量</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 隐藏未使用代码警告的属性</span></span><br><span class="line"><span class="meta">#![#[allow(dead_code)]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// `to_owned()` 从一个字符串 slice 创建一个具有所有权的 `String`。</span></span><br><span class="line"><span class="keyword">let</span> dave     = Person::Info &#123; name: <span class="string">"Dave"</span>.to_owned(), height: <span class="number">72</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>一个使用enum的例子<br><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Person</span></span> &#123;</span><br><span class="line">    Engineer,</span><br><span class="line">    Scientist,</span><br><span class="line">    Height(<span class="built_in">i32</span>),</span><br><span class="line">    Weight(<span class="built_in">i32</span>),</span><br><span class="line">    Info &#123; name: <span class="built_in">String</span>, height: <span class="built_in">i32</span> &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">inspect</span></span>(p: Person) &#123;</span><br><span class="line">	<span class="comment">// 明确地 `use` 各个名称使他们直接可用而不需要手动加上作用域。</span></span><br><span class="line">    <span class="keyword">use</span> Person::&#123;Engineer&#125;;</span><br><span class="line">    <span class="keyword">match</span> p &#123;</span><br><span class="line">    	<span class="comment">// 上面使用use了，所以这里可以不用加作用域了</span></span><br><span class="line">        Engineer =&gt; <span class="built_in">println!</span>(<span class="string">"is a engineer"</span>),</span><br><span class="line">        Person::Scientist =&gt; <span class="built_in">println!</span>(<span class="string">"is a scientist"</span>),</span><br><span class="line">        Person::Height(i) =&gt; <span class="built_in">println!</span>(<span class="string">"has a height of &#123;&#125;."</span>, i),</span><br><span class="line">        Person::Weight(i) =&gt; <span class="built_in">println!</span>(<span class="string">"has a weight of &#123;&#125;"</span>, i),</span><br><span class="line">        Person::Info &#123; name, height &#125; =&gt; &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">"&#123;&#125; is &#123;&#125; tall!"</span>, name, height);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> person = Person::Height(<span class="number">18</span>);</span><br><span class="line">    <span class="keyword">let</span> amira = Person::Weight(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">let</span> dave = Person::Info &#123;name:<span class="string">"Dive"</span>.to_owned(),height:<span class="number">72</span>&#125;;</span><br><span class="line">    <span class="keyword">let</span> rebecca = Person::Scientist;</span><br><span class="line">    <span class="keyword">let</span> rohan = Person::Engineer;</span><br><span class="line">    inspect(person);</span><br><span class="line">    inspect(amira);</span><br><span class="line">    inspect(dave);</span><br><span class="line">    inspect(rebecca);</span><br><span class="line">    inspect(rohan);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>enum的一个常见用法就是创建链表</p>
+</blockquote>
+<h1 id="变量绑定"><a href="#变量绑定" class="headerlink" title="变量绑定"></a>变量绑定</h1><p>可变变量、作用域和隐藏、变量先声明</p>
+<h1 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h1><p>rust在基本类型之间没有提供隐式类型转化（implicit type conversion,coercion)(强制类型转化)。但是使用关键字<code>as</code>可以显式转化(explict type conversion,casting)</p>
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>方法部分一个比较好的实例<br><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Pair 含有的资源，两个堆分配的整型</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Pair</span></span>(<span class="built_in">Box</span>&lt;<span class="built_in">i32</span>&gt;,<span class="built_in">Box</span>&lt;<span class="built_in">i32</span>&gt;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Pair &#123;</span><br><span class="line">    <span class="comment">// 这个方法“消费”调用者对象的资源</span></span><br><span class="line">    <span class="comment">// self 为 `self:Self`的语法糖</span></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">destroy</span></span>(<span class="keyword">self</span>)&#123;</span><br><span class="line">        <span class="comment">// 解构 `self`</span></span><br><span class="line">        <span class="keyword">let</span> Pair(first,second)=<span class="keyword">self</span>;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">"destroy Pair(&#123;&#125;,&#123;&#125;)"</span>,first,second);</span><br><span class="line">        <span class="comment">// `first`和`second`离开作用域后释放</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> pair = Pair(<span class="built_in">Box</span>::new(<span class="number">1</span>),<span class="built_in">Box</span>::new(<span class="number">2</span>));</span><br><span class="line">    pair.destroy();</span><br><span class="line">    <span class="comment">// 报错！前面的 `destroy` 调用“消费了” `pair`</span></span><br><span class="line">    <span class="comment">//pair.destroy();</span></span><br><span class="line">    <span class="comment">// 试一试 ^ 将此行注释去掉</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><h3 id="捕获"><a href="#捕获" class="headerlink" title="捕获"></a>捕获</h3><p>闭包本身是相当灵活的，可以实现按照所需功能来让闭包运行而不用类型标注。这允许变量捕获灵活地适应使用情况，有时是移动（moving）有时是借用(borrowing)<br>闭包可以捕获变量：</p>
+<ul>
+<li>通过引用：&amp;T</li>
+<li>通过可变引用:&amp;mut T</li>
+<li>通过值：T</li>
+</ul>
+<p>大白话：就是说闭包可以根据自己的使用需要来决定到底使用上面三种方式中的那种。并且优先使用<code>&amp;T</code>,不满足时才会使用下面的两种。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">use</span> std::mem;</span><br><span class="line">    <span class="keyword">let</span> color = <span class="string">"Green"</span>;</span><br><span class="line">    <span class="comment">// 闭包打印color，它会借用 &amp;color ，并将该借用和闭包存储到print变量中。</span></span><br><span class="line">    <span class="comment">// 它会一直保持借用状态直到 print 离开作用域。</span></span><br><span class="line">    <span class="comment">// println 只需要引用即可，所以他没有强加更多的限制（后面的两种）</span></span><br><span class="line">    <span class="keyword">let</span> print =|| <span class="built_in">println!</span>(<span class="string">"color :&#123;&#125;"</span>, color);</span><br><span class="line"></span><br><span class="line">    print(); <span class="comment">// 调用闭包 Green</span></span><br><span class="line">    print(); <span class="comment">// 调用闭包 Green</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 闭包要使count的值增加，可以使用&amp;mut count 或者 count</span></span><br><span class="line">    <span class="comment">// 但是&amp;mut count 限制更少，所以采用它，仅仅借用count[&amp;mut count]即可。</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// inc 前面加 mut ，是因为一个可变的引用 `&amp;mut count`是存储在其内部。</span></span><br><span class="line">    <span class="comment">// 因此，调用该闭包转变成一个需要加`mut`的闭包</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> inc = ||&#123;</span><br><span class="line">        count += <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">"count:&#123;&#125;"</span>, count);</span><br><span class="line">    &#125;</span><br><span class="line">    inc(); <span class="comment">// count:1</span></span><br><span class="line">    inc(); <span class="comment">// count:2</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 下面这行是报错的，因为你再次借用了。</span></span><br><span class="line">    <span class="comment">//let reborrow = &amp;mut count;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 再实验一下： 不可复制类型（non-copy type）</span></span><br><span class="line">    <span class="keyword">let</span> movable = <span class="built_in">Box</span>::new(<span class="number">3</span>);</span><br><span class="line">    <span class="comment">// 因为下面的闭包中，mem::drop()要求使用T，所以这必须通过使用值来实现。</span></span><br><span class="line">    <span class="comment">// 如果是可复制类型，将会复制值到闭包而不会用到原始值，</span></span><br><span class="line">    <span class="comment">// 不可复制类型的话，就必须移动（move），因此变量movable 就被移动到了闭包中。</span></span><br><span class="line">    <span class="keyword">let</span> consume = ||&#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">"movable:&#123;&#125;"</span>, movable);</span><br><span class="line">        mem::<span class="built_in">drop</span>(movable);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// consume 消费（consume）了该变量，所以这只能调用一次。</span></span><br><span class="line">    consume() </span><br><span class="line"></span><br><span class="line">    <span class="comment">// consume()  报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="作为输入参量"><a href="#作为输入参量" class="headerlink" title="作为输入参量"></a>作为输入参量</h3><p>闭包作为输入参数时，闭包的完整类型必须使用以下的其中一种 <code>trait</code> 来标注。他们的受限程序依次递减。</p>
+<ul>
+<li><code>Fn</code>：闭包捕获引用(<code>&amp;T</code>)</li>
+<li><code>FnMut</code>:闭包捕获可变引用(<code>&amp;mut T</code>)</li>
+<li><code>FnOnce</code>:闭包捕获值(T)</li>
+</ul>
+<p>假如想作为一个标记为<code>FnOnce</code>类型的参数，这意味着闭包可以捕获<code>&amp;T</code> ,<code>&amp;mut T</code>,<code>T</code>三种类型。但是编译器最终会选择哪个，取决于捕获的变量在闭包中如何使用。</p>
+<p>This is because if a move is possiable ,then any type of borrow should also be possible.Note that the reverse is not true. if the parameter is annotated as <code>Fn</code>,then capturing variables by <code>&amp;mut T</code> or <code>T</code> are not allowed.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 把闭包作为参数并调用它</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">apply</span></span>&lt;F&gt;(f:F)<span class="keyword">where</span></span><br><span class="line">    F:<span class="built_in">FnOnce</span>()&#123;</span><br><span class="line">    f();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 把闭包作为参数，返回i32类型的值</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">apply_to_3</span></span>&lt;F&gt;(f:F) -&gt;<span class="built_in">i32</span> <span class="keyword">where</span> F:<span class="built_in">Fn</span>(<span class="built_in">i32</span>)-&gt;<span class="built_in">i32</span>&#123;</span><br><span class="line">    f(<span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="keyword">use</span> std::mem;</span><br><span class="line">    <span class="keyword">let</span> greeting = <span class="string">"hello"</span>;</span><br><span class="line">    <span class="comment">// 不可复制的类型</span></span><br><span class="line">    <span class="comment">// `to_owned`从借用的数据中创建了自己有所有权的数据</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> farewell = <span class="string">"goodbye"</span>.to_owned();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 捕获两个变量：greeting 通过引用，farewell通过值。</span></span><br><span class="line">    <span class="keyword">let</span> diary = ||&#123;</span><br><span class="line">        <span class="comment">// greeting 通过引用：需要 `Fn` trait</span></span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">"i said &#123;&#125;"</span>, greeting);</span><br><span class="line">        <span class="comment">// 迫使 farewell 以可变引用的方式被捕获，这种情况需要 `FnMut` trait</span></span><br><span class="line">        farewell.push_str(<span class="string">"!!!"</span>);</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">"then i screamed &#123;&#125;"</span>, farewell);</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">"now i can sleep"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 手动调用drop,迫使farewell以值的方式被捕获。这种情况需要 `FnOnce` trait</span></span><br><span class="line">        mem::<span class="built_in">drop</span>(farewell);</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 调用处理闭包的函数</span></span><br><span class="line">    apply(diary);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> double = |x| <span class="number">2</span>*x;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"2 double:&#123;&#125;"</span>, apply_to_3(double));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的例子中，如果我们将<code>apply</code> 函数改变成下面的类型<br><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 把闭包作为参数并调用它</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">apply</span></span>&lt;F&gt;(f:F)<span class="keyword">where</span></span><br><span class="line">    F:<span class="built_in">FnMut</span>()&#123;</span><br><span class="line">    f();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>程序就不行了，因为声明<code>FnMut</code>类型已经限定了传入的闭包只能捕获<code>T</code> 和 <code>&amp;T</code> 的类型，而在闭包中<code>mem::drop(farewell);</code> 是需要捕获值的类型的。所以报错。</p>
+<h3 id="闭包作为输出参量"><a href="#闭包作为输出参量" class="headerlink" title="闭包作为输出参量"></a>闭包作为输出参量</h3><h1 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h1><h2 id="文件分层"><a href="#文件分层" class="headerlink" title="文件分层"></a>文件分层</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ tree .</span><br><span class="line">.</span><br><span class="line">|-- my</span><br><span class="line">|   |-- inaccessible.rs</span><br><span class="line">|   |-- mod.rs</span><br><span class="line">|   `-- nested.rs</span><br><span class="line">`-- split.rs</span><br></pre></td></tr></table></figure>
+<p>在split.rs中<br><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此声明将会查找名为 `my.rs` 或 `my/mod.rs` 的文件，并将该文件的内容插入到</span></span><br><span class="line"><span class="comment">// 此作用域名为 `my` 的模块里面。</span></span><br><span class="line"><span class="keyword">mod</span> my;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">function</span></span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"called `function()`"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="crate"><a href="#crate" class="headerlink" title="crate"></a>crate</h1><p>如果crate中有mod声明，那么模块文件的内容将会在运行编译之前与crate文件合并。换句话说，模块不会单独进行编译，只有crate进行编译。</p>
+<h1 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h1><h2 id="crate-1"><a href="#crate-1" class="headerlink" title="crate"></a>crate</h2><p><code>crate_type</code> 属性可以告知编译器 <code>crate</code>是一个二进制的可执行文件还是一个库（甚至是哪种类型的库），crate_time 属性可以设定 crate 的名称。<br><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个 crate 是一个库文件</span></span><br><span class="line"><span class="meta">#![crate_type = <span class="meta-string">"lib"</span>]</span></span><br><span class="line"><span class="comment">// 库的名称为 “rary”</span></span><br><span class="line"><span class="meta">#![crate_name = <span class="meta-string">"rary"</span>]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="cfg"><a href="#cfg" class="headerlink" title="cfg"></a>cfg</h2><p>例如控制代码在哪个系统上执行<br><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个函数仅当操作系统是 Linux 的时候才会编译</span></span><br><span class="line"><span class="meta">#[cfg(target_os = <span class="meta-string">"linux"</span>)]</span></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">are_you_on_linux</span></span>() &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"You are running linux!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><h2 id="函数-1"><a href="#函数-1" class="headerlink" title="函数"></a>函数</h2><h2 id="实现-implementation"><a href="#实现-implementation" class="headerlink" title="实现 implementation"></a>实现 implementation</h2><h2 id="特性-trait"><a href="#特性-trait" class="headerlink" title="特性 trait"></a>特性 trait</h2><h1 id="作用域规则"><a href="#作用域规则" class="headerlink" title="作用域规则"></a>作用域规则</h1><h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><h3 id="显式标注"><a href="#显式标注" class="headerlink" title="显式标注"></a>显式标注</h3><p>编译器（有时也称为借用检查器）使用它来确保所有的借用都是有效的。<br><code>foo&lt;&#39;a,&#39;b&gt;</code></p>
+<p>在这种情况下，foo的生命周期不能超出’a或’b的周期。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="徐晓峰 wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      </div>
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rust/" rel="tag"># rust</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/26/通用计算机-2019-03-26-正则表达式学习笔记/" rel="next" title="正则表达式学习笔记">
+                <i class="fa fa-chevron-left"></i> 正则表达式学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/04/golang-2019-04-04-golang中有趣三个点/" rel="prev" title="golang中有趣的三个点...">
+                golang中有趣的三个点... <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">徐晓峰</p>
+              <p class="site-description motion-element" itemprop="description">记录自己走过的点滴</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">58</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/naichadouban" title="GitHub-job &rarr; https://github.com/naichadouban" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-job</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xulove" title="GitHub-personal &rarr; https://github.com/xulove" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-personal</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义类型"><span class="nav-number">1.</span> <span class="nav-text">自定义类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量绑定"><span class="nav-number">2.</span> <span class="nav-text">变量绑定</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型转换"><span class="nav-number">3.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数"><span class="nav-number">4.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">4.1.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包"><span class="nav-number">4.2.</span> <span class="nav-text">闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#捕获"><span class="nav-number">4.2.1.</span> <span class="nav-text">捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作为输入参量"><span class="nav-number">4.2.2.</span> <span class="nav-text">作为输入参量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包作为输出参量"><span class="nav-number">4.2.3.</span> <span class="nav-text">闭包作为输出参量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模块"><span class="nav-number">5.</span> <span class="nav-text">模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件分层"><span class="nav-number">5.1.</span> <span class="nav-text">文件分层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crate"><span class="nav-number">6.</span> <span class="nav-text">crate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#属性"><span class="nav-number">7.</span> <span class="nav-text">属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#crate-1"><span class="nav-number">7.1.</span> <span class="nav-text">crate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cfg"><span class="nav-number">7.2.</span> <span class="nav-text">cfg</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#泛型"><span class="nav-number">8.</span> <span class="nav-text">泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数-1"><span class="nav-number">8.1.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现-implementation"><span class="nav-number">8.2.</span> <span class="nav-text">实现 implementation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特性-trait"><span class="nav-number">8.3.</span> <span class="nav-text">特性 trait</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#作用域规则"><span class="nav-number">9.</span> <span class="nav-text">作用域规则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">9.1.</span> <span class="nav-text">生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#显式标注"><span class="nav-number">9.1.1.</span> <span class="nav-text">显式标注</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">徐晓峰</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="创建HTTP服务12345func main()&amp;#123;    if err := http.ListenAndServe(&quot;:12345&quot;,nil); err != nil&amp;#123;        fmt.Println(&quot;start http server fail:&quot;,err)    &amp;#125;&amp;#125; 没有添加业务逻辑，所有访问都会 404 page not found 添加">
+<meta name="keywords" content="http,golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang开发HTTP，一篇文章就够了">
+<meta property="og:url" content="http://yoursite.com/2019/03/14/golang-2019-03-14-golang开发HTTP，一篇文章就够了/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="创建HTTP服务12345func main()&amp;#123;    if err := http.ListenAndServe(&quot;:12345&quot;,nil); err != nil&amp;#123;        fmt.Println(&quot;start http server fail:&quot;,err)    &amp;#125;&amp;#125; 没有添加业务逻辑，所有访问都会 404 page not found 添加">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-12T04:05:21.269Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="golang开发HTTP，一篇文章就够了">
+<meta name="twitter:description" content="创建HTTP服务12345func main()&amp;#123;    if err := http.ListenAndServe(&quot;:12345&quot;,nil); err != nil&amp;#123;        fmt.Println(&quot;start http server fail:&quot;,err)    &amp;#125;&amp;#125; 没有添加业务逻辑，所有访问都会 404 page not found 添加">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/14/golang-2019-03-14-golang开发HTTP，一篇文章就够了/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>golang开发HTTP，一篇文章就够了 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-学习规划">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/plan/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>学习规划</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/14/golang-2019-03-14-golang开发HTTP，一篇文章就够了/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="徐晓峰">
+      <meta itemprop="description" content="记录自己走过的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">golang开发HTTP，一篇文章就够了
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-14 00:00:00" itemprop="dateCreated datePublished" datetime="2019-03-14T00:00:00+08:00">2019-03-14</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/golang学习/" itemprop="url" rel="index"><span itemprop="name">golang学习</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="创建HTTP服务"><a href="#创建HTTP服务" class="headerlink" title="创建HTTP服务"></a>创建HTTP服务</h1><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>,<span class="literal">nil</span>); err != <span class="literal">nil</span>&#123;</span><br><span class="line">        fmt.Println(<span class="string">"start http server fail:"</span>,err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>没有添加业务逻辑，所有访问都会 404 page not found</p>
+<h1 id="添加-http-Handler"><a href="#添加-http-Handler" class="headerlink" title="添加 http.Handler"></a>添加 http.Handler</h1><p>就是添加页面业务处理<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	http.HandleFunc(<span class="string">"/"</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter,r *http.Request)</span></span> &#123;</span><br><span class="line">		w.Write([]<span class="keyword">byte</span>(<span class="string">"hello world"</span>))</span><br><span class="line">	&#125;)</span><br><span class="line">	http.HandleFunc(<span class="string">"/abc"</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter,r *http.Request)</span></span> &#123;</span><br><span class="line">		w.Write([]<span class="keyword">byte</span>(<span class="string">"hello world ,abc"</span>))</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, <span class="literal">nil</span>);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>golang自带的路由功能比较弱<br>上面的代码除了请求路劲<code>/abc</code> 会匹配到第二个handler，其他的都匹配到了第一个<code>/</code><br>所以我们需要自己实现一个路由<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyHandler <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(mh MyHandler)</span> <span class="title">ServeHTTP</span><span class="params">(w http.ResponseWriter,r *http.Request)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> r.URL.Path ==<span class="string">"/hello"</span>&#123;</span><br><span class="line">		w.Write([]<span class="keyword">byte</span>(<span class="string">"hello page"</span>))</span><br><span class="line">		<span class="keyword">return</span> <span class="comment">//这里的return是要加的，不然下面的代码也会执行了</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> r.URL.Path == <span class="string">"/world"</span>&#123;</span><br><span class="line">		w.Write([]<span class="keyword">byte</span>(<span class="string">"world page"</span>))</span><br><span class="line">		<span class="keyword">return</span> </span><br><span class="line">	&#125;</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"root page"</span>))</span><br><span class="line">	<span class="comment">// 可以继续写自己的路由匹配规则</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	http.Handle(<span class="string">"/"</span>, MyHandler&#123;&#125;)  <span class="comment">//note： 这里不是刚才的http.HandleFunc()了</span></span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, <span class="literal">nil</span>);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>或者可以更简单一些<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, MyHandler&#123;&#125;);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="http-ServeMux-路由"><a href="#http-ServeMux-路由" class="headerlink" title="http.ServeMux 路由"></a>http.ServeMux 路由</h1><p>golang的<code>net/http</code>包给我们提供了一个路由<code>ServeMux</code>,h上面的方法<code>http.HandleFunc()</code>和<code>http.Handle()</code> 其实就是把路由规则注册到了默认的<code>ServeMux</code>上了，就是DefaultServeMux。我们可以看看源码：<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// DefaultServeMux is the default ServeMux used by Serve.</span></span><br><span class="line"><span class="keyword">var</span> DefaultServeMux = &amp;defaultServeMux</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> defaultServeMux ServeMux</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Handle registers the handler for the given pattern</span></span><br><span class="line"><span class="comment">// in the DefaultServeMux.</span></span><br><span class="line"><span class="comment">// The documentation for ServeMux explains how patterns are matched.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Handle</span><span class="params">(pattern <span class="keyword">string</span>, handler Handler)</span></span> &#123; DefaultServeMux.Handle(pattern, handler) &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// HandleFunc registers the handler function for the given pattern</span></span><br><span class="line"><span class="comment">// in the DefaultServeMux.</span></span><br><span class="line"><span class="comment">// The documentation for ServeMux explains how patterns are matched.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">HandleFunc</span><span class="params">(pattern <span class="keyword">string</span>, handler <span class="keyword">func</span>(ResponseWriter, *Request)</span>)</span> &#123;</span><br><span class="line">	DefaultServeMux.HandleFunc(pattern, handler)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自己写一个ServeMux"><a href="#自己写一个ServeMux" class="headerlink" title="自己写一个ServeMux"></a>自己写一个ServeMux</h2><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testhandler</span><span class="params">(w http.ResponseWriter,r *http.Request)</span></span>&#123;</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"this is the ServeMux handler"</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, testhandler)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是由于golang自带的ServerMux路由规则过于简单，实践中一般都不会用。<br>推荐：<a href="https://github.com/gorilla/mux" target="_blank" rel="noopener">https://github.com/gorilla/mux</a></p>
+<h1 id="http-Handler-http-HandlerFunc-中间件"><a href="#http-Handler-http-HandlerFunc-中间件" class="headerlink" title="http.Handler/http.HandlerFunc 中间件"></a>http.Handler/http.HandlerFunc 中间件</h1><p>golang的http处理过程不止一个http.handlerFunc,而是一组http.handleFunc<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handler1</span><span class="params">(w http.ResponseWriter,r *http.Request)</span></span>&#123;</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"handler1"</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handler2</span><span class="params">(w http.ResponseWriter,r *http.Request)</span></span>&#123;</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"handler2"</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">makeHandler</span><span class="params">(handlers ...http.HandlerFunc)</span><span class="title">http</span>.<span class="title">HandlerFunc</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter,r *http.Request)</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> _,hander := <span class="keyword">range</span> handlers&#123;</span><br><span class="line">			hander(w,r)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, makeHandler(handler1,handler2))</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们访问 <code>http://localhost:12345/</code>,就会看到 handler1和handler2都打印出来了。</p>
+<p>框架<a href="https://github.com/urfave/negroni" target="_blank" rel="noopener">https://github.com/urfave/negroni</a> 基本上就是这种模式。</p>
+<h1 id="request"><a href="#request" class="headerlink" title="request"></a>request</h1><p>一个http请求主要是客户端发过来的 <code>*http.Request</code> ，和返回给客户端的<code>http.reponseWriter</code><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handlerFunc</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span>&#123;</span><br><span class="line">	fmt.Println(r.Method) <span class="comment">//GET</span></span><br><span class="line">	fmt.Println(r.URL) <span class="comment">///abc</span></span><br><span class="line">	fmt.Println(r.URL.Path) <span class="comment">//abc</span></span><br><span class="line">	fmt.Println(r.RemoteAddr) <span class="comment">//[::1]:62639</span></span><br><span class="line">	fmt.Println(r.UserAgent()) <span class="comment">//Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36</span></span><br><span class="line">	fmt.Println(r.Header.Get(<span class="string">"Accept"</span>)) <span class="comment">//text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span></span><br><span class="line">	fmt.Println(r.Cookies()) <span class="comment">//[_ga=GA1.1.668973879.1547800734]</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, handlerFunc)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>更过信息可查看官方文档</p>
+<h1 id="表单数据"><a href="#表单数据" class="headerlink" title="表单数据"></a>表单数据</h1><p>（测试可以用postman测试）<br>请求传递的表单数据，存储在<code>*http.Request.Form</code> 和 <code>*http.Request.PostForm</code>中</p>
+<h2 id="get请求"><a href="#get请求" class="headerlink" title="get请求"></a>get请求</h2><p><code>Get /?name=xuxiaofeng</code>,获取请求内容并打印到返回内容<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handlerFunc</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span>&#123;</span><br><span class="line">	name := r.FormValue(<span class="string">"name"</span>)</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(name))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, handlerFunc)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>http://localhost:12345/?name=xuxiaofeng</code>,就可以看到打印的内容</p>
+<h2 id="post表单请求"><a href="#post表单请求" class="headerlink" title="post表单请求"></a>post表单请求</h2><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handlerFunc</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span>&#123;</span><br><span class="line">	name1 := r.FormValue(<span class="string">"name"</span>)  <span class="comment">//FormValue(),如果name存在，也是获取第一个值【查源码就知道了】</span></span><br><span class="line">	name2 := r.PostFormValue(<span class="string">"name"</span>) <span class="comment">// PostFormValue()也是同理，name存在是，也是获取第一个值</span></span><br><span class="line">	name3 := r.Form.Get(<span class="string">"name"</span>)</span><br><span class="line">	name4 := r.PostForm.Get(<span class="string">"name"</span>)</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(name1+name2+name3+name4))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, handlerFunc)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的四个值是相同的,但仅限于是post请求的情况下<br>如果我们这样请求<code>http://localhost:12345/?name=abc</code>,那<code>r.PostFromValue()</code> 和 <code>r.PostForm.Get(&quot;name&quot;)</code>都获取不到数据，带post的都获取不到数据。</p>
+<h2 id="直接操作r-Form和r-PostForm"><a href="#直接操作r-Form和r-PostForm" class="headerlink" title="直接操作r.Form和r.PostForm"></a>直接操作r.Form和r.PostForm</h2><p>如果我们想直接操作r.Form<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handlerFunc</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span>&#123;</span><br><span class="line">	fmt.Println(r.Form[<span class="string">"name"</span>])</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"over"</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, handlerFunc)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们会发现，<code>fmt.Println(r.Form[&quot;name&quot;])</code>打印不出东西。看下面<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handlerFunc</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span>&#123;</span><br><span class="line">	<span class="comment">// 这里一定要记得 ParseForm，否则 r.Form 是空的</span></span><br><span class="line">    <span class="comment">// 调用 r.FormValue() 的时候会自动执行 r.ParseForm()</span></span><br><span class="line">	r.ParseForm()</span><br><span class="line">	fmt.Println(r.Form) <span class="comment">// map[name:[abc] age:[13]]</span></span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"over"</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, handlerFunc)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>表单数据存储在 r.Form，是 map[string][]string 类型，即支持一个表单域多个值的情况。r.FormValue() 只获取第一个值</p>
+<h2 id="表单数据-lt-gt-结构体"><a href="#表单数据-lt-gt-结构体" class="headerlink" title="表单数据&lt;&gt;结构体"></a>表单数据&lt;&gt;结构体</h2><p>表单数据是简单的 kv 对应，很容易实现 kv 到 结构体的一一对应<br>这个库 <a href="https://github.com/mholt/binding" target="_blank" rel="noopener">https://github.com/mholt/binding</a> 就是干这个的<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">    Id   <span class="keyword">int</span></span><br><span class="line">    Name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(u *User)</span> <span class="title">FieldMap</span><span class="params">(req *http.Request)</span> <span class="title">binding</span>.<span class="title">FieldMap</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> binding.FieldMap&#123;</span><br><span class="line">        &amp;u.Id: <span class="string">"user_id"</span>,</span><br><span class="line">        &amp;u.Name: binding.Field&#123;</span><br><span class="line">            Form:     <span class="string">"name"</span>,</span><br><span class="line">            Required: <span class="literal">true</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handle</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">    user := <span class="built_in">new</span>(User)</span><br><span class="line">    errs := binding.Bind(r, user)</span><br><span class="line">    <span class="keyword">if</span> errs.Handle(w) &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="body消息体"><a href="#body消息体" class="headerlink" title="body消息体"></a>body消息体</h1><blockquote>
+<p>无论表单数据，还是上传的二进制数据，都是保存在 HTTP 的 Body 中的。操作 <em>http.Request.Body 可以获取到内容。但是注意 </em>http.Request.Body 是 io.ReadCloser 类型，只能一次性读取完整，<strong>第二次就是空的</strong>。<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">httpHandler</span><span class="params">(w http.ResponseWriter,r *http.Request)</span></span>&#123;</span><br><span class="line">	body,err := ioutil.ReadAll(r.Body)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"read body error"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(body))</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"receive request:"</span>))</span><br><span class="line">	w.Write(body)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, httpHandler)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux);err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>根据HTTP协议，如果请求的<code>Content-Type: application/x-www-form-urlencoded</code>,body 中的数据就是类似 abc=123&amp;abc=abc&amp;abc=xyz 格式的数据，也就是常规的 表单数据。这些使用 r.ParseForm() 然后操作 r.Form 处理数据。如果是纯数据，比如文本abcdefg 、 JSON 数据等，你才需要直接操作 Body 的。比如接收 JSON 数据：<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span> <span class="string">`json:"name"`</span></span><br><span class="line">	Age  <span class="keyword">int</span>    <span class="string">`json:"age"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">httpHandler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	body, err := ioutil.ReadAll(r.Body)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Panicf(<span class="string">"read body failed:%v"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> u User</span><br><span class="line">	json.Unmarshal(body, &amp;u)</span><br><span class="line">	fmt.Printf(<span class="string">"%#v\n"</span>, u)</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"receive data:"</span>))</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="keyword">string</span>(body)))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, httpHandler)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h1><p>上传的文件经过 Go 的解析保存在 *http.Request.MultipartForm 中,通过 r.FormFile() 去获取收到的文件信息和数据流，并处理：<br>服务端文件<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">httpHandlerFunc</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 这里一定要记得 r.ParseMultipartForm(), 否则 r.MultipartForm 是空的</span></span><br><span class="line">	<span class="comment">// 调用 r.FormFile() 的时候会自动执行 r.ParseMultipartForm()</span></span><br><span class="line">	err := r.ParseMultipartForm(<span class="number">32</span> &lt;&lt; <span class="number">20</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"ParseMultipartForm error:%v"</span>, err)</span><br><span class="line">		w.WriteHeader(<span class="number">500</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 写明缓冲的大小。如果超过缓冲，文件内容会被放在临时目录中，而不是内存。过大可能较多占用内存，过小可能增加硬盘 I/O</span></span><br><span class="line">	<span class="comment">// FormFile() 时调用 ParseMultipartForm() 使用的大小是 32 &lt;&lt; 20，32MB</span></span><br><span class="line">	srcfile, srcfileheader, err := r.FormFile(<span class="string">"file"</span>) <span class="comment">// file 是上传表单域的名字</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"get upload file fail:"</span>, err)</span><br><span class="line">		w.WriteHeader(<span class="number">500</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> srcfile.Close() <span class="comment">// 此时上传内容的 IO 已经打开，需要手动关闭！！</span></span><br><span class="line">	<span class="comment">// fileHeader 有一些文件的基本信息</span></span><br><span class="line">	fmt.Println(srcfileheader.Header.Get(<span class="string">"Content-Type"</span>))</span><br><span class="line">	<span class="comment">// / 打开目标地址，把上传的内容存进去</span></span><br><span class="line">	dstfile, err := os.OpenFile(<span class="string">"./test.jpg"</span>, os.O_CREATE|os.O_RDWR|os.O_TRUNC, <span class="number">0666</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"save upload file fail:"</span>, err)</span><br><span class="line">		w.WriteHeader(<span class="number">500</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	_, err = io.Copy(dstfile, srcfile)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"copy to dstfile error:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"上传文件完成"</span>))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, httpHandlerFunc)</span><br><span class="line">	http.ListenAndServe(<span class="string">":12345"</span>, mux)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>用postman发现不能测试上传文件，就有golang写了一个上传文件的客户端<br>教程看这里：<a href="https://matt.aimonetti.net/posts/2013/07/01/golang-multipart-file-upload-example/" target="_blank" rel="noopener">https://matt.aimonetti.net/posts/2013/07/01/golang-multipart-file-upload-example/</a><br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newUploadFileRequest</span><span class="params">(uri <span class="keyword">string</span>, params <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>, paramName, path <span class="keyword">string</span>)</span> <span class="params">(*http.Request, error)</span></span> &#123;</span><br><span class="line">	srcfile, err := os.Open(path)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> srcfile.Close()</span><br><span class="line">	body := &amp;bytes.Buffer&#123;&#125;</span><br><span class="line">	writer := multipart.NewWriter(body) <span class="comment">// writing to body</span></span><br><span class="line">	part, err := writer.CreateFormFile(paramName, filepath.Base(path))</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	io.Copy(part, srcfile)</span><br><span class="line">	<span class="keyword">for</span> k, v := <span class="keyword">range</span> params &#123;</span><br><span class="line">		writer.WriteField(k, v)</span><br><span class="line">	&#125;</span><br><span class="line">	err = writer.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	req, err := http.NewRequest(<span class="string">"POST"</span>, uri, body)</span><br><span class="line">	req.Header.Set(<span class="string">"Content-Type"</span>, writer.FormDataContentType())</span><br><span class="line">	<span class="keyword">return</span> req, <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">//path,_ := os.Getwd()</span></span><br><span class="line">	<span class="comment">//path += "test.png"</span></span><br><span class="line">	extraParams := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;</span><br><span class="line">		<span class="string">"title"</span>:       <span class="string">"My Document"</span>,</span><br><span class="line">		<span class="string">"author"</span>:      <span class="string">"Matt Aimonetti"</span>,</span><br><span class="line">		<span class="string">"description"</span>: <span class="string">"a picture for test file upload"</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	request, err := newUploadFileRequest(<span class="string">"http://localhost:12345"</span>, extraParams, <span class="string">"file"</span>, <span class="string">"./111.jpg"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	client := &amp;http.Client&#123;&#125;</span><br><span class="line">	resp, err := client.Do(request)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		body := &amp;bytes.Buffer&#123;&#125;</span><br><span class="line">		_, err := body.ReadFrom(resp.Body)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		resp.Body.Close()</span><br><span class="line">		fmt.Println(resp.StatusCode)</span><br><span class="line">		fmt.Println(resp.Header)</span><br><span class="line">		fmt.Println(body)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上传之后就会发现根目录下多了个<code>test.jpg</code>文件，打开一看就是我们刚才上传的那个图片。</p>
+<h2 id="上传多个文件"><a href="#上传多个文件" class="headerlink" title="上传多个文件"></a>上传多个文件</h2><p>上面的例子中，<code>r.FromFile(&quot;file&quot;)</code>只能获取单个文件（也就是第一个文件），如果想要获取多个文件就需要直接操作<code>r.MultipartForm</code>了。<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">httpHandler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	r.ParseMultipartForm(<span class="number">32</span> &lt;&lt; <span class="number">20</span>)</span><br><span class="line">	<span class="keyword">var</span> err error</span><br><span class="line">	<span class="keyword">var</span> file multipart.File</span><br><span class="line">	<span class="keyword">for</span> _, fileheader := <span class="keyword">range</span> r.MultipartForm.File[<span class="string">"file"</span>] &#123;</span><br><span class="line">		<span class="keyword">if</span> file, err := fileheader.Open(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"open file error:"</span>, err)</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line">		SaveFile(file) <span class="comment">// 仿照上面单个文件的操作，保存 file</span></span><br><span class="line">		file.Close()   <span class="comment">// 操作结束一定要 Close，for 循环里不要用 defer file.Close()</span></span><br><span class="line">		file = <span class="literal">nil</span></span><br><span class="line">		w.Write([]<span class="keyword">byte</span>(<span class="string">"save:"</span> + fileheader.Filename))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, httpHandler)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="responseWriter"><a href="#responseWriter" class="headerlink" title="responseWriter"></a>responseWriter</h1><p>http.ResponseWriter 是一个接口，你可以根据接口，添加一些自己需要的行为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type ResponseWriter interface &#123;</span><br><span class="line">    Header() Header // 添加返回头信息</span><br><span class="line">    Write([]byte) (int, error) // 添加返回的内容</span><br><span class="line">    WriteHeader(int) // 设置返回的状态码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>w.WriteHeader() 是一次性的，不能重复设置状态码，否则会有提示信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">func HttpHandle(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    w.WriteHeader(200) // 设置成功</span><br><span class="line">    w.WriteHeader(404) // 提示：http: multiple response.WriteHeader calls </span><br><span class="line">    w.WriteHeader(503) // 提示：http: multiple response.WriteHeader calls </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>而且需要在 w.Write() 之前设置 w.WriteHeader()，否则是 200。（要先发送状态码，再发送内容）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func HttpHandle(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    w.Write([]byte(&quot;Hello World&quot;))</span><br><span class="line">    w.WriteHeader(404) // 提示：http: multiple response.WriteHeader calls，因为 w.Write() 已发布 HTTP 200</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>http.ResponseWriter 接口过于简单，实际使用会自己实现 ResponseWriter 来使用，比如获取返回的内容：<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyResponseWriter <span class="keyword">struct</span> &#123;</span><br><span class="line">	http.ResponseWriter</span><br><span class="line">	bodyBytes *bytes.Buffer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 覆写 http.ResponseWriter 的方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(mrw MyResponseWriter)</span> <span class="title">Write</span><span class="params">(body []<span class="keyword">byte</span>)</span> <span class="params">(<span class="keyword">int</span>, error)</span></span> &#123;</span><br><span class="line">	mrw.bodyBytes.Write(body)             <span class="comment">// 记录下返回的内容</span></span><br><span class="line">	<span class="keyword">return</span> mrw.ResponseWriter.Write(body) <span class="comment">// 这里才是http真正的返回</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Body 获取记录的返回的内容，这个是自己添加的方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(mrw MyResponseWriter)</span> <span class="title">Body</span><span class="params">()</span> []<span class="title">byte</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> mrw.bodyBytes.Bytes()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">httpHandler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	mrw := MyResponseWriter&#123;</span><br><span class="line">		ResponseWriter: w,</span><br><span class="line">		bodyBytes:      bytes.NewBuffer(<span class="literal">nil</span>),</span><br><span class="line">	&#125;</span><br><span class="line">	mrw.Header().Set(<span class="string">"Content-Type"</span>, <span class="string">"text/html"</span>) <span class="comment">// 要输出HTML记得加头信息</span></span><br><span class="line">	mrw.Write([]<span class="keyword">byte</span>(<span class="string">"&lt;h1&gt;the game of power!&lt;/h1&gt;"</span>))</span><br><span class="line">	mrw.Write([]<span class="keyword">byte</span>(<span class="string">"the server receive some data"</span>))</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(mrw.Body()))</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, httpHandler)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="输出其他内容"><a href="#输出其他内容" class="headerlink" title="输出其他内容"></a>输出其他内容</h1><p><code>net/http</code> 提供一些便利的方法可以输出其他的内容，比如 cookie:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">func HttpHandle(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    c := &amp;http.Cookie&#123;</span><br><span class="line">        Name:     &quot;abc&quot;,</span><br><span class="line">        Value:    &quot;xyz&quot;,</span><br><span class="line">        Expires:  time.Now().Add(1000 * time.Second),</span><br><span class="line">        MaxAge:   1000,</span><br><span class="line">        HttpOnly: true,</span><br><span class="line">    &#125;</span><br><span class="line">    http.SetCookie(w, c)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>比如服务端返回下载文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func HttpHandle(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    http.ServeFile(w, r, &quot;download.txt&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>或者是生成的数据流，比如验证码，当作文件返回：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">func HttpHandle(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    captchaImageBytes := createCaptcha() // 假设生成验证码的函数，返回 []byte</span><br><span class="line">    buf := bytes.NewReader(captchaImageBytes)</span><br><span class="line">    http.ServeContent(w, r, &quot;captcha.png&quot;, time.Now(), buf)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有一些状态码的直接操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">func HttpHandle(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    http.Redirect(w, r, &quot;/abc&quot;, 302)</span><br><span class="line">&#125;</span><br><span class="line">func HttpHandle2(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    http.NotFound(w, r)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>返回 JSON, XML 和 渲染模板的内容等的代码例子，可以参考 <a href="http://www.alexedwards.net/blog/golang-response-snippets" target="_blank" rel="noopener">HTTP Response Snippets for Go</a>。</p>
+<h1 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h1><p>Go 1.7 添加了 context 包，用于传递数据和做超时、取消等处理。*http.Request 添加了 r.Context() 和 r.WithContext() 来操作请求过程需要的 context.Context 对象。</p>
+<h2 id="传递数据"><a href="#传递数据" class="headerlink" title="传递数据"></a>传递数据</h2><p>context 可以在 http.HandleFunc 之间传递数据：<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">httpHandler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	ctx := context.WithValue(r.Context(), <span class="string">"name"</span>, <span class="string">"权利的游戏"</span>) <span class="comment">// 写入 string 到 context</span></span><br><span class="line">	handler2(w, r.WithContext(ctx))                        <span class="comment">// 传递给下一个 handleFunc</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handler2</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	name, ok := r.Context().Value(<span class="string">"name"</span>).(<span class="keyword">string</span>) <span class="comment">// 取出的 interface 需要推断到 string</span></span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		name = <span class="string">""</span></span><br><span class="line">	&#125;</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"convert name:"</span> + name))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mux := http.NewServeMux()</span><br><span class="line">	mux.HandleFunc(<span class="string">"/"</span>, httpHandler)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, mux); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="处理超时的请求"><a href="#处理超时的请求" class="headerlink" title="处理超时的请求"></a>处理超时的请求</h2><p>利用 context.WithTimeout 可以创建会超时结束的 context，用来处理业务超时的情况：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">func HttpHandle(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    ctx, cancelFn := context.WithTimeout(r.Context(), 1*time.Second)</span><br><span class="line"></span><br><span class="line">    // cancelFn 关掉 WithTimeout 里的计时器</span><br><span class="line">    // 如果 ctx 超时，计时器会自动关闭，但是如果没有超时就执行到 &lt;-resCh,就需要手动关掉</span><br><span class="line">    defer cancelFn()</span><br><span class="line"></span><br><span class="line">    // 把业务放到 goroutine 执行， resCh 获取结果</span><br><span class="line">    resCh := make(chan string, 1)</span><br><span class="line">    go func() &#123;</span><br><span class="line">        // 故意写业务超时</span><br><span class="line">        time.Sleep(5 * time.Second)</span><br><span class="line">        resCh &lt;- r.FormValue(&quot;abc&quot;)</span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    // 看 ctx 超时还是 resCh 的结果先到达</span><br><span class="line">    select &#123;</span><br><span class="line">    case &lt;-ctx.Done():</span><br><span class="line">        w.WriteHeader(http.StatusGatewayTimeout)</span><br><span class="line">        w.Write([]byte(&quot;http handle is timeout:&quot; + ctx.Err().Error()))</span><br><span class="line">    case r := &lt;-resCh:</span><br><span class="line">        w.Write([]byte(&quot;get: abc = &quot; + r))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="带-context-的中间件"><a href="#带-context-的中间件" class="headerlink" title="带 context 的中间件"></a>带 context 的中间件</h2><p>Go 的很多 HTTP 框架使用 <code>context</code> 或者自己定义的 <code>Context</code> 结果作为 <code>http.Handler</code> 中间件之间数据传递的媒介，比如 <a href="https://github.com/rs/xhandler" target="_blank" rel="noopener">xhandler</a>:</p>
+<h1 id="Hijack"><a href="#Hijack" class="headerlink" title="Hijack"></a>Hijack</h1><p>一些时候需要直接操作 Go 的 HTTP 连接时，使用 Hijack() 将 HTTP 对应的 TCP 取出。连接在 Hijack() 之后，HTTP 的相关操作会受到影响，连接的管理需要用户自己操作，而且例如 w.Write([]byte) 不会返回内容，需要操作 Hijack() 后的 *bufio.ReadWriter。<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hiJackHandle</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	hj, ok := w.(http.Hijacker)</span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		w.Write([]<span class="keyword">byte</span>(<span class="string">"the server do not support hijacker"</span>))</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	conn, buf, err := hj.Hijack() <span class="comment">// 需要手动关闭连接</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"Hijack error:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> conn.Close()</span><br><span class="line">	w.Write([]<span class="keyword">byte</span>(<span class="string">"继续用w返回内容"</span>)) <span class="comment">//error:http: response.Write on hijacked connection</span></span><br><span class="line">	<span class="comment">// 返回内容需要</span></span><br><span class="line">	buf.WriteString(<span class="string">"用buf返回的hello world"</span>)</span><br><span class="line">	buf.Flush()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	http.HandleFunc(<span class="string">"/"</span>, hiJackHandle)</span><br><span class="line">	<span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":12345"</span>, <span class="literal">nil</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"start http server faild:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>Hijack</code> 主要看到的用法是对 HTTP 的 Upgrade 时在用，比如从 HTTP 到 Websocket 时，<a href="https://github.com/golang/net/blob/master/websocket/server.go#L73" target="_blank" rel="noopener">golang.org/x/net/websocket</a>:<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s Server)</span> <span class="title">serveWebSocket</span><span class="params">(w http.ResponseWriter, req *http.Request)</span></span> &#123;</span><br><span class="line">    rwc, buf, err := w.(http.Hijacker).Hijack()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(<span class="string">"Hijack failed: "</span> + err.Error())</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// The server should abort the WebSocket connection if it finds</span></span><br><span class="line">    <span class="comment">// the client did not send a handshake that matches with protocol</span></span><br><span class="line">    <span class="comment">// specification.</span></span><br><span class="line">    <span class="keyword">defer</span> rwc.Close()</span><br><span class="line">    conn, err := newServerConn(rwc, buf, req, &amp;s.Config, s.Handshake)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> conn == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(<span class="string">"unexpected nil conn"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    s.Handler(conn)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="http-Server-的使用细节"><a href="#http-Server-的使用细节" class="headerlink" title="http.Server 的使用细节"></a>http.Server 的使用细节</h1><p>上面所有的代码我都是用的 http.ListenAndServe 来启动 HTTP 服务。实际上执行这个过程的 <em>http.Server 这个结构。有些时候我们不是使用默认的行为，会给 </em>http.Server 定义更多的内容。</p>
+<p>http.ListenAndServe 默认的 *http.Server 是没有超时设置的。一些场景下你必须设置超时，否则会遇到太多连接句柄的问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">func main() &#123;</span><br><span class="line">    server := &amp;http.Server&#123;</span><br><span class="line">        Handler:      MyHandler&#123;&#125;, // 使用实现 http.Handler 的结构处理 HTTP 数据</span><br><span class="line">        ReadTimeout:  10 * time.Second,</span><br><span class="line">        WriteTimeout: 10 * time.Second,</span><br><span class="line">    &#125;</span><br><span class="line">    // 监听 TCP 端口，把监听器交给 *http.Server 使用</span><br><span class="line">    ln, err := net.Listen(&quot;tcp&quot;, &quot;:12345&quot;)</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        panic(&quot;listen :12345 fail:&quot; + err.Error())</span><br><span class="line">    &#125;</span><br><span class="line">    if err = server.Serve(ln); err != nil &#123;</span><br><span class="line">        fmt.Println(&quot;start http server fail:&quot;, err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>有朋友用 Beego 的时候希望同时监听两个端口提供一样数据操作的 HTTP 服务。这个需求就可以利用 *http.Server 来实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import (</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;net/http&quot;</span><br><span class="line"></span><br><span class="line">    &quot;github.com/astaxie/beego&quot;</span><br><span class="line">    &quot;github.com/astaxie/beego/context&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    beego.Get(&quot;/&quot;, func(ctx *context.Context) &#123;</span><br><span class="line">        ctx.WriteString(&quot;abc&quot;)</span><br><span class="line">    &#125;)</span><br><span class="line">    go func() &#123; // server 的 ListenAndServe 是阻塞的，应该在另一个 goroutine 开启另一个server</span><br><span class="line">        server2 := &amp;http.Server&#123;</span><br><span class="line">            Handler: beego.BeeApp.Handlers, // 使用实现 http.Handler 的结构处理 HTTP 数据</span><br><span class="line">            Addr:    &quot;:54321&quot;,</span><br><span class="line">        &#125;</span><br><span class="line">        if err := server2.ListenAndServe(); err != nil &#123;</span><br><span class="line">            fmt.Println(&quot;start http server2 fail:&quot;, err)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    server1 := &amp;http.Server&#123;</span><br><span class="line">        Handler: beego.BeeApp.Handlers, // 使用实现 http.Handler 的结构处理 HTTP 数据</span><br><span class="line">        Addr:    &quot;:12345&quot;,</span><br><span class="line">    &#125;</span><br><span class="line">    if err := server1.ListenAndServe(); err != nil &#123;</span><br><span class="line">        fmt.Println(&quot;start http server1 fail:&quot;, err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样访问 <a href="http://localhost:12345" target="_blank" rel="noopener">http://localhost:12345</a> 和 <a href="http://localhost:54321" target="_blank" rel="noopener">http://localhost:54321</a> 都可以看到返回 abc 的内容。</p>
+<h1 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h1><p>随着互联网安全的问题日益严重，许多的网站开始使用 HTTPS 提供服务。Go 创建一个 HTTPS 服务是很简便的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import (</span><br><span class="line">    &quot;fmt&quot;</span><br><span class="line">    &quot;net/http&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func handler(w http.ResponseWriter, r *http.Request) &#123;</span><br><span class="line">    fmt.Fprintf(w, &quot;Hello, HTTPS Server&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">    http.HandleFunc(&quot;/&quot;, handler)</span><br><span class="line">    http.ListenAndServeTLS(&quot;:12345&quot;,</span><br><span class="line">        &quot;server.crt&quot;,</span><br><span class="line">        &quot;server.key&quot;, nil)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ListenAndServeTLS</code> 新增了两个参数 <code>certFile</code> 和 <code>keyFile</code>。HTTPS的数据传输是加密的。实际使用中，HTTPS利用的是对称与非对称加密算法结合的方式，需要加密用的公私密钥对进行加密，也就是 <code>server.crt</code> 和 <code>server.key</code> 文件。具体的生成可以阅读 <code>openssl</code> 的文档。</p>
+<p>关于 Go 和 HTTPS 的内容，可以阅读 <strong>Tony Bai</strong> 的 <a href="http://tonybai.com/2015/04/30/go-and-https/" target="_blank" rel="noopener">Go 和 HTTPS</a>。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Go 的 <code>net/http</code> 包为开发者提供很多便利的方法的，可以直接开发不复杂的 Web 应用。如果需要复杂的路由功能，及更加集成和简便的 HTTP 操作，推荐使用一些 Web 框架。</p>
+<p>各种 Web 框架 : <a href="https://github.com/avelino/awesome-go#web-frameworks" target="_blank" rel="noopener">awesome-go#web-frameworks</a></p>
+<p>参考 <a href="http://fuxiaohei.me/2016/9/20/go-and-http-server.html" target="_blank" rel="noopener">http://fuxiaohei.me/2016/9/20/go-and-http-server.html</a></p>
+<h1 id="另外参考"><a href="#另外参考" class="headerlink" title="另外参考"></a>另外参考</h1><h2 id="Server-Serve"><a href="#Server-Serve" class="headerlink" title="Server.Serve()"></a>Server.Serve()</h2><p>上面的文章中没有介绍这个用法<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(srv *Server)</span> <span class="title">Serve</span><span class="params">(l net.Listener)</span> <span class="title">error</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>用法及其中原理可以参考：<a href="https://cizixs.com/2016/08/17/golang-http-server-side/" target="_blank" rel="noopener">https://cizixs.com/2016/08/17/golang-http-server-side/</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="徐晓峰 wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      </div>
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+            <a href="/tags/golang/" rel="tag"># golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/13/tools-2019-03-13-redis、nginx、postgresql日志系统/" rel="next" title="redis、nginx、postgresql日志系统">
+                <i class="fa fa-chevron-left"></i> redis、nginx、postgresql日志系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/17/study-编程达人-滴水逆向3期学习-2019-03-17-JCC（修改EIP）为堆栈图做准备/" rel="prev" title="JCC（修改EIP）为堆栈图做准备">
+                JCC（修改EIP）为堆栈图做准备 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">徐晓峰</p>
+              <p class="site-description motion-element" itemprop="description">记录自己走过的点滴</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">58</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/naichadouban" title="GitHub-job &rarr; https://github.com/naichadouban" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-job</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xulove" title="GitHub-personal &rarr; https://github.com/xulove" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-personal</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建HTTP服务"><span class="nav-number">1.</span> <span class="nav-text">创建HTTP服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加-http-Handler"><span class="nav-number">2.</span> <span class="nav-text">添加 http.Handler</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http-ServeMux-路由"><span class="nav-number">3.</span> <span class="nav-text">http.ServeMux 路由</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自己写一个ServeMux"><span class="nav-number">3.1.</span> <span class="nav-text">自己写一个ServeMux</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http-Handler-http-HandlerFunc-中间件"><span class="nav-number">4.</span> <span class="nav-text">http.Handler/http.HandlerFunc 中间件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#request"><span class="nav-number">5.</span> <span class="nav-text">request</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表单数据"><span class="nav-number">6.</span> <span class="nav-text">表单数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#get请求"><span class="nav-number">6.1.</span> <span class="nav-text">get请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#post表单请求"><span class="nav-number">6.2.</span> <span class="nav-text">post表单请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接操作r-Form和r-PostForm"><span class="nav-number">6.3.</span> <span class="nav-text">直接操作r.Form和r.PostForm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表单数据-lt-gt-结构体"><span class="nav-number">6.4.</span> <span class="nav-text">表单数据&lt;&gt;结构体</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#body消息体"><span class="nav-number">7.</span> <span class="nav-text">body消息体</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上传文件"><span class="nav-number">8.</span> <span class="nav-text">上传文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#上传多个文件"><span class="nav-number">8.1.</span> <span class="nav-text">上传多个文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#responseWriter"><span class="nav-number">9.</span> <span class="nav-text">responseWriter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输出其他内容"><span class="nav-number">10.</span> <span class="nav-text">输出其他内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Context"><span class="nav-number">11.</span> <span class="nav-text">Context</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#传递数据"><span class="nav-number">11.1.</span> <span class="nav-text">传递数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理超时的请求"><span class="nav-number">11.2.</span> <span class="nav-text">处理超时的请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#带-context-的中间件"><span class="nav-number">11.3.</span> <span class="nav-text">带 context 的中间件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hijack"><span class="nav-number">12.</span> <span class="nav-text">Hijack</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#http-Server-的使用细节"><span class="nav-number">13.</span> <span class="nav-text">http.Server 的使用细节</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTPS"><span class="nav-number">14.</span> <span class="nav-text">HTTPS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">14.0.1.</span> <span class="nav-text">总结</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#另外参考"><span class="nav-number">15.</span> <span class="nav-text">另外参考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Server-Serve"><span class="nav-number">15.1.</span> <span class="nav-text">Server.Serve()</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">徐晓峰</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

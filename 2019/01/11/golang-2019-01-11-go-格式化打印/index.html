@@ -168,7 +168,7 @@
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-a782028f1cd84566.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-34dbf9d09a1963bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-d64c6272e4a10b65.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-16T01:05:16.809Z">
+<meta property="og:updated_time" content="2019-03-14T02:15:08.998Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="go 格式化打印-utf-8编码规则">
 <meta name="twitter:description" content="示例程序1234567891011121314func main() &amp;#123;	var s byte = &apos;?&apos;	fmt.Println(s) //63	//输出 2/8/10 进制格式	fmt.Printf(&quot;%b,%o,%d\n&quot;, s, s, s) // 111111,77,63	// 以16进制输出字符串	fmt.Printf(&quot;%x\n&quot;, &quot;hex this&quot;)	// 输出数值所表">
@@ -550,8 +550,10 @@
 <p>汉字字符集编码查询<br><a href="http://www.qqxiuzi.cn/bianma/zifuji.php" target="_blank" rel="noopener">http://www.qqxiuzi.cn/bianma/zifuji.php</a></p>
 <p>在线进制转换<br><a href="https://tool.lu/hexconvert/" target="_blank" rel="noopener">https://tool.lu/hexconvert/</a></p>
 <p>在线Unicode和UTF编码转换<br><a href="https://www.qqxiuzi.cn/bianma/Unicode-UTF.php" target="_blank" rel="noopener">https://www.qqxiuzi.cn/bianma/Unicode-UTF.php</a></p>
+<h1 id="格式化打印结构体"><a href="#格式化打印结构体" class="headerlink" title="格式化打印结构体"></a>格式化打印结构体</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line">import (</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">	&quot;reflect&quot;</span><br><span class="line">)</span><br><span class="line">type Manager struct &#123;</span><br><span class="line">	User</span><br><span class="line">	Name string</span><br><span class="line">&#125;</span><br><span class="line">type User struct &#123;</span><br><span class="line">	ID int</span><br><span class="line">	Name string</span><br><span class="line">	Age int</span><br><span class="line">&#125;</span><br><span class="line">func main() &#123;</span><br><span class="line">	u := User&#123;123,&quot;xixiaofeng&quot;,27&#125;</span><br><span class="line">	m := Manager&#123;User:u,Name:&quot;第一个组织&quot;&#125;</span><br><span class="line">	t := reflect.TypeOf(m)</span><br><span class="line">	fmt.Printf(&quot;%v&quot;,t.Field(0))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重点就是最后这句话<code>fmt.Printf(&quot;%v&quot;,t.Field(0))</code>,<br>如果格式化是<code>%v</code>,打印出是<code>{User  main.User  0 [0] true}</code><br>但是我们有时候需要完整的打印出结构体，方便观察<br><code>fmt.Printf(&quot;%#v&quot;,t.Field(0))</code><br><code>reflect.StructField{Name:&quot;User&quot;, PkgPath:&quot;&quot;, Type:(*reflect.rtype)(0x4af3e0), Tag:&quot;&quot;, Offset:0x0, Index:[]int{0}, Anonymous:true}</code></p>
 <h1 id="UTF-8编码规则"><a href="#UTF-8编码规则" class="headerlink" title="UTF-8编码规则"></a>UTF-8编码规则</h1><p><a href="https://blog.csdn.net/sandyen/article/details/1108168" target="_blank" rel="noopener">https://blog.csdn.net/sandyen/article/details/1108168</a></p>
-<h1 id="编码示例"><a href="#编码示例" class="headerlink" title="编码示例"></a>编码示例</h1><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> s <span class="keyword">rune</span> = <span class="string">'好'</span></span><br><span class="line">	fmt.Printf(<span class="string">"%d\n"</span>,s) <span class="comment">// 22909</span></span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"hello"</span>)</span><br><span class="line">	fmt.Println(buf.Bytes()) <span class="comment">// [104 101 108 108 111]</span></span><br><span class="line">	buf.WriteRune(s)</span><br><span class="line">	fmt.Println(buf.Bytes()) <span class="comment">// [104 101 108 108 111 229 165 189]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="编码示例"><a href="#编码示例" class="headerlink" title="编码示例"></a>编码示例</h2><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> s <span class="keyword">rune</span> = <span class="string">'好'</span></span><br><span class="line">	fmt.Printf(<span class="string">"%d\n"</span>,s) <span class="comment">// 22909</span></span><br><span class="line">	buf := bytes.NewBufferString(<span class="string">"hello"</span>)</span><br><span class="line">	fmt.Println(buf.Bytes()) <span class="comment">// [104 101 108 108 111]</span></span><br><span class="line">	buf.WriteRune(s)</span><br><span class="line">	fmt.Println(buf.Bytes()) <span class="comment">// [104 101 108 108 111 229 165 189]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>什么<code>好</code>会写入三个字节？<code>[229 165 189]</code><br>我们先看看<code>好</code>的编码方式<br><a href="http://tool.oschina.net/hexconvert" target="_blank" rel="noopener">http://tool.oschina.net/hexconvert</a><br><img src="https://upload-images.jianshu.io/upload_images/422094-a380bff48c7d1454.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="https://upload-images.jianshu.io/upload_images/422094-aa84a5a7241a387b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="https://upload-images.jianshu.io/upload_images/422094-1d32dd953fed3401.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>将Unicode编码597D转化为UTF-8编码<br><img src="https://upload-images.jianshu.io/upload_images/422094-6f0fc8bd12aabcfa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>可以看到utf-8编码是<code>E5A58D</code>,这是十六进制的，我们转为为10进制<br><img src="https://upload-images.jianshu.io/upload_images/422094-b481aa21a9f83e7c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <blockquote>
 <p>我们要的是字节数组，所以需要将<code>11100101 10100101 10111101</code>拆成字节，然后再转化成10进制显示。</p>
@@ -685,7 +687,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -726,7 +728,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -831,7 +855,51 @@
                     
                       
                     
-                    <span class="site-state-item-count">46</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -892,7 +960,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#示例程序"><span class="nav-number">1.</span> <span class="nav-text">示例程序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UTF-8编码规则"><span class="nav-number">2.</span> <span class="nav-text">UTF-8编码规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编码示例"><span class="nav-number">3.</span> <span class="nav-text">编码示例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#示例程序"><span class="nav-number">1.</span> <span class="nav-text">示例程序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式化打印结构体"><span class="nav-number">2.</span> <span class="nav-text">格式化打印结构体</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UTF-8编码规则"><span class="nav-number">3.</span> <span class="nav-text">UTF-8编码规则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编码示例"><span class="nav-number">3.1.</span> <span class="nav-text">编码示例</span></a></li></ol></li></ol></div>
             
 
           </div>

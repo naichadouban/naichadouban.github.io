@@ -160,7 +160,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="golang强类型golang是一种强类型的静态语言。强类型就是说一旦类型定义了，就不能够再改变它的类型。静态是说，程序在运行前检测类型，而不是像JavaScript和python等动态语言，运行时才检测  为了安全考虑，golang时不允许两种指针类型 之间相互转化的。  指针类型转换即使有相同的底层类型也是不能转换的123456func main() &amp;#123;	var i Myint =">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-04T11:16:16.167Z">
+<meta property="og:updated_time" content="2019-04-22T12:04:47.540Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="go指针类型转化 unsafe Pointer">
 <meta name="twitter:description" content="golang强类型golang是一种强类型的静态语言。强类型就是说一旦类型定义了，就不能够再改变它的类型。静态是说，程序在运行前检测类型，而不是像JavaScript和python等动态语言，运行时才检测  为了安全考虑，golang时不允许两种指针类型 之间相互转化的。  指针类型转换即使有相同的底层类型也是不能转换的123456func main() &amp;#123;	var i Myint =">
@@ -545,14 +545,14 @@
 <p>程序中我们需明白</p>
 <blockquote>
 <ol>
-<li><em>int，表示int类型的指针，</em>float表示float类型的指针</li>
+<li><code>*int</code>，表示int类型的指针，<code>*float</code> 表示float类型的指针</li>
 <li><code>float64(i)</code>就是普通的类型转化，golang时允许的</li>
 <li><code>(*float64)(&amp;i)</code> 中 <code>(*float64)</code> 括号中整体是一个类型，表示float64类型的指针类型</li>
 </ol>
 </blockquote>
 <p>通过上面的例子，我们知道不同的指针类型是不同转换的，但是我们就需要转化怎么办？<br>就需要用到unsafe包的 Pointer了</p>
 <h1 id="unsafe-Pointer"><a href="#unsafe-Pointer" class="headerlink" title="unsafe.Pointer"></a>unsafe.Pointer</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>unsafe.Pointer是一种特殊类型的指针，它可以包含任意类型的地址<br>我们可以在golang的源码中看到如下的定义<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ArbitraryType <span class="keyword">int</span></span><br><span class="line"><span class="keyword">type</span> Pointer *ArbitraryType</span><br></pre></td></tr></table></figure></p>
-<p>说明unsafe.Pointer其实就是*int，一个通用类型的指针<br>示例一<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := <span class="number">10</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T,%v\n"</span>,&amp;i,&amp;i)  <span class="comment">// *int,0xc00004c080</span></span><br><span class="line">	<span class="keyword">var</span> j unsafe.Pointer =  unsafe.Pointer(&amp;i) <span class="comment">// unsafe.Pointer,0xc00004c080</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T,%v"</span>,j,j)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>说明unsafe.Pointer其实就是<code>*int</code> ，一个通用类型的指针<br>示例一<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := <span class="number">10</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T,%v\n"</span>,&amp;i,&amp;i)  <span class="comment">// *int,0xc00004c080</span></span><br><span class="line">	<span class="keyword">var</span> j unsafe.Pointer =  unsafe.Pointer(&amp;i) <span class="comment">// unsafe.Pointer,0xc00004c080</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T,%v"</span>,j,j)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>如果我们直接<code>var j unsafe.Pointer =  &amp;i</code> 的话，就会报错：cannot use &amp;i (type *int) as type unsafe.Pointer in assignment。说民unsafe.Pointer是一种类型，上面的示例只是类型强转。</p>
 <h2 id="利用unsafe-Pointer再不同-T之间转换"><a href="#利用unsafe-Pointer再不同-T之间转换" class="headerlink" title="利用unsafe.Pointer再不同*T之间转换"></a>利用unsafe.Pointer再不同<code>*T</code>之间转换</h2><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">int</span> = <span class="number">10</span></span><br><span class="line">	<span class="keyword">var</span> j *<span class="keyword">float64</span> = (*<span class="keyword">float64</span>)(unsafe.Pointer(&amp;i))</span><br><span class="line">	fmt.Printf(<span class="string">"%T.%T\n"</span>,j,*j) <span class="comment">// *float64.float64</span></span><br><span class="line">	*j = *j * <span class="number">3</span></span><br><span class="line">	fmt.Printf(<span class="string">"%v,%v"</span>,i,j) <span class="comment">//30,0xc00004c080</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面的代码中，我们通过操作<code>j</code>指针就改变了<code>i</code>的值。<br>虽然毫无意义，但是证明了通过<code>unsafe.Pointer</code>，我们可以将<code>*int</code>转化成<code>*float64</code></p>
@@ -626,8 +626,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/07/golang-2019-01-06-go-变量声明初始化、new、make/" rel="prev" title="go 变量声明初始化、new、make">
-                go 变量声明初始化、new、make <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/06/golang-2019-01-06-go-变量声明初始化、new、make/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -698,7 +698,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -739,7 +739,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -844,7 +866,51 @@
                     
                       
                     
-                    <span class="site-state-item-count">46</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

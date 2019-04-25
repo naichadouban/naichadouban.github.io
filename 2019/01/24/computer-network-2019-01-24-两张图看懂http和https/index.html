@@ -152,20 +152,20 @@
 
 
 
-  <meta name="description" content="http访问过程 https访问过程">
+  <meta name="description" content="http和httpshttp访问过程 https访问过程几点说明：  服务器端返回证书和公开密钥，公开密钥作为证书的一部分而存在  Connection: keep-alivehttp请求头中，有一个字段Connection: keep-alive 释放连接TCP连接若connection 模式为close，则服务器主动关闭TCP 连接，客户端被动关闭连接，释放TCP 连接; 若connectio">
 <meta name="keywords" content="http,https">
 <meta property="og:type" content="article">
 <meta property="og:title" content="两张图看懂http和https">
 <meta property="og:url" content="http://yoursite.com/2019/01/24/computer-network-2019-01-24-两张图看懂http和https/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="http访问过程 https访问过程">
+<meta property="og:description" content="http和httpshttp访问过程 https访问过程几点说明：  服务器端返回证书和公开密钥，公开密钥作为证书的一部分而存在  Connection: keep-alivehttp请求头中，有一个字段Connection: keep-alive 释放连接TCP连接若connection 模式为close，则服务器主动关闭TCP 连接，客户端被动关闭连接，释放TCP 连接; 若connectio">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-4649bc330f6270db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/422094-8e74d012bfef0dac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-01-24T07:14:35.455Z">
+<meta property="og:updated_time" content="2019-04-08T10:55:39.396Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="两张图看懂http和https">
-<meta name="twitter:description" content="http访问过程 https访问过程">
+<meta name="twitter:description" content="http和httpshttp访问过程 https访问过程几点说明：  服务器端返回证书和公开密钥，公开密钥作为证书的一部分而存在  Connection: keep-alivehttp请求头中，有一个字段Connection: keep-alive 释放连接TCP连接若connection 模式为close，则服务器主动关闭TCP 连接，客户端被动关闭连接，释放TCP 连接; 若connectio">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/422094-4649bc330f6270db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -539,8 +539,16 @@
       
 
       
-        <p>http访问过程<br><img src="https://upload-images.jianshu.io/upload_images/422094-4649bc330f6270db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>https访问过程<br><img src="https://upload-images.jianshu.io/upload_images/422094-8e74d012bfef0dac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+        <h1 id="http和https"><a href="#http和https" class="headerlink" title="http和https"></a>http和https</h1><p>http访问过程<br><img src="https://upload-images.jianshu.io/upload_images/422094-4649bc330f6270db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>https访问过程<br><img src="https://upload-images.jianshu.io/upload_images/422094-8e74d012bfef0dac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>几点说明：</p>
+<blockquote>
+<p>服务器端返回证书和公开密钥，公开密钥作为证书的一部分而存在</p>
+</blockquote>
+<h1 id="Connection-keep-alive"><a href="#Connection-keep-alive" class="headerlink" title="Connection: keep-alive"></a>Connection: keep-alive</h1><p>http请求头中，有一个字段<code>Connection: keep-alive</code></p>
+<p>释放连接TCP连接<br>若connection 模式为close，则服务器主动关闭TCP 连接，客户端被动关闭连接，释放TCP 连接;</p>
+<p>若connection 模式为keepalive，则该连接会保持一段时间，在该时间内可以继续接收请求;</p>
+<p>大远的话：一个连接必须两端配合，要不要保持连接必须两边商量着来。不能服务端已经关闭连接了，客户端还请求。</p>
+<h1 id="有keepalive了，还要websocket干什么？"><a href="#有keepalive了，还要websocket干什么？" class="headerlink" title="有keepalive了，还要websocket干什么？"></a>有keepalive了，还要websocket干什么？</h1><p>websocket是全双工通信，意味着服务端和客户端是平等的，都可以给对方发信息<br>http中keepalive只能保持一段时间，而且服务端是不能主动给客户端发信息的。</p>
 
       
     </div>
@@ -587,8 +595,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/24/比特币系-btcd-2019-01-28-btcd的p2p网络（2）-连接connMgr/" rel="next" title="btcd的p2p网络（2）-连接connMgr">
-                <i class="fa fa-chevron-left"></i> btcd的p2p网络（2）-连接connMgr
+              <a href="/2019/01/23/比特币系-btcd-2019-01-23-btcd的p2p网络（1）-地址addrMgr/" rel="next" title="btcd的p2p网络（1）-地址addrMrg">
+                <i class="fa fa-chevron-left"></i> btcd的p2p网络（1）-地址addrMrg
               </a>
             
           </div>
@@ -597,8 +605,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/28/比特币系-btcd-2019-01-23-btcd的p2p网络（1）-地址addrMgr/" rel="prev" title="btcd的p2p网络（1）-地址addrMrg">
-                btcd的p2p网络（1）-地址addrMrg <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/28/比特币系-btcd-2019-01-28-btcd的p2p网络（2）-连接connMgr/" rel="prev" title="btcd的p2p网络（2）-连接connMgr">
+                btcd的p2p网络（2）-连接connMgr <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -644,8 +652,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -660,7 +677,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -701,7 +718,29 @@
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -806,7 +845,51 @@
                     
                       
                     
-                    <span class="site-state-item-count">46</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -857,6 +940,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#http和https"><span class="nav-number">1.</span> <span class="nav-text">http和https</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Connection-keep-alive"><span class="nav-number">2.</span> <span class="nav-text">Connection: keep-alive</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#有keepalive了，还要websocket干什么？"><span class="nav-number">3.</span> <span class="nav-text">有keepalive了，还要websocket干什么？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

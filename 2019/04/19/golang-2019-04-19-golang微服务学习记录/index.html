@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="gomicroservices微服务入门第一篇文章http://blog.cuicc.com/blog/2015/07/22/microservices/ 本系列参考文章中文地址 https://wuyin.io/archives/page/2/ https://studygolang.com/articles/12060 英文地址（优先推荐） https://ewanvalentine.io/m">
+<meta name="keywords" content="golang,go-micro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang微服务学习记录">
+<meta property="og:url" content="http://yoursite.com/2019/04/19/golang-2019-04-19-golang微服务学习记录/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="gomicroservices微服务入门第一篇文章http://blog.cuicc.com/blog/2015/07/22/microservices/ 本系列参考文章中文地址 https://wuyin.io/archives/page/2/ https://studygolang.com/articles/12060 英文地址（优先推荐） https://ewanvalentine.io/m">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-25T09:08:29.526Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="golang微服务学习记录">
+<meta name="twitter:description" content="gomicroservices微服务入门第一篇文章http://blog.cuicc.com/blog/2015/07/22/microservices/ 本系列参考文章中文地址 https://wuyin.io/archives/page/2/ https://studygolang.com/articles/12060 英文地址（优先推荐） https://ewanvalentine.io/m">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/19/golang-2019-04-19-golang微服务学习记录/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>golang微服务学习记录 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-学习规划">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/plan/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>学习规划</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/golang-2019-04-19-golang微服务学习记录/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="徐晓峰">
+      <meta itemprop="description" content="记录自己走过的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">golang微服务学习记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-19 00:00:00" itemprop="dateCreated datePublished" datetime="2019-04-19T00:00:00+08:00">2019-04-19</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="gomicroservices"><a href="#gomicroservices" class="headerlink" title="gomicroservices"></a>gomicroservices</h1><p>微服务入门第一篇文章<br><a href="http://blog.cuicc.com/blog/2015/07/22/microservices/" target="_blank" rel="noopener">http://blog.cuicc.com/blog/2015/07/22/microservices/</a></p>
+<p>本系列参考文章<br>中文地址</p>
+<p><a href="https://wuyin.io/archives/page/2/" target="_blank" rel="noopener">https://wuyin.io/archives/page/2/</a></p>
+<p><a href="https://studygolang.com/articles/12060" target="_blank" rel="noopener">https://studygolang.com/articles/12060</a></p>
+<p>英文地址（优先推荐）</p>
+<p><a href="https://ewanvalentine.io/microservices-in-golang-part-1/" target="_blank" rel="noopener">https://ewanvalentine.io/microservices-in-golang-part-1/</a></p>
+<h1 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h1><ol>
+<li>protoc.exe .\consignment.proto –go_out=./</li>
+</ol>
+<p>这样是错误的，没有写编译插件</p>
+<ol start="2">
+<li>windows10上makefile的使用<br>下载软件 <a href="http://sourceforge.net/projects/mingw/files/latest/download?source=files" target="_blank" rel="noopener">http://sourceforge.net/projects/mingw/files/latest/download?source=files</a></li>
+</ol>
+<p>安装，把安装目录的<code>bin</code> 目录添加到环境变量。</p>
+<p>然后把默认的编译器都安装上即可（其实只要选择编译器是勾选C Compiler 与C++ Compiler）</p>
+<p>最后在MinGW的安装目录，打开bin文件夹，将mingw32-make.exe重命名为make.exe</p>
+<ol start="3">
+<li>停止当前所有运行中的容器、删除镜像</li>
+</ol>
+<p><code>docker stop $(docker ps -aq)</code><br><code>docker rmi $(docker images -q)</code><br><code>docker container rm *</code> 删除一个处于终止状态的容器<br><code>docker container prune</code> 清除所有处于终止状态的容器 </p>
+<ol start="4">
+<li>Git 多平台换行符问题(LF or CRLF)</li>
+</ol>
+<p>Git 多平台换行符问题(LF or CRLF)</p>
+<p><a href="http://kuanghy.github.io/2017/03/19/git-lf-or-crlf" target="_blank" rel="noopener">http://kuanghy.github.io/2017/03/19/git-lf-or-crlf</a></p>
+<h1 id="学习记录"><a href="#学习记录" class="headerlink" title="学习记录"></a>学习记录</h1><h1 id="dev1"><a href="#dev1" class="headerlink" title="dev1"></a>dev1</h1><p>这一节基本上还是grpc的内容</p>
+<ol>
+<li>微服务的介绍</li>
+<li>grpc的使用介绍</li>
+<li>protobuf的使用</li>
+</ol>
+<h2 id="consignment微服务"><a href="#consignment微服务" class="headerlink" title="consignment微服务"></a>consignment微服务</h2><ol>
+<li>创建protobuf服务描述文件consignment.proto</li>
+<li>用protoc把consignment.proto编译成go版本</li>
+<li>创建grpc服务端</li>
+</ol>
+<p>关键代码<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">listener, err := net.Listen(<span class="string">"tcp"</span>, PORT)</span><br><span class="line">server := grpc.NewServer()</span><br><span class="line">pb.RegisterShippingServiceServer(server, &amp;service&#123;repo&#125;)</span><br><span class="line">server.Serve(listener)</span><br></pre></td></tr></table></figure></p>
+<ol start="4">
+<li>创建grpc客户端</li>
+</ol>
+<p>关键代码<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conn, err := grpc.Dial(ADDRESS, grpc.WithInsecure())</span><br><span class="line">client := pb.NewShippingServiceClient(conn)</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line">resp, err := client.CreateConsignment(context.Background(), consignment)</span><br></pre></td></tr></table></figure></p>
+<h1 id="dev2"><a href="#dev2" class="headerlink" title="dev2"></a>dev2</h1><h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><ol>
+<li>Docker-从入门到实践<br><a href="https://yeasy.gitbooks.io/docker_practice/content/" target="_blank" rel="noopener">https://yeasy.gitbooks.io/docker_practice/content/</a></li>
+</ol>
+<p>docker只是容器技术的一种实现，比较流行的一种。不要把容器技术和docker混淆了。</p>
+<h2 id="把consignment微服务容器化"><a href="#把consignment微服务容器化" class="headerlink" title="把consignment微服务容器化"></a>把consignment微服务容器化</h2><p>创建Dockerfile文件<br><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 若运行环境是 Linux 则需把 alpine 换成 debian</span></span><br><span class="line"><span class="comment"># 使用最新版 alpine 作为基础镜像</span></span><br><span class="line"><span class="keyword">FROM</span> alpine:latest</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在容器的根目录下创建 app 目录</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /app</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># 将工作目录切换到 /app 下</span></span></span><br><span class="line"><span class="bash">WORKDIR /app</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># 将微服务的服务端运行文件拷贝到 /app 下</span></span></span><br><span class="line"><span class="bash">ADD consignment-service /app/consignment-service</span></span><br><span class="line"><span class="bash"></span></span><br><span class="line"><span class="bash"><span class="comment"># 运行服务端</span></span></span><br><span class="line"><span class="bash">CMD [<span class="string">"./consignment-service"</span>]</span></span><br></pre></td></tr></table></figure></p>
+<p>为了使用方便，我们创建Makefile文件<br><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">build:</span><br><span class="line">	<span class="comment"># 编译proto文件（当前应该是grpc，micro是后面加上go-micro之后的）</span></span><br><span class="line">	protoc -I. --go_out=plugins=micro:. proto/consignment/consignment.proto</span><br><span class="line">	<span class="comment"># 编译服务代码</span></span><br><span class="line">	GOOS=linux GOARCH=amd64 go build</span><br><span class="line">	<span class="comment"># 创建docker镜像</span></span><br><span class="line">	docker build -t shippy-service-consignment .</span><br><span class="line"><span class="keyword">run</span><span class="bash">:</span></span><br><span class="line"><span class="bash">	<span class="comment"># 启动docker容器</span></span></span><br><span class="line"><span class="bash">	docker run -p 8010:8010 -e MICRO_SERVER_ADDRESS=:8010 shippy-service-consignment</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="go-micro"><a href="#go-micro" class="headerlink" title="go-micro"></a>go-micro</h2><blockquote>
+<p>为什么需要go-micro，我们用grpc不就挺好吗？</p>
+<ol>
+<li>管理麻烦:我们在consignment/cli.go文件中，就是调用服务时，需要手动指定服务的ip和端口。当我们部署很多服务后，一个服务的IP或者端口发生变化，其他服务就都不能调用了。</li>
+<li>服务发现：为了解决各个微服务间的调用问题，就需要服务发现。服务发现就相当于是一个注册中心，各个微服务启动时都到这里来记录自己的IP和端口，服务注销时，也把记录的IP和端口注销掉。go-micro刚好实现了这一点（不止这一点），我们就用go-micro来改造我们的服务。</li>
+</ol>
+</blockquote>
+<h2 id="用go-micro改造consignment服务端"><a href="#用go-micro改造consignment服务端" class="headerlink" title="用go-micro改造consignment服务端"></a>用go-micro改造consignment服务端</h2><ol>
+<li>首先consignment.proto 用protoc编译时，plugins插件改成了micro</li>
+</ol>
+<p>用插件 micro 插件编译后，之前.proto 定义的方法中的返回值现在移到了请求参数中。</p>
+<ol start="2">
+<li>服务端代码也需要改</li>
+</ol>
+<p>主要代码<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">server := micro.NewService(</span><br><span class="line">		micro.Name(<span class="string">"shippy.service.consignmen"</span>),</span><br><span class="line">		micro.Version(<span class="string">"latest"</span>),</span><br><span class="line">    )</span><br><span class="line">pb.RegisterShippingServiceHandler(server.Server(), &amp;service&#123;repo&#125;)</span><br><span class="line">server.Run()</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li>监听地址没有写死</li>
+</ol>
+<p>查看代码发现，我们再go-micro服务启动的过程中，自始至终都没有出现服务监听的ip和端口。why ？</p>
+<blockquote>
+<p>go-mirco 会自动使用系统或命令行中变量 MICRO_SERVER_ADDRESS 的地址</p>
+</blockquote>
+<p>所以我们再Makefile中docker启动命令中，加了环境变量<code>-e MICRO_SERVER_ADDRESS=:8010</code></p>
+<p>go-micro默认是使用mdns作为服务发现的，我们可以使用环境变量 <code>MICRO_REGISTRY=mdns</code> 来设置。在生产环境中，可以使用etcd来代替。</p>
+<h2 id="用go-micro改造consignment客户端"><a href="#用go-micro改造consignment客户端" class="headerlink" title="用go-micro改造consignment客户端"></a>用go-micro改造consignment客户端</h2><p>主要代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">service := micro.NewService(micro.Name(<span class="string">"shippy.consignment.cli"</span>))</span><br><span class="line">service.Init()</span><br><span class="line"><span class="comment">// 这个名字 shippy.service.consignment 一定要写对啊</span></span><br><span class="line">client := pb.NewShippingServiceClient(<span class="string">"shippy.service.consignment"</span>, service.Client())</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line">res, err := client.CreateConsignment(context.Background(), consignment)</span><br></pre></td></tr></table></figure>
+<h2 id="用go-micro创建VesselService微服务"><a href="#用go-micro创建VesselService微服务" class="headerlink" title="用go-micro创建VesselService微服务"></a>用go-micro创建VesselService微服务</h2><h1 id="dev3"><a href="#dev3" class="headerlink" title="dev3"></a>dev3</h1><h2 id="yaml文件语法"><a href="#yaml文件语法" class="headerlink" title="yaml文件语法"></a>yaml文件语法</h2><p><a href="http://www.ruanyifeng.com/blog/2016/07/yaml.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/07/yaml.html</a></p>
+<h2 id="docker-compose的使用"><a href="#docker-compose的使用" class="headerlink" title="docker-compose的使用"></a>docker-compose的使用</h2><p>之前，我们启动每一个微服务都需要有一个Makefile文件，如果微服务很多的话，管理起来很不方便。我们就需要一个统一管理:docker-compoose</p>
+<p>为了使用docker-compose，我们几个服务的同级目录下创建了 <code>docker-compose.yaml</code> 文件。</p>
+<ol>
+<li>常用命令</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker-compose build</span><br><span class="line">docker-compose up <span class="comment">//加 -d  表示在后台运行</span></span><br><span class="line">docker-compose run *</span><br><span class="line">docker-compose down <span class="comment">//和run命令相对应</span></span><br><span class="line">docker-compose images <span class="comment">//列出compose文件包含的镜像</span></span><br><span class="line">docker-compose logs <span class="comment">//列出容器日志</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>基本参数</li>
+</ol>
+<p>-p :表示项目名，不指定的话，默认用所在目录作用项目名。</p>
+<h2 id="mgo"><a href="#mgo" class="headerlink" title="mgo"></a>mgo</h2><p>最好的驱动 <code>go get gopkg.in/mgo.v2</code></p>
+<p>简单的使用教程： <a href="https://www.itfanr.cc/2017/06/28/golang-connect-to-mongodb/" target="_blank" rel="noopener">https://www.itfanr.cc/2017/06/28/golang-connect-to-mongodb/</a></p>
+<p>条件查询的示例：<a href="https://www.jianshu.com/p/b63e5cfa4ce5" target="_blank" rel="noopener">https://www.jianshu.com/p/b63e5cfa4ce5</a></p>
+<h2 id="consignment服务重构"><a href="#consignment服务重构" class="headerlink" title="consignment服务重构"></a>consignment服务重构</h2><p>之前一个服务的代码，全部都写在main.go中。仓库repository，服务service逻辑，go-micro服务都在一起显得有点混乱。</p>
+<p>现在我们加了mongoDb，想要数据持久化。</p>
+<p>所以我们把代码拆分成几个文件：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">datastore.<span class="keyword">go</span> <span class="comment">// 创建与 MongoDB 的主回话</span></span><br><span class="line">repository.<span class="keyword">go</span> <span class="comment">// 实现与数据库进行的操作</span></span><br><span class="line">handler.<span class="keyword">go</span> <span class="comment">// 实现微服务的服务端，处理业务骆</span></span><br><span class="line">main.<span class="keyword">go</span> <span class="comment">// 注册 并启动服务</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="vessel-service重构"><a href="#vessel-service重构" class="headerlink" title="vessel-service重构"></a>vessel-service重构</h2><p>重构逻辑与consignment服务相同</p>
+<h2 id="在docker-compose-yaml中引入MongoDB"><a href="#在docker-compose-yaml中引入MongoDB" class="headerlink" title="在docker-compose.yaml中引入MongoDB"></a>在docker-compose.yaml中引入MongoDB</h2><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line">  ...</span><br><span class="line">  datastore:</span><br><span class="line">    image: mongo</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="number">27017</span>:<span class="number">27017</span></span><br></pre></td></tr></table></figure>
+<p>Note:mongoDB 的docker服务是<code>datastore</code>。这是用到了docker内置DNS机制。</p>
+<p>进入到mongoDB终端操作，<code>docker exec -it d5ad8985ecdf bash</code>.通过git自带的终端报错，通过 power shell 正常。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br><span class="line">show dbs</span><br><span class="line">use vessels</span><br><span class="line">show collections</span><br><span class="line">db.vessels.find()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>我们的consignment服务，vessel服务中，需要使用MongoDB是，就可以直接这样设置<code>DB_HOST: &quot;datastore:27017&quot;</code></p>
+</blockquote>
+<h2 id="user-service"><a href="#user-service" class="headerlink" title="user-service"></a>user-service</h2><h3 id="首先需要引入docker-service：postgresql"><a href="#首先需要引入docker-service：postgresql" class="headerlink" title="首先需要引入docker service：postgresql"></a>首先需要引入docker service：postgresql</h3><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">database:</span><br><span class="line">  image: postgres</span><br><span class="line">  ports:</span><br><span class="line">    - <span class="number">5432</span>:<span class="number">5432</span></span><br></pre></td></tr></table></figure>
+<p>Note1:这个docker 服务名：database,就表示我们在其他地方使用此postgresql，就可以用<code>database:5432</code>表示了</p>
+<p>Note2：在我们后来启动user-service的时候，发现docker-compose.yaml中postgresql这样配置是不可以的。修改如下：<br><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">database:</span><br><span class="line">  image: postgres:<span class="number">9.5</span>.<span class="number">4</span></span><br><span class="line">  ports:</span><br><span class="line">    - <span class="number">5432</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="UserService服务"><a href="#UserService服务" class="headerlink" title="UserService服务"></a>UserService服务</h3><ol>
+<li>定义proto文件</li>
+<li>实现业务处理逻辑 handler.go</li>
+<li>实现数据库的交互 repository.go</li>
+</ol>
+<p>这里我们使用了gorm：<a href="https://jasperxu.github.io/gorm-zh" target="_blank" rel="noopener">https://jasperxu.github.io/gorm-zh</a></p>
+<ol start="4">
+<li>main.go</li>
+</ol>
+<blockquote>
+<p>启动服务测试一下</p>
+</blockquote>
+<h3 id="NOTE"><a href="#NOTE" class="headerlink" title="NOTE"></a>NOTE</h3><ol>
+<li>docker-compose启动user-service时，需要先exec到postgesql的docker容器中，进行数据库的初始化。</li>
+</ol>
+<p>中文教程中所说的，必须要先手动启动postgresql，没必要。写好依赖即可。</p>
+<ol start="2">
+<li>启动user-cli<br><code>docker-compose.exe run user-cli --name=&quot;xuxiaofeng&quot; --email=&quot;13641537547@163.com&quot; --password=&quot;123456789&quot; --company=&quot;china&quot;</code></li>
+</ol>
+<p>报错：<br>Error response from daemon: OCI runtime create failed: container_linux.go:344: starting container process caused “exec: \”–name=xuxiaofeng\”: executable file not found in $PATH”: unknown</p>
+<blockquote>
+<p>原来是在run后面忘记加参数command了</p>
+</blockquote>
+<p>但是加上<code>command</code>也是不可以，解析不到我们传入的命令，导致数据都是空。</p>
+<blockquote>
+<p>最终解决：<br>把<code>user-cli\cli.go</code>文件中的cmd.Init()给去掉<br>运行命令中去掉command：<code>docker-compose.exe run user-cli --name=&quot;xuxiaofeng&quot; --email=&quot;13641537547@163.com&quot; --password=&quot;123456789&quot; --company=&quot;china&quot;</code> ,就成功了。也不知道为什么教程中那样可以成功。</p>
+</blockquote>
+<p>后来在执行<code>consignment-cli</code>的时候，也是报了同样的错误。</p>
+<p>最后发现其实是<code>Dockerfile</code> 没有配置对。关键是 <code>ENTRYPOINT</code>命令。<br><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> [<span class="string">"./consignment-cli"</span>]</span></span><br><span class="line"><span class="bash">CMD [ <span class="string">"./consignment-cli"</span> ]</span></span><br></pre></td></tr></table></figure></p>
+<p><a href="https://yeasy.gitbooks.io/docker_practice/image/dockerfile/entrypoint.html" target="_blank" rel="noopener">https://yeasy.gitbooks.io/docker_practice/image/dockerfile/entrypoint.html</a></p>
+<h1 id="dev4"><a href="#dev4" class="headerlink" title="dev4"></a>dev4</h1><p>之前，在user-service中，我们用户密码都是明文的。这节中主要就是面加密，并且引入了JWT</p>
+<p>首先是密码hash处理<code>golang.org/x/crypto/bcrypt</code></p>
+<p>主要是下面两个函数<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// hash处理用户密码</span></span><br><span class="line">hashedpwd, err := bcrypt.GenerateFromPassword([]<span class="keyword">byte</span>(req.Password), bcrypt.DefaultCost)</span><br><span class="line"><span class="comment">// 进行密码验证</span></span><br><span class="line"><span class="keyword">if</span> err := bcrypt.CompareHashAndPassword([]<span class="keyword">byte</span>(u.Password), []<span class="keyword">byte</span>(req.Password)); err != <span class="literal">nil</span> &#123;</span><br></pre></td></tr></table></figure></p>
+<p>至于JWT，JWT是有自己的协议的。这里有一些介绍的文章。</p>
+<p><a href="https://auth0.com/blog/json-web-token-signing-algorithms-overview/" target="_blank" rel="noopener">https://auth0.com/blog/json-web-token-signing-algorithms-overview/</a></p>
+<blockquote>
+<p>当然我们并不能说JWT就比传统的Token机制要好。这篇文章就详细描述了两者的优缺点<a href="http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/" target="_blank" rel="noopener">http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/</a></p>
+</blockquote>
+<p>JWT我们使用这个第三方包：github.com/dgrijalva/jwt-go</p>
+<p>主要就是下面的代码<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将 JWT 字符串解密为 CustomClaims 对象</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(srv *TokenService)</span> <span class="title">Decode</span><span class="params">(tokenStr <span class="keyword">string</span>)</span> <span class="params">(*CustomClaims, error)</span></span> &#123;</span><br><span class="line">  t, err := jwt.ParseWithClaims(tokenStr, &amp;CustomClaims&#123;&#125;, <span class="function"><span class="keyword">func</span><span class="params">(token *jwt.Token)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> privateKey, <span class="literal">nil</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 解密转换类型并返回</span></span><br><span class="line">  <span class="keyword">if</span> claims, ok := t.Claims.(*CustomClaims); ok &amp;&amp; t.Valid &#123;</span><br><span class="line">    <span class="keyword">return</span> claims, <span class="literal">nil</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将 User 用户信息加密为 JWT 字符串</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(srv *TokenService)</span> <span class="title">Encode</span><span class="params">(user *pb.User)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line">  <span class="comment">// 三天后过期</span></span><br><span class="line">  expireTime := time.Now().Add(time.Hour * <span class="number">24</span> * <span class="number">3</span>).Unix()</span><br><span class="line">  claims := CustomClaims&#123;</span><br><span class="line">    user,</span><br><span class="line">    jwt.StandardClaims&#123;</span><br><span class="line">      Issuer:    <span class="string">"go.micro.srv.user"</span>, <span class="comment">// 签发者</span></span><br><span class="line">      ExpiresAt: expireTime,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">  jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)</span><br><span class="line">  <span class="keyword">return</span> jwtToken.SignedString(privateKey)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>jwt的hash算法大致可以分为两类。一类是对称加密，一类是非对称加密。前者使用同一个秘钥进行加解密，后者通常用公钥加密，私钥解密。</p>
+</blockquote>
+<p>有了token之后，在不同的微服务之间就可以用户认证了。好多方法都需要认证的时候，我们就需要类似中间件这样的东西了。</p>
+<p>go-micro已经给我们提供了类似的功能</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">srv := micro.NewService(</span><br><span class="line">  <span class="comment">// 必须和 consignment.proto 中的 package 一致</span></span><br><span class="line">  micro.Name(<span class="string">"go.micro.srv.consignment"</span>),</span><br><span class="line">  micro.Version(<span class="string">"latest"</span>),</span><br><span class="line">  micro.WrapHandler(AuthWrapper), <span class="comment">// 这个就是中间件了</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="dev5"><a href="#dev5" class="headerlink" title="dev5"></a>dev5</h1><p>之前我们的服务之间耦合度还是比较高的，经常在一个服务中调用其他服务。一是不方便测试，而是服务增多的话，关系会比较混乱。</p>
+<p>因此我们需要事件模型，也就是发布订阅模型。服务A完成一件事后，通知消息系统 <code>事件x</code> 已完成。它并不关心有多少个服务正在监听这个事件。其他的服务，谁需要这个事件，谁就到信息系统订阅这个事件。</p>
+<p>这里面有三个重要点，一是消息系统（有好多开源的系统），二是发布事件，三是订阅事件。</p>
+<p>这里我们使用的是 <code>go-micro NATS 插件</code>，go-micro已经把NATS插件集成到自身的系统中了。</p>
+<blockquote>
+<p>前提是我们需要用docker 运行一个NATS服务。</p>
+</blockquote>
+<h2 id="使用go实现的NATS"><a href="#使用go实现的NATS" class="headerlink" title="使用go实现的NATS"></a>使用go实现的NATS</h2><p>我们也可以不使用go-micro提供的NATS插件，直接就是用golang实现的NATS插件。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nc, _ := nats.Connect(nats.DefaultURL)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Simple Publisher</span></span><br><span class="line">nc.Publish(<span class="string">"user.created"</span>, userJsonString)</span><br></pre></td></tr></table></figure>
+<p>事件订阅<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Simple Async Subscriber</span></span><br><span class="line">nc.Subscribe(<span class="string">"user.created"</span>, <span class="function"><span class="keyword">func</span><span class="params">(m *nats.Msg)</span></span> &#123;</span><br><span class="line">    user := convertUserString(m.Data)</span><br><span class="line">    <span class="keyword">go</span> sendEmail(user)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="go-micro内置Pubsub层"><a href="#go-micro内置Pubsub层" class="headerlink" title="go-micro内置Pubsub层"></a>go-micro内置Pubsub层</h2><p>其实我们无需任何第三方中间件，直接使用go-micro内置即可。</p>
+<p><code>publisher := micro.NewPublisher(topic, srv.Client())</code></p>
+<h1 id="dev6-API-网关"><a href="#dev6-API-网关" class="headerlink" title="dev6 API 网关"></a>dev6 API 网关</h1><p>这几之前，我们想请求微服务内部的接口，是没有办法通过HTTP请求的。</p>
+<p>这节我们给它加一个HTTP API网关，之后我们就可以直接http请求了。</p>
+<p>docker run -p 8080:8080 -e MICRO_REGISTRY=mdns microhq/micro api –handler=rpc –address=:8080 –namespace=shippy</p>
+<p>curl -XPOST -H ‘Content-Type: application/json’ -d ‘{<br>            “service”: “shippy.auth”,<br>            “method”: “Auth.Create”,<br>            “request”: {<br>                “user”: {<br>                    “email”: “<a href="mailto:ewan.valentine89@gmail.com" target="_blank" rel="noopener">ewan.valentine89@gmail.com</a>“,<br>                    “password”: “testing123”,<br>                    “name”: “Ewan Valentine”,<br>                    “company”: “BBC”<br>                }<br>            }<br>    }’<br>    <a href="http://localhost:8080/rpc" target="_blank" rel="noopener">http://localhost:8080/rpc</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="徐晓峰 wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      </div>
+    
+
+    
+       
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/golang/" rel="tag"># golang</a>
+          
+            <a href="/tags/go-micro/" rel="tag"># go-micro</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/08/golang-2019-04-08-grpc学习记录/" rel="next" title="grpc学习记录">
+                <i class="fa fa-chevron-left"></i> grpc学习记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/24/study-编程达人-滴水逆向3期学习-2019-04-24-Golang-语言机制和其设计原则/" rel="prev" title="Golang 语言机制和其设计原则">
+                Golang 语言机制和其设计原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">徐晓峰</p>
+              <p class="site-description motion-element" itemprop="description">记录自己走过的点滴</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">58</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">68</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/naichadouban" title="GitHub-job &rarr; https://github.com/naichadouban" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-job</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/xulove" title="GitHub-personal &rarr; https://github.com/xulove" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub-personal</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gomicroservices"><span class="nav-number">1.</span> <span class="nav-text">gomicroservices</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#笔记"><span class="nav-number">2.</span> <span class="nav-text">笔记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#学习记录"><span class="nav-number">3.</span> <span class="nav-text">学习记录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dev1"><span class="nav-number">4.</span> <span class="nav-text">dev1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#consignment微服务"><span class="nav-number">4.1.</span> <span class="nav-text">consignment微服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dev2"><span class="nav-number">5.</span> <span class="nav-text">dev2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker"><span class="nav-number">5.1.</span> <span class="nav-text">docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#把consignment微服务容器化"><span class="nav-number">5.2.</span> <span class="nav-text">把consignment微服务容器化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go-micro"><span class="nav-number">5.3.</span> <span class="nav-text">go-micro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用go-micro改造consignment服务端"><span class="nav-number">5.4.</span> <span class="nav-text">用go-micro改造consignment服务端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用go-micro改造consignment客户端"><span class="nav-number">5.5.</span> <span class="nav-text">用go-micro改造consignment客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用go-micro创建VesselService微服务"><span class="nav-number">5.6.</span> <span class="nav-text">用go-micro创建VesselService微服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dev3"><span class="nav-number">6.</span> <span class="nav-text">dev3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#yaml文件语法"><span class="nav-number">6.1.</span> <span class="nav-text">yaml文件语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-compose的使用"><span class="nav-number">6.2.</span> <span class="nav-text">docker-compose的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mgo"><span class="nav-number">6.3.</span> <span class="nav-text">mgo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#consignment服务重构"><span class="nav-number">6.4.</span> <span class="nav-text">consignment服务重构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vessel-service重构"><span class="nav-number">6.5.</span> <span class="nav-text">vessel-service重构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在docker-compose-yaml中引入MongoDB"><span class="nav-number">6.6.</span> <span class="nav-text">在docker-compose.yaml中引入MongoDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#user-service"><span class="nav-number">6.7.</span> <span class="nav-text">user-service</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#首先需要引入docker-service：postgresql"><span class="nav-number">6.7.1.</span> <span class="nav-text">首先需要引入docker service：postgresql</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UserService服务"><span class="nav-number">6.7.2.</span> <span class="nav-text">UserService服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NOTE"><span class="nav-number">6.7.3.</span> <span class="nav-text">NOTE</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dev4"><span class="nav-number">7.</span> <span class="nav-text">dev4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dev5"><span class="nav-number">8.</span> <span class="nav-text">dev5</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用go实现的NATS"><span class="nav-number">8.1.</span> <span class="nav-text">使用go实现的NATS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go-micro内置Pubsub层"><span class="nav-number">8.2.</span> <span class="nav-text">go-micro内置Pubsub层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dev6-API-网关"><span class="nav-number">9.</span> <span class="nav-text">dev6 API 网关</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">徐晓峰</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.6.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.6.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
