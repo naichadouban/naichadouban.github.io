@@ -1,9 +1,10 @@
 ---
-title: 配置证书后https访问无法建立安全连接
+title: nginx配置证书后https访问无法建立安全连接
 date: 2019-05-27T08:00:00
 tags: ["nginx","https"]
 categories: ["nginx"]
 ---
+# nginx配置https
 
 `listen 443; >>> listen 443 ssl;`
 
