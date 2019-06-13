@@ -1,5 +1,5 @@
 ---
-title: "Byte"
+title: golang byte()
 date: 2019-05-27T16:43:01+08:00
 lastmod: 2019-05-27T16:43:01+08:00
 draft: false
