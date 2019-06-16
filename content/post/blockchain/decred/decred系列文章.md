@@ -1,8 +1,12 @@
 ---
-title: decred系列文章
-date: 2019-06-16
+title: "decred系列文章"
+date: 2019-06-16T00:00:00+08:00
 tags: ["decred"]
 categories: ["decred"]
+draft: false
+
+weight: 10
+autoCollapseToc: true
 ---
 
 # Decred源码分析正式
