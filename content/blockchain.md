@@ -9,33 +9,20 @@ weight: 10
 autoCollapseToc: true
 ---
 
-# Decred源码分析正式
+# Decred源码分析
 
-1. Decred源码环境/IDE配置
-
-2. Decred数据库存储
-
-3. Blockchain初始化
-
-4. ProcessBlock流程
-- 一致性检测 checkBlockSanity()
-- 入链检测
-- 入主链
-- 侧链转主链
-
-5. 工作量证明
-
-6. 权益证明
-
-7. 权益交易规则
-
-8. 奖励计算
-
-9. 共识更改
-
-10. Stake权益/pos的一些知识
-
-11. SPV（简单支付认证）
+- [Decred源码环境/IDE配置](/post/blockchains/decred/001-decred源码安装ied配置/)
+- [Decred数据库存储](/post/blockchains/decred/002-decred数据库存储/)
+- [decred中ticket票存储](/post/blockchains/decred/decred中ticket票存储/)
+- [Blockchain初始化](/post/blockchains/decred/003-blockchain初始化/)
+- [ProcessBlock流程：一致性检测 checkBlockSanity()、入链检测、入主链、侧链转主链](/post/blockchains/decred/003-blockchain初始化/)
+- [工作量证明](/post/blockchains/decred/005-工作量证明/)
+- [权益证明](/post/blockchains/decred/006-权益证明/)
+- [权益交易规则](/post/blockchains/decred/007-权益交易规则/)
+- 奖励计算
+- 共识更改
+- Stake权益/pos的一些知识
+- SPV（简单支付认证）
 
 # Decred源码分析-草稿
 
