@@ -1,12 +1,8 @@
 ---
 title: "golang临时记录"
 date: 2019-06-03T01:37:56+08:00
-draft: false
-comments: true
 tags: ["golang"]
 categories: ["golang","未整理"]
-author: "徐晓峰"
-toc: true
 
 ---
 
